@@ -1,6 +1,6 @@
 {
     "name": "@courselit/web",
-    "version": "0.74.4",
+    "version": "0.74.5",
     "private": true,
     "scripts": {
         "openapi:generate": "node ./openapi/generate-openapi.mjs",
