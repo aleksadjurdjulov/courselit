@@ -32,10 +32,10 @@ html
                 text-align: center;
             }
     body
-        p   You have been enrolled in a course: <strong> #{courseName} </strong>.
+        p   Upisani ste na kurs: <strong> #{courseName} </strong>.
         p 
-            |   To access all of your content, 
-            |   #[a(href=\`\${loginLink}\`) log in] here.
+            |   Da pristupite svom sadržaju, 
+            |   #[a(href=\`\${loginLink}\`) prijavite se] ovde.
         if !hideCourseLitBranding
             div(class="courselit-branding-container")
                 a(

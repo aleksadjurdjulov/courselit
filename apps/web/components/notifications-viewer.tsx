@@ -39,6 +39,19 @@ import {
 import { Notification } from "@courselit/common-models";
 import { useToast } from "@courselit/components-library";
 import { useRouter } from "next/navigation";
+import {
+    NOTIFICATIONS_POPOVER_TITLE,
+    NOTIFICATIONS_POPOVER_VIEW,
+    NOTIFICATIONS_POPOVER_READ_ALL,
+    NOTIFICATIONS_POPOVER_EMPTY,
+    NOTIFICATIONS_POPOVER_PREVIOUS,
+    NOTIFICATIONS_POPOVER_NEXT,
+    NOTIFICATIONS_POPOVER_PAGE,
+    NOTIFICATIONS_POPOVER_OF,
+    NOTIFICATIONS_POPOVER_OPEN_ERROR,
+    NOTIFICATIONS_POPOVER_QUEUE_WARNING,
+    TOAST_TITLE_ERROR,
+} from "@ui-config/strings";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -238,8 +251,8 @@ export function NotificationsViewer() {
             router.push(targetUrl.toString());
         } catch (error) {
             toast({
-                title: "Error",
-                description: "Failed to open the notification",
+                title: TOAST_TITLE_ERROR,
+                description: NOTIFICATIONS_POPOVER_OPEN_ERROR,
                 variant: "destructive",
             });
         }
@@ -253,7 +266,9 @@ export function NotificationsViewer() {
                     {unreadCount > 0 && (
                         <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
                     )}
-                    <span className="sr-only">View notifications</span>
+                    <span className="sr-only">
+                        {NOTIFICATIONS_POPOVER_VIEW}
+                    </span>
                 </Button>
             </PopoverTrigger>
             <PopoverContent
@@ -264,7 +279,7 @@ export function NotificationsViewer() {
                 <Card>
                     <CardHeader className="border-b py-2 px-4 flex flex-row justify-between items-center">
                         <CardTitle className="text-base text-left">
-                            Notifications
+                            {NOTIFICATIONS_POPOVER_TITLE}
                         </CardTitle>
                         {notifications.some((n) => !n.read) && (
                             <Button
@@ -275,7 +290,7 @@ export function NotificationsViewer() {
                             >
                                 <Check className="h-3 w-3 mr-1" />
                                 <span className="sr-only sm:not-sr-only">
-                                    Read all
+                                    {NOTIFICATIONS_POPOVER_READ_ALL}
                                 </span>
                             </Button>
                         )}
@@ -284,15 +299,14 @@ export function NotificationsViewer() {
                         {!config.queueServer && (
                             <div className="p-2 bg-yellow-100 text-red-500 text-xs flex items-center">
                                 <TriangleAlert className="h-6 w-6 inline mr-2" />
-                                Queue configuration is missing. Realtime
-                                notifications will not work.
+                                {NOTIFICATIONS_POPOVER_QUEUE_WARNING}
                             </div>
                         )}
                         {notifications.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-8">
                                 <Inbox className="h-12 w-12 text-muted-foreground mb-4" />
                                 <p className="text-sm text-muted-foreground">
-                                    No new notifications
+                                    {NOTIFICATIONS_POPOVER_EMPTY}
                                 </p>
                             </div>
                         ) : (
@@ -330,10 +344,11 @@ export function NotificationsViewer() {
                                 className="text-xs"
                             >
                                 <ChevronLeft className="h-3 w-3 mr-1" />{" "}
-                                Previous
+                                {NOTIFICATIONS_POPOVER_PREVIOUS}
                             </Button>
                             <span className="text-xs text-muted-foreground">
-                                Page {currentPage} of {totalPages}
+                                {NOTIFICATIONS_POPOVER_PAGE} {currentPage}{" "}
+                                {NOTIFICATIONS_POPOVER_OF} {totalPages}
                             </span>
                             <Button
                                 variant="ghost"
@@ -342,7 +357,8 @@ export function NotificationsViewer() {
                                 disabled={currentPage === totalPages}
                                 className="text-xs"
                             >
-                                Next <ChevronRight className="h-3 w-3 ml-1" />
+                                {NOTIFICATIONS_POPOVER_NEXT}{" "}
+                                <ChevronRight className="h-3 w-3 ml-1" />
                             </Button>
                         </CardFooter>
                     )}

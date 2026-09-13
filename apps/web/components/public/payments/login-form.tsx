@@ -22,6 +22,12 @@ import { useToast } from "@courselit/components-library";
 import {
     LOGIN_CODE_INTIMATION_MESSAGE,
     LOGIN_FORM_DISCLAIMER,
+    LOGIN_FORM_TERMS_LINK,
+    LOGIN_CODE_PLACEHOLDER,
+    LOGIN_EMAIL_PLACEHOLDER,
+    BTN_LOGIN,
+    BTN_LOGIN_GET_CODE,
+    LOGIN_SECTION_EMAIL_INVALID,
     TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 import { getUserProfile } from "@/app/(with-contexts)/helpers";
@@ -34,8 +40,8 @@ import RecaptchaScriptLoader from "@components/recaptcha-script-loader";
 import ExternalLoginButton from "@/components/auth/external-login-button";
 
 const loginFormSchema = z.object({
-    email: z.string().email("Invalid email address"),
-    otp: z.string().min(6, "OTP must be at least 6 characters").optional(),
+    email: z.string().email(LOGIN_SECTION_EMAIL_INVALID),
+    otp: z.string().min(6, "Kod mora imati najmanje 6 karaktera").optional(),
 });
 
 type LoginStep = "email" | "otp" | "complete";
@@ -234,7 +240,9 @@ export function LoginForm({
                                                 <Input
                                                     theme={theme.theme}
                                                     type="email"
-                                                    placeholder="Email address"
+                                                    placeholder={
+                                                        LOGIN_EMAIL_PLACEHOLDER
+                                                    }
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -274,7 +282,7 @@ export function LoginForm({
                                     disabled={loading}
                                     theme={theme.theme}
                                 >
-                                    Continue
+                                    {BTN_LOGIN_GET_CODE}
                                 </Button>
                             </>
                         )}
@@ -293,7 +301,9 @@ export function LoginForm({
                                                 <Input
                                                     theme={theme.theme}
                                                     type="text"
-                                                    placeholder="Enter OTP"
+                                                    placeholder={
+                                                        LOGIN_CODE_PLACEHOLDER
+                                                    }
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -308,7 +318,7 @@ export function LoginForm({
                                     disabled={loading}
                                     theme={theme.theme}
                                 >
-                                    Verify OTP
+                                    {BTN_LOGIN}
                                 </Button>
                             </>
                         )}
@@ -332,7 +342,7 @@ export function LoginForm({
             <Caption theme={theme.theme} className="text-center">
                 {LOGIN_FORM_DISCLAIMER}
                 <Link href="/p/terms">
-                    <span className="underline">Terms</span>
+                    <span className="underline">{LOGIN_FORM_TERMS_LINK}</span>
                 </Link>
             </Caption>
             <RecaptchaScriptLoader />

@@ -16,11 +16,11 @@ html
                 text-align: center;
             }
     body
-        p   #{code} is your verification code.
+        p   #{code} je Vaš verifikacioni kod.
         p
-            strong IMPORTANT:
-            |   Do not share this email with anyone as anyone can log in to your
-            |   account using the link in this email.
+            strong VAŽNO:
+            |   Ne delite ovaj email ni sa kim — bilo ko može da se prijavi na
+            |   Vaš nalog pomoću koda iz ove poruke.
         if !hideCourseLitBranding
             div(class="courselit-branding-container")
                 a(

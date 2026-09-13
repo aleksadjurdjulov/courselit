@@ -241,7 +241,7 @@ export const inviteCustomer = async (
 
         await addMailJob({
             to: [user.email],
-            subject: `You have been invited to ${course.title}`,
+            subject: `${responses.course_enroll_email_subject_prefix} ${course.title}`,
             body: emailBody,
             from: getEmailFrom({
                 name: ctx.subdomain?.settings?.title || ctx.subdomain.name,

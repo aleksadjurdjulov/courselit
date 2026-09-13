@@ -25,6 +25,13 @@ import {
     BTN_LOGIN_NO_CODE,
     LOGIN_FORM_LABEL,
     LOGIN_FORM_DISCLAIMER,
+    LOGIN_FORM_TERMS_LINK,
+    LOGIN_EMAIL_PLACEHOLDER,
+    LOGIN_CODE_PLACEHOLDER,
+    LOGIN_ERROR_SIGNIN_PREFIX,
+    LOGIN_ERROR_UNEXPECTED,
+    LOGIN_ERROR_RECAPTCHA_UNAVAILABLE,
+    LOGIN_ERROR_RECAPTCHA_FAILED,
     LOADING,
     TOAST_TITLE_ERROR,
 } from "@/ui-config/strings";
@@ -68,8 +75,7 @@ export default function LoginForm({
         if (!executeRecaptcha) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description:
-                    "reCAPTCHA service not available. Please try again later.",
+                description: LOGIN_ERROR_RECAPTCHA_UNAVAILABLE,
                 variant: "destructive",
             });
             setLoading(false);
@@ -80,7 +86,7 @@ export default function LoginForm({
         if (!recaptchaToken) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description: "reCAPTCHA validation failed. Please try again.",
+                description: LOGIN_ERROR_RECAPTCHA_FAILED,
                 variant: "destructive",
             });
             setLoading(false);
@@ -105,7 +111,7 @@ export default function LoginForm({
             ) {
                 toast({
                     title: TOAST_TITLE_ERROR,
-                    description: `reCAPTCHA verification failed. ${recaptchaData.score ? `Score: ${recaptchaData.score.toFixed(2)}.` : ""} Please try again.`,
+                    description: `${LOGIN_ERROR_RECAPTCHA_FAILED}${recaptchaData.score ? ` Score: ${recaptchaData.score.toFixed(2)}.` : ""}`,
                     variant: "destructive",
                 });
                 setLoading(false);
@@ -114,7 +120,7 @@ export default function LoginForm({
         } catch (err) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description: "reCAPTCHA verification failed. Please try again.",
+                description: LOGIN_ERROR_RECAPTCHA_FAILED,
                 variant: "destructive",
             });
             setLoading(false);
@@ -133,7 +139,7 @@ export default function LoginForm({
                 otp: code,
             });
             if (error) {
-                setError(`Can't sign you in at this time: ${error.message}`);
+                setError(`${LOGIN_ERROR_SIGNIN_PREFIX} ${error.message}`);
             } else {
                 window.location.href =
                     redirectTo ||
@@ -145,7 +151,7 @@ export default function LoginForm({
             console.error("Error during requestCode:", err);
             toast({
                 title: TOAST_TITLE_ERROR,
-                description: "An unexpected error occurred. Please try again.",
+                description: LOGIN_ERROR_UNEXPECTED,
                 variant: "destructive",
             });
         } finally {
@@ -235,7 +241,9 @@ export default function LoginForm({
                                             <Input
                                                 type="email"
                                                 value={email}
-                                                placeholder="Enter your email"
+                                                placeholder={
+                                                    LOGIN_EMAIL_PLACEHOLDER
+                                                }
                                                 required={true}
                                                 onChange={(e) =>
                                                     setEmail(e.target.value)
@@ -269,7 +277,9 @@ export default function LoginForm({
                                             <Input
                                                 type="text"
                                                 value={code}
-                                                placeholder="Code"
+                                                placeholder={
+                                                    LOGIN_CODE_PLACEHOLDER
+                                                }
                                                 required={true}
                                                 onChange={(e) =>
                                                     setCode(e.target.value)
@@ -328,7 +338,9 @@ export default function LoginForm({
                         <Caption theme={theme.theme} className="text-center">
                             {LOGIN_FORM_DISCLAIMER}
                             <Link href="/p/terms">
-                                <span className="underline">Terms</span>
+                                <span className="underline">
+                                    {LOGIN_FORM_TERMS_LINK}
+                                </span>
                             </Link>
                         </Caption>
                     </div>
