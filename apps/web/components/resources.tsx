@@ -1,3 +1,5 @@
+import { RESOURCES_HEADER } from "@ui-config/strings";
+
 interface Link {
     href: string;
     text: string;
@@ -10,7 +12,9 @@ interface ResourcesProps {
 export default function Resources({ links = [] }: ResourcesProps) {
     return (
         <div className="mb-8">
-            <h2 className="font-medium text-base mt-8 mb-2">Resources</h2>
+            <h2 className="font-medium text-base mt-8 mb-2">
+                {RESOURCES_HEADER}
+            </h2>
             <ul>
                 {links.map((link, index) => (
                     <li key={index} className="mb-1">
@@ -25,18 +29,6 @@ export default function Resources({ links = [] }: ResourcesProps) {
                     </li>
                 ))}
             </ul>
-            {/* {links.map((link, index) => (
-                <div key={index}>
-                    -{" "}
-                    <a
-                        href={link.href}
-                        className="text-blue-600 hover:underline"
-                        target="_blank"
-                    >
-                        {link.text}
-                    </a>
-                </div>
-            ))} */}
         </div>
     );
 }

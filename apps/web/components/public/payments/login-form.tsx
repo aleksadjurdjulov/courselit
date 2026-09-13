@@ -28,6 +28,10 @@ import {
     BTN_LOGIN,
     BTN_LOGIN_GET_CODE,
     LOGIN_SECTION_EMAIL_INVALID,
+    LOGIN_EMAIL_REQUIRED,
+    LOGIN_OTP_MIN_LENGTH,
+    LOGIN_ERROR_RECAPTCHA_UNAVAILABLE,
+    LOGIN_ERROR_RECAPTCHA_FAILED,
     TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 import { getUserProfile } from "@/app/(with-contexts)/helpers";
@@ -41,7 +45,7 @@ import ExternalLoginButton from "@/components/auth/external-login-button";
 
 const loginFormSchema = z.object({
     email: z.string().email(LOGIN_SECTION_EMAIL_INVALID),
-    otp: z.string().min(6, "Kod mora imati najmanje 6 karaktera").optional(),
+    otp: z.string().min(6, LOGIN_OTP_MIN_LENGTH).optional(),
 });
 
 type LoginStep = "email" | "otp" | "complete";
@@ -77,8 +81,7 @@ export function LoginForm({
         if (!executeRecaptcha) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description:
-                    "reCAPTCHA service not available. Please try again later.",
+                description: LOGIN_ERROR_RECAPTCHA_UNAVAILABLE,
                 variant: "destructive",
             });
             setLoading(false);
@@ -89,7 +92,7 @@ export function LoginForm({
         if (!recaptchaToken) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description: "reCAPTCHA validation failed. Please try again.",
+                description: LOGIN_ERROR_RECAPTCHA_FAILED,
                 variant: "destructive",
             });
             setLoading(false);
@@ -114,7 +117,7 @@ export function LoginForm({
             ) {
                 toast({
                     title: TOAST_TITLE_ERROR,
-                    description: `reCAPTCHA verification failed. ${recaptchaData.score ? `Score: ${recaptchaData.score.toFixed(2)}.` : ""} Please try again.`,
+                    description: `${LOGIN_ERROR_RECAPTCHA_FAILED}${recaptchaData.score ? ` Score: ${recaptchaData.score.toFixed(2)}.` : ""}`,
                     variant: "destructive",
                 });
                 setLoading(false);
@@ -123,7 +126,7 @@ export function LoginForm({
         } catch (err) {
             toast({
                 title: TOAST_TITLE_ERROR,
-                description: "reCAPTCHA verification failed. Please try again.",
+                description: LOGIN_ERROR_RECAPTCHA_FAILED,
                 variant: "destructive",
             });
             setLoading(false);
@@ -153,7 +156,7 @@ export function LoginForm({
         if (!emailValue || !/\S+@\S+\.\S+/.test(emailValue)) {
             form.setError("email", {
                 type: "manual",
-                message: "Please enter a valid email address",
+                message: LOGIN_EMAIL_REQUIRED,
             });
             return;
         }

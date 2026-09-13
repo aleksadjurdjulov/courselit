@@ -21,6 +21,11 @@ import {
     shouldFocusCommunityPostComposer,
     stripCommunityPostReplyFromUrl,
 } from "@/lib/community-post-navigation";
+import {
+    COURSE_DISCUSSIONS_COMMENT_PLACEHOLDER,
+    COURSE_DISCUSSIONS_POST_COMMENT,
+    COMMUNITY_POSTING,
+} from "@ui-config/strings";
 
 function toggleReactionLocally(
     reactions: CommunityReaction[] | undefined,
@@ -609,12 +614,14 @@ export default function CommentSection({
                     className="flex flex-col gap-2"
                 >
                     <Textarea
-                        placeholder="Add a comment..."
+                        placeholder={COURSE_DISCUSSIONS_COMMENT_PLACEHOLDER}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     />
                     <Button onClick={handlePostComment} disabled={isPosting}>
-                        {isPosting ? "Posting..." : "Post Comment"}
+                        {isPosting
+                            ? COMMUNITY_POSTING
+                            : COURSE_DISCUSSIONS_POST_COMMENT}
                     </Button>
                 </div>
             )}

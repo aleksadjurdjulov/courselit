@@ -32,13 +32,27 @@ import {
     TextEditorContent,
 } from "@courselit/common-models";
 import LoadingSkeleton from "./loading-skeleton";
-import { formattedLocaleDate, hasCommunityPermission } from "@ui-lib/utils";
+import {
+    formattedLocaleDate,
+    hasCommunityPermission,
+    getCommunityCategoryLabel,
+} from "@ui-lib/utils";
 import { MediaItem } from "./media-item";
 import MembershipStatus from "./membership-status";
 import {
     MANAGE_LINK_TEXT,
     TOAST_TITLE_ERROR,
     TOAST_TITLE_SUCCESS,
+    COMMUNITY_SHOW_MORE,
+    COMMUNITY_SHOW_LESS,
+    COURSE_DISCUSSIONS_DELETE,
+    COURSE_DISCUSSIONS_REPORTED,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT,
+    COURSE_DISCUSSIONS_REPORT_POST_SUCCESS,
+    BUTTON_CANCEL_TEXT,
 } from "@ui-config/strings";
 import { useCommunity } from "@/hooks/use-community";
 import { useMembership } from "@/hooks/use-membership";
@@ -745,8 +759,8 @@ export function CommunityForum({
             try {
                 await fetch.exec();
                 toast({
-                    title: "Reported",
-                    description: "Post has been reported",
+                    title: COURSE_DISCUSSIONS_REPORTED,
+                    description: COURSE_DISCUSSIONS_REPORT_POST_SUCCESS,
                 });
                 setShowReportConfirmation(false);
                 setPostToReport(null);
@@ -932,7 +946,7 @@ export function CommunityForum({
                                 className={`rounded-full ${category === activeCategory ? "bg-gray-500 text-white" : ""}`}
                                 onClick={() => handleCategoryClick(category)}
                             >
-                                {category}
+                                {getCommunityCategoryLabel(category)}
                             </Button>
                         ))}
                         <Button
@@ -941,7 +955,9 @@ export function CommunityForum({
                             className="rounded-full"
                             onClick={toggleCategories}
                         >
-                            {showAllCategories ? "Less" : "More..."}
+                            {showAllCategories
+                                ? COMMUNITY_SHOW_LESS
+                                : COMMUNITY_SHOW_MORE}
                         </Button>
                     </div>
 
@@ -1009,7 +1025,9 @@ export function CommunityForum({
                         onOpenChange={setShowDeleteConfirmation}
                     >
                         <DialogContent>
-                            <DialogTitle>Delete post</DialogTitle>
+                            <DialogTitle>
+                                {COURSE_DISCUSSIONS_DELETE}
+                            </DialogTitle>
                             <DialogDescription>
                                 Are you sure you want to delete this post? This
                                 action cannot be undone.
@@ -1021,13 +1039,13 @@ export function CommunityForum({
                                         setShowDeleteConfirmation(false)
                                     }
                                 >
-                                    Cancel
+                                    {BUTTON_CANCEL_TEXT}
                                 </Button>
                                 <Button
                                     variant="destructive"
                                     onClick={confirmDeletePost}
                                 >
-                                    Delete
+                                    {COURSE_DISCUSSIONS_DELETE}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>
@@ -1037,12 +1055,16 @@ export function CommunityForum({
                         onOpenChange={setShowReportConfirmation}
                     >
                         <DialogContent>
-                            <DialogTitle>Report Post</DialogTitle>
+                            <DialogTitle>
+                                {COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE}
+                            </DialogTitle>
                             <DialogDescription>
-                                Please provide a reason for reporting this post.
+                                {COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION}
                             </DialogDescription>
                             <Textarea
-                                placeholder="Reason for reporting..."
+                                placeholder={
+                                    COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER
+                                }
                                 value={reportReason}
                                 onChange={(e) =>
                                     setReportReason(e.target.value)
@@ -1055,14 +1077,14 @@ export function CommunityForum({
                                         setShowReportConfirmation(false)
                                     }
                                 >
-                                    Cancel
+                                    {BUTTON_CANCEL_TEXT}
                                 </Button>
                                 <Button
                                     variant="destructive"
                                     onClick={confirmReportPost}
                                     disabled={!reportReason.trim()}
                                 >
-                                    Submit
+                                    {COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>

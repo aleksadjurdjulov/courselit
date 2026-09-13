@@ -30,7 +30,20 @@ import { RejectionReasonDialog } from "./rejection-reason-dialog";
 import { FetchBuilder } from "@courselit/utils";
 import { AddressContext } from "@components/contexts";
 import { PaginatedTable, useToast } from "@courselit/components-library";
-import { TOAST_TITLE_ERROR } from "@ui-config/strings";
+import {
+    COMMUNITY_MEMBERSHIP_FILTER_ALL,
+    COMMUNITY_REPORT_CHANGE,
+    COMMUNITY_REPORT_COL_ACTIONS,
+    COMMUNITY_REPORT_COL_CONTENT,
+    COMMUNITY_REPORT_COL_REASON,
+    COMMUNITY_REPORT_COL_REJECTION_REASON,
+    COMMUNITY_REPORT_COL_STATUS,
+    COMMUNITY_REPORT_COL_TYPE,
+    COMMUNITY_STATUS_ACCEPTED,
+    COMMUNITY_STATUS_PENDING,
+    COMMUNITY_STATUS_REJECTED,
+    TOAST_TITLE_ERROR,
+} from "@ui-config/strings";
 import {
     CommunityReport,
     CommunityReportStatus,
@@ -193,11 +206,19 @@ export function ReportsTable({ communityId }: { communityId: string }) {
     const getStatusBadge = (status: CommunityReportStatus) => {
         switch (status) {
             case "pending":
-                return <Badge variant="secondary">PENDING</Badge>;
+                return (
+                    <Badge variant="secondary">
+                        {COMMUNITY_STATUS_PENDING}
+                    </Badge>
+                );
             case "accepted":
-                return <Badge variant="default">ACCEPTED</Badge>;
+                return (
+                    <Badge variant="default">{COMMUNITY_STATUS_ACCEPTED}</Badge>
+                );
             case "rejected":
-                return <Badge variant="outline">REJECTED</Badge>;
+                return (
+                    <Badge variant="outline">{COMMUNITY_STATUS_REJECTED}</Badge>
+                );
             default:
                 return null;
         }
@@ -208,13 +229,23 @@ export function ReportsTable({ communityId }: { communityId: string }) {
             <div>
                 <Select value={filter} onValueChange={setFilter}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="All" />
+                        <SelectValue
+                            placeholder={COMMUNITY_MEMBERSHIP_FILTER_ALL}
+                        />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="accepted">Accepted</SelectItem>
-                        <SelectItem value="rejected">Rejected</SelectItem>
+                        <SelectItem value="all">
+                            {COMMUNITY_MEMBERSHIP_FILTER_ALL}
+                        </SelectItem>
+                        <SelectItem value="pending">
+                            {COMMUNITY_STATUS_PENDING}
+                        </SelectItem>
+                        <SelectItem value="accepted">
+                            {COMMUNITY_STATUS_ACCEPTED}
+                        </SelectItem>
+                        <SelectItem value="rejected">
+                            {COMMUNITY_STATUS_REJECTED}
+                        </SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -227,12 +258,24 @@ export function ReportsTable({ communityId }: { communityId: string }) {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Content</TableHead>
-                                <TableHead>Type</TableHead>
-                                <TableHead>Reason</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Rejection Reason</TableHead>
-                                <TableHead>Actions</TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_CONTENT}
+                                </TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_TYPE}
+                                </TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_REASON}
+                                </TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_STATUS}
+                                </TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_REJECTION_REASON}
+                                </TableHead>
+                                <TableHead>
+                                    {COMMUNITY_REPORT_COL_ACTIONS}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -262,7 +305,7 @@ export function ReportsTable({ communityId }: { communityId: string }) {
                                             }
                                         >
                                             <RotateCCW className="mr-2 h-4 w-4" />
-                                            Change
+                                            {COMMUNITY_REPORT_CHANGE}
                                         </Button>
                                     </TableCell>
                                 </TableRow>

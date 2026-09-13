@@ -14,12 +14,13 @@ import {
     truncateTextEditorContent,
 } from "@courselit/page-blocks";
 import { CommunityMedia, CommunityPost } from "@courselit/common-models";
-import { capitalize, truncate } from "@courselit/utils";
+import { truncate } from "@courselit/utils";
 import { Pin } from "lucide-react";
 import Link from "next/link";
 import { useContext } from "react";
 import { ThemeContext } from "@components/contexts";
 import { ReactionsBar } from "./reactions-bar";
+import { getCommunityCategoryLabel } from "@ui-lib/utils";
 
 interface CommunityPostCardProps {
     post: CommunityPost;
@@ -82,7 +83,7 @@ export default function CommunityPostCard({
                             </div>
                             <div className="text-xs text-muted-foreground">
                                 {formatTimestamp(post.updatedAt)} •{" "}
-                                {capitalize(post.category)}
+                                {getCommunityCategoryLabel(post.category)}
                                 {communityName && communityId && (
                                     <>
                                         {" "}

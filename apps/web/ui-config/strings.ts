@@ -187,10 +187,17 @@ export const COURSE_DISCUSSIONS_ADMIN_REJECTION_DIALOG_DESCRIPTION =
     "Navedite razlog odbijanja ove prijave. Ovo je opciono, ali preporučeno.";
 export const COURSE_DISCUSSIONS_ADMIN_REJECTION_DIALOG_LABEL = "Razlog";
 export const COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE = "Prijavi objavu";
+export const COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE_COMMENT =
+    "Prijavi komentar";
 export const COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION =
     "Navedite razlog prijave ove objave.";
+export const COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION_COMMENT =
+    "Navedite razlog prijave ovog komentara.";
 export const COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER = "Razlog prijave...";
 export const COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT = "Pošalji";
+export const COURSE_DISCUSSIONS_REPORT_POST_SUCCESS = "Objava je prijavljena";
+export const COURSE_DISCUSSIONS_REPORT_CONTENT_SUCCESS =
+    "Sadržaj je prijavljen";
 export const COURSE_DISCUSSIONS_EDIT = "Izmeni";
 export const COURSE_DISCUSSIONS_EDITED_LABEL = "izmenjeno";
 export const COURSE_DISCUSSIONS_SAVE = "Sačuvaj";
@@ -580,6 +587,18 @@ export const PAYMENT_PLAN_FREE_LABEL = "Besplatno";
 export const PAYMENT_PLAN_ONETIME_LABEL = "Jednokratno";
 export const PAYMENT_PLAN_SUBSCRIPTION_LABEL = "Pretplata";
 export const PAYMENT_PLAN_EMI_LABEL = "EMI";
+export const PAYMENT_PLAN_NEW_LABEL = "Novi plan";
+export const PAYMENT_PLAN_FREQUENCY_LABEL = "Učestalost plaćanja";
+export const PAYMENT_PLAN_MONTHLY_LABEL = "Mesečno";
+export const PAYMENT_PLAN_YEARLY_LABEL = "Godišnje";
+export const PAYMENT_PLAN_MAKE_RECOMMENDED = "Postavi kao preporučeni";
+export const PAYMENT_PLAN_ARCHIVE = "Arhiviraj plan";
+export const PAYMENT_PLAN_ARCHIVE_TITLE =
+    "Da li ste sigurni da želite da arhivirate ovaj plan?";
+export const PAYMENT_PLAN_ARCHIVE_DESCRIPTION =
+    "Ova radnja se ne može opozvati. Plan plaćanja će biti trajno arhiviran.";
+export const PAYMENT_PLAN_ARCHIVE_ACTION = "Arhiviraj";
+export const PAYMENT_PLAN_INCLUDED_PRODUCTS_SUFFIX = "proizvoda";
 export const PRICING_PAID_SUBTITLE =
     "Ljudi mogu pristupiti sadržaju nakon jednokratnog plaćanja. Korisnik mora biti prijavljen.";
 export const PRICING_PAID_NO_PAYMENT_METHOD =
@@ -873,6 +892,130 @@ export const NEW_COMMUNITY_BUTTON = "Nova zajednica";
 export const COMMUNITY_FIELD_NAME = "Naziv zajednice";
 export const COMMUNITY_NEW_BTN_CAPTION = "Kreiraj";
 export const COMMUNITY_SETTINGS = "Upravljaj";
+export const COMMUNITY_MANAGE_SUBHEADER =
+    "Upravljajte podešavanjima Vaše zajednice.";
+export const COMMUNITY_MANAGE_EDIT_PAGE = "Izmeni stranicu";
+export const COMMUNITY_MANAGE_NAME_LABEL = "Naziv";
+export const COMMUNITY_MANAGE_NAME_PLACEHOLDER = "Naziv zajednice";
+export const COMMUNITY_MANAGE_SLUG_LABEL = "Slug";
+export const COMMUNITY_MANAGE_SLUG_DESCRIPTION =
+    "URL identifikator za stranicu ove zajednice.";
+export const COMMUNITY_MANAGE_DESCRIPTION_LABEL = "Opis";
+export const COMMUNITY_MANAGE_ENABLED_LABEL = "Zajednica omogućena";
+export const COMMUNITY_MANAGE_ENABLED_DESCRIPTION =
+    "Dozvolite korisnicima da se pridruže Vašoj zajednici";
+export const COMMUNITY_MANAGE_AUTO_ACCEPT_LABEL = "Automatski prihvati članove";
+export const COMMUNITY_MANAGE_AUTO_ACCEPT_DESCRIPTION =
+    "Automatski prihvati nove članove";
+export const COMMUNITY_MANAGE_JOINING_REASON_LABEL =
+    "Tekst za razlog pridruživanja";
+export const COMMUNITY_MANAGE_JOINING_REASON_PLACEHOLDER =
+    "Tekst koji se prikazuje kada korisnici zatraže pristup besplatnoj zajednici";
+export const COMMUNITY_MANAGE_SAVE = "Sačuvaj izmene";
+export const COMMUNITY_MANAGE_FEATURED_IMAGE_LABEL = "Istaknuta slika";
+export const COMMUNITY_MANAGE_FEATURED_IMAGE_DESCRIPTION =
+    "Hero slika Vaše zajednice";
+export const COMMUNITY_MANAGE_CATEGORIES_LABEL = "Kategorije";
+export const COMMUNITY_MANAGE_CATEGORIES_DESCRIPTION =
+    "Dodajte i upravljajte kategorijama zajednice";
+export const COMMUNITY_MANAGE_CATEGORY_PLACEHOLDER = "Unesite naziv kategorije";
+export const COMMUNITY_MANAGE_CATEGORY_ADD = "Dodaj kategoriju";
+export const COMMUNITY_MANAGE_CATEGORY_REMOVE = "Ukloni kategoriju";
+export const COMMUNITY_MANAGE_CATEGORY_ADDED_TITLE = "Kategorija dodata";
+export const COMMUNITY_MANAGE_CATEGORY_ADDED_DESCRIPTION =
+    "Kategorija je uspešno dodata.";
+export const COMMUNITY_MANAGE_CATEGORY_DELETED_TITLE = "Kategorija obrisana";
+export const COMMUNITY_MANAGE_CATEGORY_DELETED_DESCRIPTION =
+    "Kategorija je uklonjena i objave su migrirane.";
+export const COMMUNITY_MANAGE_CATEGORY_DELETE_TITLE = "Obriši kategoriju";
+export const COMMUNITY_MANAGE_CATEGORY_DELETE_DESCRIPTION =
+    "Izaberite kategoriju u koju ćete migrirati objave pre brisanja.";
+export const COMMUNITY_MANAGE_CATEGORY_SELECT = "Izaberite kategoriju";
+export const COMMUNITY_MANAGE_CATEGORY_DELETE_MIGRATE =
+    "Obriši i migriraj postojeći sadržaj u";
+export const COMMUNITY_MANAGE_CATEGORY_NONE = "Nijedna";
+export const COMMUNITY_MANAGE_PRICING_LABEL = "Cene";
+export const COMMUNITY_MANAGE_PRICING_DESCRIPTION =
+    "Upravljajte planovima plaćanja za zajednicu";
+export const COMMUNITY_MANAGE_DELETE_BUTTON = "Obriši zajednicu";
+export const COMMUNITY_MANAGE_DELETE_TITLE = "Da li ste apsolutno sigurni?";
+export const COMMUNITY_MANAGE_DELETE_DESCRIPTION =
+    "Ova radnja je nepovratna. Svi podaci zajednice biće trajno obrisani.";
+export const COMMUNITY_MANAGE_DELETE_CONFIRM_LABEL =
+    'Ukucajte "obrisi" da potvrdite';
+export const COMMUNITY_MANAGE_DELETE_CONFIRM_PLACEHOLDER =
+    "Ukucajte 'obrisi' da potvrdite";
+export const COMMUNITY_MANAGE_DELETE_CONFIRM_KEYWORD = "obrisi";
+export const COMMUNITY_MANAGE_DELETE_LOADING = "Brisanje...";
+export const COMMUNITY_MANAGE_DELETE_ACTION = "Obriši";
+export const COMMUNITY_MANAGE_DELETED_SUCCESS = "Zajednica je uspešno obrisana";
+export const COMMUNITY_MEMBERSHIP_FILTER_STATUS = "Filtriraj po statusu";
+export const COMMUNITY_MEMBERSHIP_FILTER_ALL = "Sve";
+export const COMMUNITY_MEMBERSHIP_COL_USER = "Korisnik";
+export const COMMUNITY_MEMBERSHIP_COL_STATUS = "Status";
+export const COMMUNITY_MEMBERSHIP_COL_ROLE = "Uloga";
+export const COMMUNITY_MEMBERSHIP_COL_JOINING_REASON = "Razlog pridruživanja";
+export const COMMUNITY_MEMBERSHIP_COL_REJECTION_REASON = "Razlog odbijanja";
+export const COMMUNITY_MEMBERSHIP_COL_SUBSCRIPTION = "Pretplata";
+export const COMMUNITY_MEMBERSHIP_CHANGE_STATUS = "Promeni status";
+export const COMMUNITY_MEMBERSHIP_CHANGE_ROLE = "Promeni ulogu";
+export const COMMUNITY_MEMBERSHIP_COPY_SUBSCRIPTION = "Kopiraj ID pretplate";
+export const COMMUNITY_MEMBERSHIP_SUBSCRIPTION_ID = "ID pretplate";
+export const COMMUNITY_MEMBERSHIP_COPIED_TITLE = "Uspeh";
+export const COMMUNITY_MEMBERSHIP_COPIED_DESCRIPTION =
+    "ID pretplate je kopiran u clipboard";
+export const COMMUNITY_MEMBERSHIP_REJECT_TITLE = "Odbij zahtev za članstvo";
+export const COMMUNITY_MEMBERSHIP_REJECT_DESCRIPTION =
+    "Navedite razlog odbijanja ovog zahteva za članstvo.";
+export const COMMUNITY_MEMBERSHIP_REJECT_CONFIRM = "Potvrdi odbijanje";
+export const COMMUNITY_STATUS_PENDING = "na čekanju";
+export const COMMUNITY_STATUS_ACTIVE = "aktivno";
+export const COMMUNITY_STATUS_REJECTED = "odbijeno";
+export const COMMUNITY_STATUS_ACCEPTED = "prihvaćeno";
+export const COMMUNITY_REPORT_COL_CONTENT = "Sadržaj";
+export const COMMUNITY_REPORT_COL_TYPE = "Tip";
+export const COMMUNITY_REPORT_COL_REASON = "Razlog";
+export const COMMUNITY_REPORT_COL_STATUS = "Status";
+export const COMMUNITY_REPORT_COL_REJECTION_REASON = "Razlog odbijanja";
+export const COMMUNITY_REPORT_COL_ACTIONS = "Akcije";
+export const COMMUNITY_REPORT_CHANGE = "Promeni";
+export const COMMUNITY_WRITE_SOMETHING = "Napišite nešto...";
+export const COMMUNITY_CATEGORY_ALL = "Sve";
+export const COMMUNITY_CATEGORY_GENERAL = "Opšte";
+export const COMMUNITY_SHOW_MORE = "Više...";
+export const COMMUNITY_SHOW_LESS = "Manje";
+export const COMMUNITY_BANNER_PLACEHOLDER =
+    "Ovde delite važna ažuriranja, obaveštenja ili vesti sa članovima zajednice.";
+export const COMMUNITY_MEMBERS_LABEL_ONE = "član";
+export const COMMUNITY_MEMBERS_LABEL_FEW = "člana";
+export const COMMUNITY_MEMBERS_LABEL_MANY = "članova";
+export const COMMUNITY_LEAVE = "Napusti zajednicu";
+export const COMMUNITY_JOIN = "Pridruži se";
+export const COMMUNITY_JOIN_REASON_LABEL =
+    "Zašto želite da se pridružite ovoj zajednici?";
+export const COMMUNITY_JOIN_REASON_PLACEHOLDER = "Razlog za pridruživanje";
+export const COMMUNITY_POST_TITLE_PLACEHOLDER = "Naslov";
+export const COMMUNITY_POST_CONTENT_PLACEHOLDER = "Šta Vam je na umu?";
+export const COMMUNITY_POST_TITLE_REQUIRED = "Naslov je obavezan";
+export const COMMUNITY_POST_CONTENT_REQUIRED = "Sadržaj je obavezan";
+export const COMMUNITY_POST_CATEGORY_REQUIRED = "Kategorija je obavezna";
+export const COMMUNITY_POST_SELECT_CATEGORY = "Izaberite kategoriju";
+export const COMMUNITY_POST_ATTACH_FILES = "Priloži fajlove";
+export const COMMUNITY_POST_ADD_VIDEO = "Dodaj video";
+export const COMMUNITY_POST_ADD_VIDEO_BUTTON = "Dodaj video";
+export const COMMUNITY_POST_ADD_GIF = "Dodaj GIF";
+export const COMMUNITY_POST_SEARCH_GIFS = "Pretraži GIF-ove";
+export const COMMUNITY_POST_LOADING_GIFS = "Učitavanje GIF-ova...";
+export const COMMUNITY_POST_YOUTUBE_TITLE = "YouTube video";
+export const COMMUNITY_POST_UPLOADING = "Otpremanje";
+export const COMMUNITY_POST_OF_FILES = "od";
+export const COMMUNITY_POST_FILES = "fajlova";
+export const COMMUNITY_POST_BUTTON = "Objavi";
+export const COMMUNITY_POST_SAVING = "Čuvanje...";
+export const COMMUNITY_POSTING = "Objavljivanje...";
+export const PAGINATION_PREVIOUS = "Prethodna";
+export const PAGINATION_NEXT = "Sledeća";
+export const PAGINATION_OF = "od";
 
 // Payment Plan strings
 export const NEW_PAYMENT_PLAN_HEADER = "Novi plan plaćanja";
@@ -900,7 +1043,7 @@ export const PRODUCT_EMPTY_WARNING =
 export const BLOG_UPDATED_PREFIX = "Ažurirano";
 export const HEADER_HELP = "Pomoć";
 export const CHECKOUT_PAGE_ORDER_SUMMARY = "Pregled porudžbine";
-export const TEXT_EDITOR_PLACEHOLDER = "Kucajte ovde...";
+export const TEXT_EDITOR_PLACEHOLDER = "Napišite nešto...";
 export const BTN_VIEW_CERTIFICATE = "Prikaži sertifikat";
 export const GET_SET_UP = "Podesite";
 export const MANAGE_LINK_TEXT = "Upravljaj";
@@ -914,6 +1057,15 @@ export const PRODUCTS_LIST_EMPTY_DESCRIPTION_PUBLIC =
     "Tim još nije dodao nijedan proizvod.";
 export const PRODUCTS_LIST_EMPTY_DESCRIPTION_PRIVATE =
     "Još niste dodali nijedan proizvod.";
+export const COMMUNITIES_LIST_EMPTY_TITLE = "Nema pronađenih zajednica";
+export const COMMUNITIES_LIST_EMPTY_DESCRIPTION_PUBLIC =
+    "Tim još nije dodao nijednu zajednicu.";
+export const COMMUNITIES_LIST_EMPTY_DESCRIPTION_PRIVATE =
+    "Još niste dodali nijednu zajednicu.";
+export const COMMUNITIES_LIST_PAGE_EMPTY = "Ova stranica je prazna.";
+export const COMMUNITIES_LIST_GO_TO_FIRST_PAGE = "Idi na prvu stranicu";
+export const RESOURCES_HEADER = "Resursi";
+export const RESOURCE_CREATE_COMMUNITY = "Kreirajte zajednicu";
 export const LOGIN_CODE_SENT_MESSAGE =
     "Poslali smo vam jednokratnu lozinku emailom.";
 export const LESSON_EMBED_URL_LABEL = "Embed kod";
@@ -921,3 +1073,10 @@ export const LESSON_CONTENT_LABEL = "Sadržaj";
 export const EMAIL_EDITOR_EMAIL_EDIT_HEADER = "Uređivanje emaila";
 export const EMAIL_EDITOR_TEMPLATE_EDIT_HEADER = "Uređivanje šablona";
 export const LOGIN_FORM_PERSONAL_INFORMATION_LABEL = "Lični podaci";
+export const LOGIN_EMAIL_REQUIRED = "Unesite ispravnu email adresu";
+export const LOGIN_OTP_MIN_LENGTH = "Kod mora imati najmanje 6 karaktera";
+export const FIRST_RUN_POPUP_TITLE = "Dobrodošli u Vašu novu školu! 🎉";
+export const FIRST_RUN_POPUP_DESCRIPTION =
+    "Skoro ste spremni da unovčite svoje znanje.";
+export const FIRST_RUN_POPUP_SKIP = "Uradiću to sam";
+export const FIRST_RUN_POPUP_CONTINUE = "Nastavi podešavanje";

@@ -3,7 +3,50 @@
 import DashboardContent from "@components/admin/dashboard-content";
 import { AddressContext, ProfileContext } from "@components/contexts";
 import {
+    BUTTON_CANCEL_TEXT,
     COMMUNITY_HEADER,
+    COMMUNITY_MANAGE_AUTO_ACCEPT_DESCRIPTION,
+    COMMUNITY_MANAGE_AUTO_ACCEPT_LABEL,
+    COMMUNITY_MANAGE_CATEGORIES_DESCRIPTION,
+    COMMUNITY_MANAGE_CATEGORIES_LABEL,
+    COMMUNITY_MANAGE_CATEGORY_ADD,
+    COMMUNITY_MANAGE_CATEGORY_ADDED_DESCRIPTION,
+    COMMUNITY_MANAGE_CATEGORY_ADDED_TITLE,
+    COMMUNITY_MANAGE_CATEGORY_DELETE_DESCRIPTION,
+    COMMUNITY_MANAGE_CATEGORY_DELETE_MIGRATE,
+    COMMUNITY_MANAGE_CATEGORY_DELETE_TITLE,
+    COMMUNITY_MANAGE_CATEGORY_DELETED_DESCRIPTION,
+    COMMUNITY_MANAGE_CATEGORY_DELETED_TITLE,
+    COMMUNITY_MANAGE_CATEGORY_NONE,
+    COMMUNITY_MANAGE_CATEGORY_PLACEHOLDER,
+    COMMUNITY_MANAGE_CATEGORY_REMOVE,
+    COMMUNITY_MANAGE_CATEGORY_SELECT,
+    COMMUNITY_MANAGE_DELETE_ACTION,
+    COMMUNITY_MANAGE_DELETE_BUTTON,
+    COMMUNITY_MANAGE_DELETE_CONFIRM_KEYWORD,
+    COMMUNITY_MANAGE_DELETE_CONFIRM_LABEL,
+    COMMUNITY_MANAGE_DELETE_CONFIRM_PLACEHOLDER,
+    COMMUNITY_MANAGE_DELETE_DESCRIPTION,
+    COMMUNITY_MANAGE_DELETE_LOADING,
+    COMMUNITY_MANAGE_DELETE_TITLE,
+    COMMUNITY_MANAGE_DELETED_SUCCESS,
+    COMMUNITY_MANAGE_DESCRIPTION_LABEL,
+    COMMUNITY_MANAGE_EDIT_PAGE,
+    COMMUNITY_MANAGE_ENABLED_DESCRIPTION,
+    COMMUNITY_MANAGE_ENABLED_LABEL,
+    COMMUNITY_MANAGE_FEATURED_IMAGE_DESCRIPTION,
+    COMMUNITY_MANAGE_FEATURED_IMAGE_LABEL,
+    COMMUNITY_MANAGE_JOINING_REASON_LABEL,
+    COMMUNITY_MANAGE_JOINING_REASON_PLACEHOLDER,
+    COMMUNITY_MANAGE_NAME_LABEL,
+    COMMUNITY_MANAGE_NAME_PLACEHOLDER,
+    COMMUNITY_MANAGE_PRICING_DESCRIPTION,
+    COMMUNITY_MANAGE_PRICING_LABEL,
+    COMMUNITY_MANAGE_SAVE,
+    COMMUNITY_MANAGE_SLUG_DESCRIPTION,
+    COMMUNITY_MANAGE_SLUG_LABEL,
+    COMMUNITY_MANAGE_SUBHEADER,
+    COMMUNITY_MEMBERSHIP_LIST_HEADER,
     COMMUNITY_REPORTS_HEADER,
     COMMUNITY_SETTINGS,
     DANGER_ZONE_HEADER,
@@ -12,6 +55,7 @@ import {
     TOAST_DESCRIPTION_CHANGES_SAVED,
     TOAST_TITLE_ERROR,
     TOAST_TITLE_SUCCESS,
+    TEXT_EDITOR_PLACEHOLDER,
 } from "@ui-config/strings";
 import { ChangeEvent, useContext, useEffect, useState, use } from "react";
 import {
@@ -158,7 +202,7 @@ export default function Page(props: {
             if (response.community) {
                 toast({
                     title: TOAST_TITLE_SUCCESS,
-                    description: "Community has been deleted successfully",
+                    description: COMMUNITY_MANAGE_DELETED_SUCCESS,
                 });
                 router.replace("/dashboard/communities");
             }
@@ -386,8 +430,9 @@ export default function Page(props: {
                     setCategories(response.addCategory.categories);
                     setNewCategory("");
                     toast({
-                        title: "Category Added",
-                        description: `Category "${newCategory}" has been added successfully.`,
+                        title: COMMUNITY_MANAGE_CATEGORY_ADDED_TITLE,
+                        description:
+                            COMMUNITY_MANAGE_CATEGORY_ADDED_DESCRIPTION,
                     });
                 }
             } catch (error) {
@@ -430,8 +475,9 @@ export default function Page(props: {
                 if (response.deleteCategory) {
                     setCategories(response.deleteCategory.categories);
                     toast({
-                        title: "Category Deleted",
-                        description: `The category "${deletingCategory}" has been removed and posts migrated to "${migrationCategory}".`,
+                        title: COMMUNITY_MANAGE_CATEGORY_DELETED_TITLE,
+                        description:
+                            COMMUNITY_MANAGE_CATEGORY_DELETED_DESCRIPTION,
                     });
                     setDeletingCategory(null);
                     setMigrationCategory("");
@@ -537,8 +583,8 @@ export default function Page(props: {
                                         href={`/dashboard/page/${pageId}?redirectTo=/dashboard/community/${id}/manage`}
                                     >
                                         <Button variant="outline" className="">
-                                            <Edit className="w-4 h-4" /> Edit
-                                            page
+                                            <Edit className="w-4 h-4" />{" "}
+                                            {COMMUNITY_MANAGE_EDIT_PAGE}
                                         </Button>
                                     </Link>
                                 )}
@@ -546,7 +592,8 @@ export default function Page(props: {
                                 href={`/dashboard/community/${id}/manage/memberships`}
                             >
                                 <Button variant="outline" className="">
-                                    <Users className="w-4 h-4" /> Memberships
+                                    <Users className="w-4 h-4" />{" "}
+                                    {COMMUNITY_MEMBERSHIP_LIST_HEADER}
                                 </Button>
                             </Link>
                             <Link
@@ -560,22 +607,22 @@ export default function Page(props: {
                         </div>
                     </div>
                     <p className="text-muted-foreground">
-                        Manage your community settings.
+                        {COMMUNITY_MANAGE_SUBHEADER}
                     </p>
                 </div>
                 <div className="space-y-6">
                     <FormField
                         value={name}
                         name="name"
-                        label={"Name"}
+                        label={COMMUNITY_MANAGE_NAME_LABEL}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                             setName(e.target.value)
                         }
-                        placeholder="Community name"
+                        placeholder={COMMUNITY_MANAGE_NAME_PLACEHOLDER}
                     />
                     <div className="space-y-2">
                         <Label htmlFor="slug" className="font-semibold">
-                            Slug
+                            {COMMUNITY_MANAGE_SLUG_LABEL}
                         </Label>
                         <Input
                             id="slug"
@@ -584,29 +631,32 @@ export default function Page(props: {
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setSlug(e.target.value)
                             }
-                            placeholder="my-community"
+                            placeholder="moja-zajednica"
                         />
                         <p className="text-sm text-muted-foreground">
-                            The URL-friendly identifier for this community page.
+                            {COMMUNITY_MANAGE_SLUG_DESCRIPTION}
                         </p>
                     </div>
                     <div>
-                        <h2 className="font-semibold">Description</h2>
+                        <h2 className="font-semibold">
+                            {COMMUNITY_MANAGE_DESCRIPTION_LABEL}
+                        </h2>
                         <Editor
                             initialContent={description}
                             onChange={(state: any) => setDescription(state)}
                             showToolbar={false}
                             url={address.backend}
                             refresh={refresh}
+                            placeholder={TEXT_EDITOR_PLACEHOLDER}
                         />
                     </div>
                     <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                             <Label htmlFor="enabled" className="font-semibold">
-                                Community Enabled
+                                {COMMUNITY_MANAGE_ENABLED_LABEL}
                             </Label>
                             <p className="text-sm text-muted-foreground">
-                                Allow users to join your community
+                                {COMMUNITY_MANAGE_ENABLED_DESCRIPTION}
                             </p>
                         </div>
                         <Switch
@@ -618,10 +668,10 @@ export default function Page(props: {
                     <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                             <Label htmlFor="default" className="font-semibold">
-                                Auto accept members
+                                {COMMUNITY_MANAGE_AUTO_ACCEPT_LABEL}
                             </Label>
                             <p className="text-sm text-muted-foreground">
-                                Automatically accept new members
+                                {COMMUNITY_MANAGE_AUTO_ACCEPT_DESCRIPTION}
                             </p>
                         </div>
                         <Switch
@@ -633,23 +683,25 @@ export default function Page(props: {
                     <FormField
                         value={joiningReasonText}
                         name="joiningReasonText"
-                        label="Joining reason text"
+                        label={COMMUNITY_MANAGE_JOINING_REASON_LABEL}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                             setJoiningReasonText(e.target.value)
                         }
-                        placeholder="Text to show when users request to join a free community"
+                        placeholder={
+                            COMMUNITY_MANAGE_JOINING_REASON_PLACEHOLDER
+                        }
                     />
                 </div>
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit">{COMMUNITY_MANAGE_SAVE}</Button>
             </Form>
             <Separator className="my-8" />
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label className="text-base font-semibold">
-                        Featured image
+                        {COMMUNITY_MANAGE_FEATURED_IMAGE_LABEL}
                     </Label>
                     <p className="text-sm text-muted-foreground mb-4">
-                        The hero image for your community
+                        {COMMUNITY_MANAGE_FEATURED_IMAGE_DESCRIPTION}
                     </p>
                     {featuredImage && (
                         <div className="w-32 rounded overflow-hidden border">
@@ -692,10 +744,10 @@ export default function Page(props: {
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label className="text-base font-semibold">
-                        Categories
+                        {COMMUNITY_MANAGE_CATEGORIES_LABEL}
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                        Add and manage community categories
+                        {COMMUNITY_MANAGE_CATEGORIES_DESCRIPTION}
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -713,7 +765,8 @@ export default function Page(props: {
                             >
                                 <X className="h-3 w-3" />
                                 <span className="sr-only">
-                                    Remove {category} category
+                                    {COMMUNITY_MANAGE_CATEGORY_REMOVE}{" "}
+                                    {category}
                                 </span>
                             </button>
                         </Badge>
@@ -723,20 +776,22 @@ export default function Page(props: {
                     <FormField
                         value={newCategory}
                         onChange={(e) => setNewCategory(e.target.value)}
-                        placeholder="Enter category name"
+                        placeholder={COMMUNITY_MANAGE_CATEGORY_PLACEHOLDER}
                         className="flex-1"
                     />
                     <Button type="submit" variant="secondary">
-                        Add Category
+                        {COMMUNITY_MANAGE_CATEGORY_ADD}
                     </Button>
                 </Form>
             </div>
             <Separator className="my-8" />
             <div className="space-y-4 flex flex-col md:flex-row md:items-start md:justify-between w-full">
                 <div className="space-y-2">
-                    <Label className="text-base font-semibold">Pricing</Label>
+                    <Label className="text-base font-semibold">
+                        {COMMUNITY_MANAGE_PRICING_LABEL}
+                    </Label>
                     <p className="text-sm text-muted-foreground">
-                        Manage your community pricing plans
+                        {COMMUNITY_MANAGE_PRICING_DESCRIPTION}
                     </p>
                 </div>
                 <PaymentPlanList
@@ -763,16 +818,17 @@ export default function Page(props: {
                     }
                 >
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive">Delete Community</Button>
+                        <Button variant="destructive">
+                            {COMMUNITY_MANAGE_DELETE_BUTTON}
+                        </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
                             <AlertDialogTitle>
-                                Are you absolutely sure?
+                                {COMMUNITY_MANAGE_DELETE_TITLE}
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                                This action is irreversible. All community data
-                                will be permanently deleted.
+                                {COMMUNITY_MANAGE_DELETE_DESCRIPTION}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div className="py-4">
@@ -780,12 +836,14 @@ export default function Page(props: {
                                 htmlFor="delete-confirmation"
                                 className="text-sm font-medium"
                             >
-                                Type &quot;delete&quot; to confirm
+                                {COMMUNITY_MANAGE_DELETE_CONFIRM_LABEL}
                             </Label>
                             <Input
                                 id="delete-confirmation"
                                 type="text"
-                                placeholder="Type 'delete' to confirm"
+                                placeholder={
+                                    COMMUNITY_MANAGE_DELETE_CONFIRM_PLACEHOLDER
+                                }
                                 value={deleteConfirmation}
                                 onChange={(e) =>
                                     setDeleteConfirmation(e.target.value)
@@ -794,11 +852,14 @@ export default function Page(props: {
                             />
                         </div>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel>
+                                {BUTTON_CANCEL_TEXT}
+                            </AlertDialogCancel>
                             <AlertDialogAction
                                 onClick={handleDeleteConfirm}
                                 disabled={
-                                    deleteConfirmation !== "delete" ||
+                                    deleteConfirmation !==
+                                        COMMUNITY_MANAGE_DELETE_CONFIRM_KEYWORD ||
                                     isDeleting
                                 }
                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -806,10 +867,10 @@ export default function Page(props: {
                                 {isDeleting ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Deleting...
+                                        {COMMUNITY_MANAGE_DELETE_LOADING}
                                     </>
                                 ) : (
-                                    "Delete"
+                                    COMMUNITY_MANAGE_DELETE_ACTION
                                 )}
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -834,11 +895,13 @@ export default function Page(props: {
             >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Category</DialogTitle>
+                        <DialogTitle>
+                            {COMMUNITY_MANAGE_CATEGORY_DELETE_TITLE}
+                        </DialogTitle>
                         <DialogDescription>
-                            Please select a category to migrate the posts from
+                            {COMMUNITY_MANAGE_CATEGORY_DELETE_DESCRIPTION}{" "}
                             &quot;
-                            {deletingCategory}&quot; before deleting.
+                            {deletingCategory}&quot;
                         </DialogDescription>
                     </DialogHeader>
                     <Select
@@ -846,7 +909,9 @@ export default function Page(props: {
                         onValueChange={setMigrationCategory}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a category" />
+                            <SelectValue
+                                placeholder={COMMUNITY_MANAGE_CATEGORY_SELECT}
+                            />
                         </SelectTrigger>
                         <SelectContent>
                             {categories
@@ -863,14 +928,14 @@ export default function Page(props: {
                             variant="outline"
                             onClick={() => setDeletingCategory(null)}
                         >
-                            Cancel
+                            {BUTTON_CANCEL_TEXT}
                         </Button>
                         <Button
                             className="!bg-red-500 text-white hover:!bg-red-600"
                             variant="destructive"
                             onClick={confirmDeleteCategory}
                         >
-                            {`Delete and migrate existing content to ${migrationCategory || "'None'"}`}
+                            {`${COMMUNITY_MANAGE_CATEGORY_DELETE_MIGRATE} ${migrationCategory || COMMUNITY_MANAGE_CATEGORY_NONE}`}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

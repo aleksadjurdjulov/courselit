@@ -9,7 +9,11 @@ import {
     UIConstants,
 } from "@courselit/common-models";
 import { FormEvent, Fragment, useContext, useState } from "react";
-import { getPlanPrice, hasCommunityPermission } from "@ui-lib/utils";
+import {
+    getPlanPrice,
+    hasCommunityPermission,
+    getCommunityMembersLabel,
+} from "@ui-lib/utils";
 import {
     Form,
     FormField,
@@ -33,7 +37,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@components/ui/dialog";
-import { COMMUNITY_SETTINGS, TOAST_TITLE_SUCCESS } from "@ui-config/strings";
+import {
+    COMMUNITY_SETTINGS,
+    TOAST_TITLE_SUCCESS,
+    COMMUNITY_LEAVE,
+    BUTTON_CANCEL_TEXT,
+    COMMUNITY_JOIN,
+    COMMUNITY_JOIN_REASON_LABEL,
+    COMMUNITY_JOIN_REASON_PLACEHOLDER,
+    BTN_SEND,
+} from "@ui-config/strings";
 import { Share2 } from "lucide-react";
 import WidgetErrorBoundary from "@components/public/base-layout/template/widget-error-boundary";
 import { truncate } from "@courselit/utils";
@@ -136,7 +149,8 @@ export function CommunityInfo({
                         )}
                     </div>
                     <p className="text-sm">
-                        <strong>{memberCount.toLocaleString()}</strong> members
+                        <strong>{memberCount.toLocaleString()}</strong>{" "}
+                        {getCommunityMembersLabel(memberCount)}
                     </p>
                 </div>
                 {!membership && (
@@ -147,7 +161,7 @@ export function CommunityInfo({
                                 className="w-full"
                             >
                                 <Button className="w-full">
-                                    Join {currencySymbol}
+                                    {COMMUNITY_JOIN} {currencySymbol}
                                     {amount} {period}
                                 </Button>
                             </Link>
@@ -159,7 +173,7 @@ export function CommunityInfo({
                             >
                                 <DialogTrigger asChild>
                                     <Button className="w-full">
-                                        Join {currencySymbol}
+                                        {COMMUNITY_JOIN} {currencySymbol}
                                         {amount} {period}
                                     </Button>
                                 </DialogTrigger>
@@ -169,7 +183,7 @@ export function CommunityInfo({
                                             <FormField
                                                 label={
                                                     joiningReasonText ||
-                                                    "Why do you want to join this community?"
+                                                    COMMUNITY_JOIN_REASON_LABEL
                                                 }
                                                 value={joiningReason}
                                                 onChange={(e) =>
@@ -177,11 +191,13 @@ export function CommunityInfo({
                                                         e.target.value,
                                                     )
                                                 }
-                                                placeholder="Reason to join"
+                                                placeholder={
+                                                    COMMUNITY_JOIN_REASON_PLACEHOLDER
+                                                }
                                                 required
                                             />
                                             <Button type="submit">
-                                                Submit
+                                                {BTN_SEND}
                                             </Button>
                                         </div>
                                     </Form>
@@ -198,7 +214,7 @@ export function CommunityInfo({
                                 variant="outline"
                                 className="w-full"
                             >
-                                Leave Community
+                                {COMMUNITY_LEAVE}
                             </Button>
                             <Dialog
                                 open={showLeaveConfirmation}
@@ -207,7 +223,7 @@ export function CommunityInfo({
                                 <DialogContent>
                                     <DialogHeader>
                                         <DialogTitle>
-                                            Leave Community
+                                            {COMMUNITY_LEAVE}
                                         </DialogTitle>
                                         <DialogDescription>
                                             Are you sure you want to leave this
@@ -225,13 +241,13 @@ export function CommunityInfo({
                                                 setShowLeaveConfirmation(false)
                                             }
                                         >
-                                            Cancel
+                                            {BUTTON_CANCEL_TEXT}
                                         </Button>
                                         <Button
                                             variant="destructive"
                                             onClick={handleConfirmLeave}
                                         >
-                                            Leave Community
+                                            {COMMUNITY_LEAVE}
                                         </Button>
                                     </DialogFooter>
                                 </DialogContent>

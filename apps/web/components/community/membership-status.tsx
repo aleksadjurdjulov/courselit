@@ -16,7 +16,14 @@ import {
     ProfileContext,
     SiteInfoContext,
 } from "@components/contexts";
-import { TOAST_TITLE_ERROR, TOAST_TITLE_SUCCESS } from "@ui-config/strings";
+import {
+    TOAST_TITLE_ERROR,
+    TOAST_TITLE_SUCCESS,
+    COMMUNITY_JOIN,
+    COMMUNITY_JOIN_REASON_LABEL,
+    COMMUNITY_JOIN_REASON_PLACEHOLDER,
+    BTN_SEND,
+} from "@ui-config/strings";
 import { Alert, AlertDescription, AlertTitle } from "@components/ui/alert";
 import { Clock } from "@courselit/icons";
 import { AlertCircle } from "lucide-react";
@@ -143,7 +150,7 @@ export default function MembershipStatus({
                             href={`/checkout?id=${id}&type=${Constants.MembershipEntityType.COMMUNITY}`}
                         >
                             <Button>
-                                Join {currencySymbol}
+                                {COMMUNITY_JOIN} {currencySymbol}
                                 {amount} {period}
                             </Button>
                         </Link>
@@ -155,7 +162,7 @@ export default function MembershipStatus({
                         >
                             <DialogTrigger asChild>
                                 <Button>
-                                    Join {currencySymbol}
+                                    {COMMUNITY_JOIN} {currencySymbol}
                                     {amount} {period}
                                 </Button>
                             </DialogTrigger>
@@ -165,13 +172,15 @@ export default function MembershipStatus({
                                         <FormField
                                             label={
                                                 joiningReasonText ||
-                                                "Why do you want to join this community?"
+                                                COMMUNITY_JOIN_REASON_LABEL
                                             }
                                             value={joiningReason}
                                             onChange={(e) =>
                                                 setJoiningReason(e.target.value)
                                             }
-                                            placeholder="Reason to join"
+                                            placeholder={
+                                                COMMUNITY_JOIN_REASON_PLACEHOLDER
+                                            }
                                             required
                                         />
                                         <Button
@@ -179,7 +188,7 @@ export default function MembershipStatus({
                                             disabled={loading}
                                         >
                                             {loading && <CircularProgress />}
-                                            Submit
+                                            {BTN_SEND}
                                         </Button>
                                     </div>
                                 </Form>

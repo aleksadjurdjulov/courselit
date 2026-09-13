@@ -45,7 +45,29 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Editor, emptyDoc as TextEditorEmptyDoc } from "@courselit/text-editor";
 import { extractVideoId } from "@courselit/utils";
-import { isTextEditorNonEmpty } from "@ui-lib/utils";
+import { isTextEditorNonEmpty, getCommunityCategoryLabel } from "@ui-lib/utils";
+import {
+    COMMUNITY_WRITE_SOMETHING,
+    COMMUNITY_POST_TITLE_PLACEHOLDER,
+    COMMUNITY_POST_CONTENT_PLACEHOLDER,
+    COMMUNITY_POST_TITLE_REQUIRED,
+    COMMUNITY_POST_CONTENT_REQUIRED,
+    COMMUNITY_POST_CATEGORY_REQUIRED,
+    COMMUNITY_POST_SELECT_CATEGORY,
+    COMMUNITY_POST_ATTACH_FILES,
+    COMMUNITY_POST_ADD_VIDEO,
+    COMMUNITY_POST_ADD_VIDEO_BUTTON,
+    COMMUNITY_POST_ADD_GIF,
+    COMMUNITY_POST_YOUTUBE_TITLE,
+    COMMUNITY_POST_UPLOADING,
+    COMMUNITY_POST_OF_FILES,
+    COMMUNITY_POST_FILES,
+    COMMUNITY_POST_BUTTON,
+    COMMUNITY_POSTING,
+    COMMUNITY_POST_SAVING,
+    BUTTON_CANCEL_TEXT,
+    BUTTON_SAVE,
+} from "@ui-config/strings";
 
 const createClientId = () => {
     if (typeof crypto !== "undefined" && crypto.randomUUID) {
@@ -229,7 +251,7 @@ export default function CreatePostDialog({
                 {
                     type: "youtube",
                     url: `https://www.youtube.com/embed/${videoId}`,
-                    title: "YouTube Video",
+                    title: COMMUNITY_POST_YOUTUBE_TITLE,
                     clientId: createClientId(),
                 },
             ]);
@@ -261,9 +283,12 @@ export default function CreatePostDialog({
     const handlePost = async () => {
         if (title.trim() === "" || !isTextEditorNonEmpty(content)) {
             setErrors({
-                title: title.trim() === "" ? "Title is required" : undefined,
+                title:
+                    title.trim() === ""
+                        ? COMMUNITY_POST_TITLE_REQUIRED
+                        : undefined,
                 content: !isTextEditorNonEmpty(content)
-                    ? "Content is required"
+                    ? COMMUNITY_POST_CONTENT_REQUIRED
                     : undefined,
             });
             return;
@@ -272,7 +297,7 @@ export default function CreatePostDialog({
         if (category === "") {
             setErrors((prev) => ({
                 ...prev,
-                category: "Category is required",
+                category: COMMUNITY_POST_CATEGORY_REQUIRED,
             }));
             return;
         }
@@ -338,7 +363,7 @@ export default function CreatePostDialog({
                             tabIndex={0}
                             className="flex items-start w-full rounded-md border border-input bg-background px-3 pt-3 pb-8 text-sm text-muted-foreground ring-offset-background cursor-text hover:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
-                            Write something...
+                            {COMMUNITY_WRITE_SOMETHING}
                         </div>
                     </DialogTrigger>
                 ))}
@@ -374,7 +399,7 @@ export default function CreatePostDialog({
                 <div className="space-y-4">
                     <div>
                         <Input
-                            placeholder="Title"
+                            placeholder={COMMUNITY_POST_TITLE_PLACEHOLDER}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
@@ -391,7 +416,7 @@ export default function CreatePostDialog({
                             onChange={(value) =>
                                 setContent(value as TextEditorContent)
                             }
-                            placeholder="What's on your mind?"
+                            placeholder={COMMUNITY_POST_CONTENT_PLACEHOLDER}
                             showToolbar={false}
                         />
                         {errors.content && (
@@ -422,14 +447,14 @@ export default function CreatePostDialog({
                                 >
                                     <Paperclip className="h-5 w-5" />
                                     <span className="sr-only">
-                                        Attach files
+                                        {COMMUNITY_POST_ATTACH_FILES}
                                     </span>
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">
                                 <div className="grid gap-4">
                                     <h4 className="font-medium leading-none">
-                                        Attach files
+                                        {COMMUNITY_POST_ATTACH_FILES}
                                     </h4>
                                     <Input
                                         id="file"
@@ -486,13 +511,15 @@ export default function CreatePostDialog({
                                     className="h-9 w-9"
                                 >
                                     <Video className="h-5 w-5" />
-                                    <span className="sr-only">Add video</span>
+                                    <span className="sr-only">
+                                        {COMMUNITY_POST_ADD_VIDEO}
+                                    </span>
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">
                                 <div className="grid gap-4">
                                     <h4 className="font-medium leading-none">
-                                        Add video
+                                        {COMMUNITY_POST_ADD_VIDEO}
                                     </h4>
                                     <Input
                                         id="video"
@@ -510,7 +537,7 @@ export default function CreatePostDialog({
                                             setVideoUrl("");
                                         }}
                                     >
-                                        Add Video
+                                        {COMMUNITY_POST_ADD_VIDEO_BUTTON}
                                     </Button>
                                 </div>
                             </PopoverContent>
@@ -527,7 +554,9 @@ export default function CreatePostDialog({
                                     className="h-9 w-9"
                                 >
                                     <ImageIcon className="h-5 w-5" />
-                                    <span className="sr-only">Add GIF</span>
+                                    <span className="sr-only">
+                                        {COMMUNITY_POST_ADD_GIF}
+                                    </span>
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">
@@ -540,7 +569,11 @@ export default function CreatePostDialog({
                                 onValueChange={setCategory}
                             >
                                 <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select a category" />
+                                    <SelectValue
+                                        placeholder={
+                                            COMMUNITY_POST_SELECT_CATEGORY
+                                        }
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {categories.map((category) => (
@@ -548,7 +581,9 @@ export default function CreatePostDialog({
                                             key={category}
                                             value={category}
                                         >
-                                            {category}
+                                            {getCommunityCategoryLabel(
+                                                category,
+                                            )}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -564,8 +599,9 @@ export default function CreatePostDialog({
                 {isFileUploading && uploadableMediaCount > 0 && (
                     <>
                         <p className="text-xs text-muted-foreground">
-                            Uploading {fileBeingUploadedNumber} of{" "}
-                            {uploadableMediaCount} files -{" "}
+                            {COMMUNITY_POST_UPLOADING} {fileBeingUploadedNumber}{" "}
+                            {COMMUNITY_POST_OF_FILES} {uploadableMediaCount}{" "}
+                            {COMMUNITY_POST_FILES} -{" "}
                             {Math.round(fileUploadProgress)}%
                         </p>
                         <Progress value={fileUploadProgress} className="h-2" />
@@ -578,7 +614,7 @@ export default function CreatePostDialog({
                             variant="outline"
                             disabled={isPosting}
                         >
-                            Cancel
+                            {BUTTON_CANCEL_TEXT}
                         </Button>
                     </DialogClose>
                     <Button
@@ -587,11 +623,11 @@ export default function CreatePostDialog({
                     >
                         {isPosting
                             ? postId
-                                ? "Saving..."
-                                : "Posting..."
+                                ? COMMUNITY_POST_SAVING
+                                : COMMUNITY_POSTING
                             : postId
-                              ? "Save"
-                              : "Post"}
+                              ? BUTTON_SAVE
+                              : COMMUNITY_POST_BUTTON}
                     </Button>
                 </DialogFooter>
             </DialogContent>

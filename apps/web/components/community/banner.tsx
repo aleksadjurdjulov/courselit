@@ -5,7 +5,13 @@ import { AlertCircle, Pencil, Check, X, Loader2 } from "lucide-react";
 import { useToast } from "@courselit/components-library";
 import { TextRenderer } from "@courselit/page-blocks";
 import { isTextEditorNonEmpty } from "@ui-lib/utils";
-import { BUTTON_SAVING, TOAST_TITLE_SUCCESS } from "@ui-config/strings";
+import {
+    BUTTON_SAVING,
+    TOAST_TITLE_SUCCESS,
+    COMMUNITY_BANNER_PLACEHOLDER,
+    BUTTON_CANCEL_TEXT,
+    BUTTON_SAVE,
+} from "@ui-config/strings";
 import { AddressContext, ThemeContext } from "@components/contexts";
 import type { TextEditorContent } from "@courselit/common-models";
 import { Editor, emptyDoc as TextEditorEmptyDoc } from "@courselit/text-editor";
@@ -90,11 +96,7 @@ export default function Banner({
                                 canEdit && (
                                     <div className="flex items-center space-x-2 text-muted-foreground">
                                         <AlertCircle className="h-4 w-4" />
-                                        <p>
-                                            Share important updates,
-                                            announcements, or news with your
-                                            community members here.
-                                        </p>
+                                        <p>{COMMUNITY_BANNER_PLACEHOLDER}</p>
                                     </div>
                                 )
                             )}
@@ -129,7 +131,7 @@ export default function Banner({
                                 disabled={isSaving}
                             >
                                 <X className="h-4 w-4 mr-1" />
-                                Cancel
+                                {BUTTON_CANCEL_TEXT}
                             </Button>
                             <Button
                                 size="sm"
@@ -144,7 +146,7 @@ export default function Banner({
                                 ) : (
                                     <>
                                         <Check className="h-4 w-4 mr-1" />
-                                        Save
+                                        {BUTTON_SAVE}
                                     </>
                                 )}
                             </Button>

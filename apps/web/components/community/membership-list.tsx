@@ -37,8 +37,30 @@ import {
     useToast,
 } from "@courselit/components-library";
 import {
+    BUTTON_CANCEL_TEXT,
+    COMMUNITY_MEMBERSHIP_CHANGE_ROLE,
+    COMMUNITY_MEMBERSHIP_CHANGE_STATUS,
+    COMMUNITY_MEMBERSHIP_COL_JOINING_REASON,
+    COMMUNITY_MEMBERSHIP_COL_REJECTION_REASON,
+    COMMUNITY_MEMBERSHIP_COL_ROLE,
+    COMMUNITY_MEMBERSHIP_COL_STATUS,
+    COMMUNITY_MEMBERSHIP_COL_SUBSCRIPTION,
+    COMMUNITY_MEMBERSHIP_COL_USER,
+    COMMUNITY_MEMBERSHIP_COPIED_DESCRIPTION,
+    COMMUNITY_MEMBERSHIP_COPIED_TITLE,
+    COMMUNITY_MEMBERSHIP_COPY_SUBSCRIPTION,
+    COMMUNITY_MEMBERSHIP_FILTER_ALL,
+    COMMUNITY_MEMBERSHIP_FILTER_STATUS,
     COMMUNITY_MEMBERSHIP_LIST_HEADER,
     COMMUNITY_MEMBERSHIP_LIST_SUBHEADER,
+    COMMUNITY_MEMBERSHIP_REJECT_CONFIRM,
+    COMMUNITY_MEMBERSHIP_REJECT_DESCRIPTION,
+    COMMUNITY_MEMBERSHIP_REJECT_TITLE,
+    COMMUNITY_MEMBERSHIP_SUBSCRIPTION_ID,
+    COMMUNITY_STATUS_ACTIVE,
+    COMMUNITY_STATUS_PENDING,
+    COMMUNITY_STATUS_REJECTED,
+    COURSE_DISCUSSIONS_ADMIN_REASON,
     TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 import { AddressContext, ProfileContext } from "@components/contexts";
@@ -293,8 +315,8 @@ export function MembershipList({ id }: { id: string }) {
     const handleCopyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
         toast({
-            title: "Success",
-            description: "Subscription ID is copied to clipboard",
+            title: COMMUNITY_MEMBERSHIP_COPIED_TITLE,
+            description: COMMUNITY_MEMBERSHIP_COPIED_DESCRIPTION,
         });
     };
 
@@ -315,17 +337,27 @@ export function MembershipList({ id }: { id: string }) {
                         onValueChange={(value: any) => setFilter(value)}
                     >
                         <SelectTrigger className="w-full sm:w-[180px]">
-                            <SelectValue placeholder="Filter by status" />
+                            <SelectValue
+                                placeholder={COMMUNITY_MEMBERSHIP_FILTER_STATUS}
+                            />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All</SelectItem>
+                            <SelectItem value="all">
+                                {COMMUNITY_MEMBERSHIP_FILTER_ALL}
+                            </SelectItem>
                             {[
                                 Constants.MembershipStatus.PENDING,
                                 Constants.MembershipStatus.ACTIVE,
                                 Constants.MembershipStatus.REJECTED,
                             ].map((status) => (
                                 <SelectItem value={status} key={status}>
-                                    {capitalize(status)}
+                                    {status ===
+                                    Constants.MembershipStatus.PENDING
+                                        ? COMMUNITY_STATUS_PENDING
+                                        : status ===
+                                            Constants.MembershipStatus.ACTIVE
+                                          ? COMMUNITY_STATUS_ACTIVE
+                                          : COMMUNITY_STATUS_REJECTED}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -341,17 +373,27 @@ export function MembershipList({ id }: { id: string }) {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[250px]">
-                                        User
+                                        {COMMUNITY_MEMBERSHIP_COL_USER}
                                     </TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Role</TableHead>
+                                    <TableHead>
+                                        {COMMUNITY_MEMBERSHIP_COL_STATUS}
+                                    </TableHead>
+                                    <TableHead>
+                                        {COMMUNITY_MEMBERSHIP_COL_ROLE}
+                                    </TableHead>
                                     <TableHead className="hidden lg:table-cell">
-                                        Joining Reason
+                                        {
+                                            COMMUNITY_MEMBERSHIP_COL_JOINING_REASON
+                                        }
                                     </TableHead>
                                     <TableHead className="hidden xl:table-cell">
-                                        Rejection Reason
+                                        {
+                                            COMMUNITY_MEMBERSHIP_COL_REJECTION_REASON
+                                        }
                                     </TableHead>
-                                    <TableHead>Subscription</TableHead>
+                                    <TableHead>
+                                        {COMMUNITY_MEMBERSHIP_COL_SUBSCRIPTION}
+                                    </TableHead>
                                     {/* <TableHead>Subscription Method</TableHead> */}
                                 </TableRow>
                             </TableHeader>
@@ -423,14 +465,21 @@ export function MembershipList({ id }: { id: string }) {
                                                               : "destructive"
                                                     }
                                                 >
-                                                    {member.status
-                                                        .charAt(0)
-                                                        .toUpperCase() +
-                                                        member.status.slice(1)}
+                                                    {member.status.toLowerCase() ===
+                                                    "pending"
+                                                        ? COMMUNITY_STATUS_PENDING
+                                                        : member.status.toLowerCase() ===
+                                                            "active"
+                                                          ? COMMUNITY_STATUS_ACTIVE
+                                                          : COMMUNITY_STATUS_REJECTED}
                                                 </Badge>
                                                 {member.user.userId !==
                                                     profile?.userId && (
-                                                    <Tooltip title="Change status">
+                                                    <Tooltip
+                                                        title={
+                                                            COMMUNITY_MEMBERSHIP_CHANGE_STATUS
+                                                        }
+                                                    >
                                                         <Button
                                                             size="sm"
                                                             variant="outline"
@@ -456,7 +505,11 @@ export function MembershipList({ id }: { id: string }) {
                                                 </Badge>
                                                 {member.user.userId !==
                                                     profile?.userId && (
-                                                    <Tooltip title="Change role">
+                                                    <Tooltip
+                                                        title={
+                                                            COMMUNITY_MEMBERSHIP_CHANGE_ROLE
+                                                        }
+                                                    >
                                                         <Button
                                                             size="sm"
                                                             variant="outline"
@@ -484,7 +537,7 @@ export function MembershipList({ id }: { id: string }) {
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <Tooltip
-                                                    title={`Subscription ID: ${member.subscriptionId}`}
+                                                    title={`${COMMUNITY_MEMBERSHIP_SUBSCRIPTION_ID}: ${member.subscriptionId}`}
                                                 >
                                                     {member.subscriptionId
                                                         ? truncate(
@@ -494,7 +547,11 @@ export function MembershipList({ id }: { id: string }) {
                                                         : "-"}
                                                 </Tooltip>
                                                 {member.subscriptionId && (
-                                                    <Tooltip title="Copy Subscription ID">
+                                                    <Tooltip
+                                                        title={
+                                                            COMMUNITY_MEMBERSHIP_COPY_SUBSCRIPTION
+                                                        }
+                                                    >
                                                         <Button
                                                             size="sm"
                                                             variant="outline"
@@ -520,15 +577,18 @@ export function MembershipList({ id }: { id: string }) {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Reject Membership Request</DialogTitle>
+                        <DialogTitle>
+                            {COMMUNITY_MEMBERSHIP_REJECT_TITLE}
+                        </DialogTitle>
                         <DialogDescription>
-                            Please provide a reason for rejecting this
-                            membership request.
+                            {COMMUNITY_MEMBERSHIP_REJECT_DESCRIPTION}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-4">
-                            <Label htmlFor="rejection-reason">Reason</Label>
+                            <Label htmlFor="rejection-reason">
+                                {COURSE_DISCUSSIONS_ADMIN_REASON}
+                            </Label>
                             <Textarea
                                 id="rejection-reason"
                                 value={rejectionReason}
@@ -544,14 +604,14 @@ export function MembershipList({ id }: { id: string }) {
                             variant="secondary"
                             onClick={() => setIsDialogOpen(false)}
                         >
-                            Cancel
+                            {BUTTON_CANCEL_TEXT}
                         </Button>
                         <Button
                             type="submit"
                             onClick={handleDialogConfirm}
                             disabled={!rejectionReason}
                         >
-                            Confirm Rejection
+                            {COMMUNITY_MEMBERSHIP_REJECT_CONFIRM}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

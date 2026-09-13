@@ -6,6 +6,7 @@ import { UIConstants } from "@courselit/common-models";
 import {
     MANAGE_COMMUNITIES_PAGE_HEADING,
     NEW_COMMUNITY_BUTTON,
+    RESOURCE_CREATE_COMMUNITY,
 } from "@ui-config/strings";
 import Link from "next/link";
 import { Button } from "@components/ui/button";
@@ -53,7 +54,7 @@ export default function Page() {
                 links={[
                     {
                         href: "https://docs.courselit.app/en/communities/introduction/",
-                        text: "Create a community",
+                        text: RESOURCE_CREATE_COMMUNITY,
                     },
                 ]}
             />

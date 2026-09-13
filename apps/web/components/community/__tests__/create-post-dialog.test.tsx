@@ -7,6 +7,12 @@ import {
     act,
 } from "@testing-library/react";
 import { ProfileContext } from "@components/contexts";
+import {
+    COMMUNITY_POST_TITLE_PLACEHOLDER,
+    COMMUNITY_POST_BUTTON,
+    COMMUNITY_POSTING,
+    COMMUNITY_POST_ADD_VIDEO_BUTTON,
+} from "@ui-config/strings";
 
 jest.mock("@courselit/text-editor", () => ({
     Editor: ({ onChange, value }: any) => (
@@ -148,12 +154,17 @@ describe("CreatePostDialog", () => {
         renderDialog(createPost);
         await flushMicrotasks();
 
-        const postButton = screen.getByRole("button", { name: "Post" });
+        const postButton = screen.getByRole("button", {
+            name: COMMUNITY_POST_BUTTON,
+        });
         expect(postButton).toBeDisabled();
 
-        fireEvent.change(screen.getByPlaceholderText("Title"), {
-            target: { value: "My title" },
-        });
+        fireEvent.change(
+            screen.getByPlaceholderText(COMMUNITY_POST_TITLE_PLACEHOLDER),
+            {
+                target: { value: "My title" },
+            },
+        );
         fireEvent.change(screen.getByLabelText("editor"), {
             target: { value: "My content" },
         });
@@ -180,9 +191,12 @@ describe("CreatePostDialog", () => {
         renderDialog(createPost, { category: "General" });
         await flushMicrotasks();
 
-        fireEvent.change(screen.getByPlaceholderText("Title"), {
-            target: { value: "My title" },
-        });
+        fireEvent.change(
+            screen.getByPlaceholderText(COMMUNITY_POST_TITLE_PLACEHOLDER),
+            {
+                target: { value: "My title" },
+            },
+        );
         fireEvent.change(screen.getByLabelText("editor"), {
             target: { value: "My content" },
         });
@@ -191,16 +205,20 @@ describe("CreatePostDialog", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByRole("button", { name: "Post" })).toBeEnabled();
+            expect(
+                screen.getByRole("button", { name: COMMUNITY_POST_BUTTON }),
+            ).toBeEnabled();
         });
 
-        fireEvent.click(screen.getByRole("button", { name: "Post" }));
+        fireEvent.click(
+            screen.getByRole("button", { name: COMMUNITY_POST_BUTTON }),
+        );
 
         await waitFor(() => {
             expect(createPost).toHaveBeenCalledTimes(1);
         });
         expect(
-            screen.getByRole("button", { name: "Posting..." }),
+            screen.getByRole("button", { name: COMMUNITY_POSTING }),
         ).toBeDisabled();
 
         await act(async () => {
@@ -208,7 +226,9 @@ describe("CreatePostDialog", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByRole("button", { name: "Post" })).toBeDisabled();
+            expect(
+                screen.getByRole("button", { name: COMMUNITY_POST_BUTTON }),
+            ).toBeDisabled();
         });
     });
 
@@ -224,7 +244,11 @@ describe("CreatePostDialog", () => {
                 target: { value: "youtu.be/abc123xyz" },
             },
         );
-        fireEvent.click(screen.getByRole("button", { name: "Add Video" }));
+        fireEvent.click(
+            screen.getByRole("button", {
+                name: COMMUNITY_POST_ADD_VIDEO_BUTTON,
+            }),
+        );
 
         await waitFor(() => {
             expect(screen.getByTestId("media-preview")).toHaveTextContent(

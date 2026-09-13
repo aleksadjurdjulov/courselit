@@ -25,7 +25,23 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { isCommunityComment } from "./utils";
-import { DELETED_COMMENT_PLACEHOLDER } from "@ui-config/strings";
+import {
+    DELETED_COMMENT_PLACEHOLDER,
+    COURSE_DISCUSSIONS_DELETE,
+    COURSE_DISCUSSIONS_REPORT,
+    COURSE_DISCUSSIONS_REPLY_PLACEHOLDER,
+    COURSE_DISCUSSIONS_REPLY,
+    COURSE_DISCUSSIONS_CANCEL,
+    COURSE_DISCUSSIONS_REPORTED,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE_COMMENT,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION_COMMENT,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT,
+    COURSE_DISCUSSIONS_REPORT_CONTENT_SUCCESS,
+    BUTTON_CANCEL_TEXT,
+    COURSE_DISCUSSIONS_DELETE_CONFIRM,
+    COURSE_DISCUSSIONS_DELETE_CONFIRM_DESCRIPTION,
+} from "@ui-config/strings";
 import { useToast } from "@courselit/components-library";
 import { FetchBuilder } from "@courselit/utils";
 import { ReactionsBar } from "./reactions-bar";
@@ -151,8 +167,8 @@ export function Comment({
         try {
             await fetch.exec();
             toast({
-                title: "Reported",
-                description: "Content has been reported",
+                title: COURSE_DISCUSSIONS_REPORTED,
+                description: COURSE_DISCUSSIONS_REPORT_CONTENT_SUCCESS,
             });
         } catch (err: any) {
             toast({
@@ -223,7 +239,7 @@ export function Comment({
                                             }
                                         >
                                             <Trash className="h-4 w-4" />
-                                            Delete
+                                            {COURSE_DISCUSSIONS_DELETE}
                                         </DropdownMenuItem>
                                     )}
                                     {profile?.userId !==
@@ -233,7 +249,8 @@ export function Comment({
                                                 handleReportPost(comment)
                                             }
                                         >
-                                            <FlagTriangleRight /> Report
+                                            <FlagTriangleRight />{" "}
+                                            {COURSE_DISCUSSIONS_REPORT}
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>
@@ -272,7 +289,7 @@ export function Comment({
             {isReplying && profile?.name && (
                 <div className="mt-2 space-y-2 p-1">
                     <Textarea
-                        placeholder="Write a reply..."
+                        placeholder={COURSE_DISCUSSIONS_REPLY_PLACEHOLDER}
                         value={replyContent}
                         onChange={(e) => setReplyContent(e.target.value)}
                     />
@@ -282,7 +299,7 @@ export function Comment({
                             size="sm"
                             onClick={() => setIsReplying(false)}
                         >
-                            Cancel
+                            {COURSE_DISCUSSIONS_CANCEL}
                         </Button>
                         <Button
                             size="sm"
@@ -304,7 +321,7 @@ export function Comment({
                             }}
                             disabled={isPosting}
                         >
-                            Reply
+                            {COURSE_DISCUSSIONS_REPLY}
                         </Button>
                     </div>
                 </div>
@@ -333,23 +350,23 @@ export function Comment({
                 onOpenChange={setShowDeleteConfirmation}
             >
                 <DialogContent>
-                    <DialogTitle>Delete comment</DialogTitle>
+                    <DialogTitle>{COURSE_DISCUSSIONS_DELETE}</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete this comment? This
-                        action cannot be undone.
+                        {COURSE_DISCUSSIONS_DELETE_CONFIRM}{" "}
+                        {COURSE_DISCUSSIONS_DELETE_CONFIRM_DESCRIPTION}
                     </DialogDescription>
                     <DialogFooter>
                         <Button
                             variant="secondary"
                             onClick={() => setShowDeleteConfirmation(false)}
                         >
-                            Cancel
+                            {BUTTON_CANCEL_TEXT}
                         </Button>
                         <Button
                             variant="destructive"
                             onClick={confirmDeletePost}
                         >
-                            Delete
+                            {COURSE_DISCUSSIONS_DELETE}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -359,12 +376,16 @@ export function Comment({
                 onOpenChange={setShowReportConfirmation}
             >
                 <DialogContent>
-                    <DialogTitle>Report comment</DialogTitle>
+                    <DialogTitle>
+                        {COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE_COMMENT}
+                    </DialogTitle>
                     <DialogDescription>
-                        Please provide a reason for reporting this comment.
+                        {COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION_COMMENT}
                     </DialogDescription>
                     <Textarea
-                        placeholder="Reason for reporting..."
+                        placeholder={
+                            COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER
+                        }
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
                     />
@@ -373,14 +394,14 @@ export function Comment({
                             variant="secondary"
                             onClick={() => setShowReportConfirmation(false)}
                         >
-                            Cancel
+                            {BUTTON_CANCEL_TEXT}
                         </Button>
                         <Button
                             variant="destructive"
                             onClick={confirmReportPost}
                             disabled={!reportReason.trim()}
                         >
-                            Submit
+                            {COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -20,14 +20,30 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Constants, PaymentPlan } from "@courselit/common-models";
-import { capitalize } from "@courselit/utils";
 import Link from "next/link";
 import { SiteInfoContext } from "@/components/contexts";
 import { getSymbolFromCurrency } from "@courselit/components-library";
+import {
+    BUTTON_CANCEL_TEXT,
+    PAYMENT_PLAN_ARCHIVE,
+    PAYMENT_PLAN_ARCHIVE_ACTION,
+    PAYMENT_PLAN_ARCHIVE_DESCRIPTION,
+    PAYMENT_PLAN_ARCHIVE_TITLE,
+    PAYMENT_PLAN_FREE_LABEL,
+    PAYMENT_PLAN_FREQUENCY_LABEL,
+    PAYMENT_PLAN_INCLUDED_PRODUCTS_SUFFIX,
+    PAYMENT_PLAN_MAKE_RECOMMENDED,
+    PAYMENT_PLAN_MONTHLY_LABEL,
+    PAYMENT_PLAN_NEW_LABEL,
+    PAYMENT_PLAN_ONETIME_LABEL,
+    PAYMENT_PLAN_YEARLY_LABEL,
+} from "@ui-config/strings";
 const { PaymentPlanType: paymentPlanType } = Constants;
 
 function formatAmount(amount: number | undefined, currencySymbol): string {
-    return amount ? `${currencySymbol}${amount.toFixed(2)}` : "Free";
+    return amount
+        ? `${currencySymbol}${amount.toFixed(2)}`
+        : PAYMENT_PLAN_FREE_LABEL;
 }
 
 function getPlanAmount(
@@ -36,7 +52,7 @@ function getPlanAmount(
 ): string | { amount: string; installments: number } {
     switch (plan.type) {
         case paymentPlanType.FREE:
-            return capitalize(paymentPlanType.FREE);
+            return PAYMENT_PLAN_FREE_LABEL;
         case paymentPlanType.ONE_TIME:
             return formatAmount(plan.oneTimeAmount, currencySymbol);
         case paymentPlanType.SUBSCRIPTION:
@@ -59,13 +75,15 @@ function getPlanTypeLabel(plan: PaymentPlan): string {
 
     switch (type) {
         case paymentPlanType.ONE_TIME:
-            return "One time";
+            return PAYMENT_PLAN_ONETIME_LABEL;
         case paymentPlanType.SUBSCRIPTION:
-            return plan.subscriptionYearlyAmount ? "Yearly" : "Monthly";
+            return plan.subscriptionYearlyAmount
+                ? PAYMENT_PLAN_YEARLY_LABEL
+                : PAYMENT_PLAN_MONTHLY_LABEL;
         case paymentPlanType.EMI:
             return "EMI";
         case paymentPlanType.FREE:
-            return "Free";
+            return PAYMENT_PLAN_FREE_LABEL;
         default:
             return type;
     }
@@ -150,7 +168,9 @@ export default function PaymentPlanList({
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>Make recommended</p>
+                                            <p>
+                                                {PAYMENT_PLAN_MAKE_RECOMMENDED}
+                                            </p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -182,21 +202,20 @@ export default function PaymentPlanList({
                                                 </DialogTrigger>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Archive plan</p>
+                                                <p>{PAYMENT_PLAN_ARCHIVE}</p>
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>
-                                                Are you sure you want to archive
-                                                this plan?
+                                                {PAYMENT_PLAN_ARCHIVE_TITLE}
                                             </DialogTitle>
                                             <DialogDescription>
-                                                This action cannot be undone.
-                                                This will permanently archive
-                                                the payment plan &quot;
-                                                {planToArchive?.name}
+                                                {
+                                                    PAYMENT_PLAN_ARCHIVE_DESCRIPTION
+                                                }{" "}
+                                                &quot;{planToArchive?.name}
                                                 &quot;.
                                             </DialogDescription>
                                         </DialogHeader>
@@ -208,7 +227,7 @@ export default function PaymentPlanList({
                                                     setIsDialogOpen(false);
                                                 }}
                                             >
-                                                Cancel
+                                                {BUTTON_CANCEL_TEXT}
                                             </Button>
                                             <Button
                                                 variant="destructive"
@@ -218,7 +237,7 @@ export default function PaymentPlanList({
                                                 }
                                                 disabled={disabled}
                                             >
-                                                Archive
+                                                {PAYMENT_PLAN_ARCHIVE_ACTION}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>
@@ -249,7 +268,7 @@ export default function PaymentPlanList({
                                         variant="outline"
                                         className="rounded-full px-1.5 py-0.5 text-[10px]"
                                     >
-                                        {`+${plan.includedProducts.length} products`}
+                                        {`+${plan.includedProducts.length} ${PAYMENT_PLAN_INCLUDED_PRODUCTS_SUFFIX}`}
                                     </Badge>
                                 )}
                         </div>
@@ -261,7 +280,7 @@ export default function PaymentPlanList({
                     >
                         <div className="flex justify-between items-center mb-1">
                             <h3 className="text-sm font-medium text-muted-foreground group-hover:text-primary">
-                                New Plan
+                                {PAYMENT_PLAN_NEW_LABEL}
                             </h3>
                             <Button
                                 variant="ghost"
@@ -279,7 +298,7 @@ export default function PaymentPlanList({
                                 variant="secondary"
                                 className="rounded-full px-1.5 py-0.5 text-[10px]"
                             >
-                                Payment frequency
+                                {PAYMENT_PLAN_FREQUENCY_LABEL}
                             </Badge>
                         </div>
                     </Link>

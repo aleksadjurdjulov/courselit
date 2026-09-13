@@ -5,6 +5,7 @@ import { CommunitiesList } from "./communities-list";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ThemeContext } from "@components/contexts";
 import { Header1, Section } from "@courselit/page-primitives";
+import { MANAGE_COMMUNITIES_PAGE_HEADING } from "@ui-config/strings";
 
 export default function CommunitiesPage() {
     const searchParams = useSearchParams();
@@ -22,7 +23,9 @@ export default function CommunitiesPage() {
     return (
         <Section theme={theme.theme}>
             <div className="flex flex-col gap-4">
-                <Header1 theme={theme.theme}>Communities</Header1>
+                <Header1 theme={theme.theme}>
+                    {MANAGE_COMMUNITIES_PAGE_HEADING}
+                </Header1>
                 <CommunitiesList
                     page={page}
                     onPageChange={handlePageChange}

@@ -14,6 +14,13 @@ import type {
 import { checkPermission, FetchBuilder } from "@courselit/utils";
 import { Constants, UIConstants } from "@courselit/common-models";
 import { Theme } from "@courselit/page-models";
+import {
+    COMMUNITY_CATEGORY_ALL,
+    COMMUNITY_CATEGORY_GENERAL,
+    COMMUNITY_MEMBERS_LABEL_ONE,
+    COMMUNITY_MEMBERS_LABEL_FEW,
+    COMMUNITY_MEMBERS_LABEL_MANY,
+} from "@ui-config/strings";
 export { getPlanPrice } from "@courselit/utils";
 const { permissions } = UIConstants;
 
@@ -393,4 +400,28 @@ export function hasCommunityPermission(
     const requiredRoleIndex = roleHierarchy.indexOf(requiredRole);
 
     return memberRoleIndex >= requiredRoleIndex;
+}
+
+export function getCommunityCategoryLabel(category: string): string {
+    if (category === "All") {
+        return COMMUNITY_CATEGORY_ALL;
+    }
+    if (category === "General") {
+        return COMMUNITY_CATEGORY_GENERAL;
+    }
+    return capitalize(category);
+}
+
+export function getCommunityMembersLabel(count: number): string {
+    const abs = Math.abs(count);
+    const mod10 = abs % 10;
+    const mod100 = abs % 100;
+
+    if (mod10 === 1 && mod100 !== 11) {
+        return COMMUNITY_MEMBERS_LABEL_ONE;
+    }
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
+        return COMMUNITY_MEMBERS_LABEL_FEW;
+    }
+    return COMMUNITY_MEMBERS_LABEL_MANY;
 }

@@ -7,6 +7,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    COMMUNITY_REPORT_COL_ACTIONS,
+    COMMUNITY_REPORT_COL_CONTENT,
+    COMMUNITY_REPORT_COL_REASON,
+    COMMUNITY_REPORT_COL_REJECTION_REASON,
+    COMMUNITY_REPORT_COL_STATUS,
+    COMMUNITY_REPORT_COL_TYPE,
+} from "@ui-config/strings";
 
 export function ReportsTableSkeleton() {
     return (
@@ -18,12 +26,18 @@ export function ReportsTableSkeleton() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Content</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Reason</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Rejection Reason</TableHead>
-                            <TableHead>Actions</TableHead>
+                            <TableHead>
+                                {COMMUNITY_REPORT_COL_CONTENT}
+                            </TableHead>
+                            <TableHead>{COMMUNITY_REPORT_COL_TYPE}</TableHead>
+                            <TableHead>{COMMUNITY_REPORT_COL_REASON}</TableHead>
+                            <TableHead>{COMMUNITY_REPORT_COL_STATUS}</TableHead>
+                            <TableHead>
+                                {COMMUNITY_REPORT_COL_REJECTION_REASON}
+                            </TableHead>
+                            <TableHead>
+                                {COMMUNITY_REPORT_COL_ACTIONS}
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

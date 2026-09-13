@@ -55,6 +55,20 @@ function isEmptyDoc(description) {
     );
 }
 
+function getMembersLabel(count: number): string {
+    const abs = Math.abs(count || 0);
+    const mod10 = abs % 10;
+    const mod100 = abs % 100;
+
+    if (mod10 === 1 && mod100 !== 11) {
+        return "član";
+    }
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
+        return "člana";
+    }
+    return "članova";
+}
+
 export default function Widget({
     settings: {
         title,
@@ -334,14 +348,18 @@ export default function Widget({
                                 >
                                     <>
                                         <Users className="w-4 h-4" />{" "}
-                                        {product.membersCount} members
+                                        {product.membersCount}{" "}
+                                        {getMembersLabel(
+                                            Number(product.membersCount) || 0,
+                                        )}
                                     </>
                                 </Text2>
                                 <Link
                                     href={`/checkout?type=community&id=${product.communityId}`}
                                 >
                                     <Button theme={overiddenTheme}>
-                                        {buttonCaption || "Join community"}
+                                        {buttonCaption ||
+                                            "Pridruži se zajednici"}
                                     </Button>
                                 </Link>
                             </div>

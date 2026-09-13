@@ -14,6 +14,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import debounce from "lodash.debounce";
 import { AddressContext } from "@components/contexts";
+import {
+    COMMUNITY_POST_SEARCH_GIFS,
+    COMMUNITY_POST_LOADING_GIFS,
+} from "@ui-config/strings";
 
 interface GifSelectorProps {
     onGifSelect: (gifUrl: string) => void;
@@ -89,7 +93,7 @@ function GifSelectorComponent({ onGifSelect }: GifSelectorProps) {
             <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                    placeholder="Search GIFs"
+                    placeholder={COMMUNITY_POST_SEARCH_GIFS}
                     className="pl-8"
                     value={search}
                     onChange={handleSearchChange}
@@ -99,7 +103,7 @@ function GifSelectorComponent({ onGifSelect }: GifSelectorProps) {
             <ScrollArea className="h-[300px]">
                 {loading ? (
                     <div className="flex justify-center items-center h-full">
-                        <p>Loading GIFs...</p>
+                        <p>{COMMUNITY_POST_LOADING_GIFS}</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 gap-2">

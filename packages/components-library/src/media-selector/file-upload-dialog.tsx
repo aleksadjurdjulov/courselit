@@ -58,7 +58,7 @@ export function FileUploadAlertDialog({
             },
             onUploadError: (error) => {
                 toast({
-                    title: "Upload Failed",
+                    title: "Otpremanje nije uspelo",
                     description: error.message,
                     variant: "destructive",
                 });
@@ -79,7 +79,7 @@ export function FileUploadAlertDialog({
     const handleFileValidation = (selectedFile: File) => {
         if (!isValidMimeType(selectedFile.type)) {
             setFileError(
-                `Invalid file type. Accepted: ${acceptedMimeTypes.join(", ")}`,
+                `Neispravan tip fajla. Dozvoljeno: ${acceptedMimeTypes.join(", ")}`,
             );
             setFile(null);
             return;
@@ -124,15 +124,15 @@ export function FileUploadAlertDialog({
                     disabled={disabled}
                     onClick={() => setOpen(true)}
                 >
-                    Upload file
+                    Otpremi fajl
                 </Button>
             </AlertDialogTrigger>
 
             <AlertDialogContent className="max-w-md">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Upload File</AlertDialogTitle>
+                    <AlertDialogTitle>Otpremi fajl</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Drag and drop your file or click to browse
+                        Prevucite fajl ovde ili kliknite da izaberete
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 
@@ -179,11 +179,13 @@ export function FileUploadAlertDialog({
                                       : "text-muted-foreground"
                             }`}
                         >
-                            {file ? file.name : "Drop file here or click"}
+                            {file
+                                ? file.name
+                                : "Prevucite fajl ovde ili kliknite"}
                         </p>
                         {file && !fileError && (
                             <p className="mt-1 text-xs text-muted-foreground">
-                                Selected: {(file.size / 1024).toFixed(2)} KB
+                                Izabrano: {(file.size / 1024).toFixed(2)} KB
                             </p>
                         )}
                         {fileError && (
@@ -195,10 +197,10 @@ export function FileUploadAlertDialog({
 
                     <div className="space-y-2">
                         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Caption (optional)
+                            Opis (opciono)
                         </label>
                         <Input
-                            placeholder="Add a caption to your file..."
+                            placeholder="Dodajte opis fajla..."
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
                             className="resize-none"
@@ -233,20 +235,20 @@ export function FileUploadAlertDialog({
                             disabled={Math.round(uploadProgress) > 99}
                         >
                             {Math.round(uploadProgress) > 99
-                                ? "Processing..."
-                                : "Cancel"}
+                                ? "Obrada..."
+                                : "Otkaži"}
                         </AlertDialogCancel>
                     ) : (
                         <>
                             <AlertDialogCancel onClick={resetState}>
-                                Cancel
+                                Otkaži
                             </AlertDialogCancel>
                             <AlertDialogAction asChild>
                                 <Button
                                     disabled={!file || !!fileError}
                                     onClick={handleUpload}
                                 >
-                                    Upload
+                                    Otpremi
                                 </Button>
                             </AlertDialogAction>
                         </>

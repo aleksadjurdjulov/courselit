@@ -8,6 +8,11 @@ import {
 import { ThemeContext } from "@components/contexts";
 import { Caption, Text2 } from "@courselit/page-primitives";
 import { useContext } from "react";
+import {
+    PAGINATION_PREVIOUS,
+    PAGINATION_NEXT,
+    PAGINATION_OF,
+} from "@ui-config/strings";
 
 interface PaginationControlsProps {
     currentPage: number;
@@ -47,13 +52,13 @@ export function PaginationControls({
                                 : ""
                         }
                     >
-                        <Caption theme={theme}>Previous</Caption>
+                        <Caption theme={theme}>{PAGINATION_PREVIOUS}</Caption>
                     </PaginationPrevious>
                 </PaginationItem>
 
                 <div>
                     <Text2 theme={theme}>
-                        {currentPage} of {totalPages}
+                        {currentPage} {PAGINATION_OF} {totalPages}
                     </Text2>
                 </div>
 
@@ -80,7 +85,7 @@ export function PaginationControls({
                                 : ""
                         }
                     >
-                        <Caption theme={theme}>Next</Caption>
+                        <Caption theme={theme}>{PAGINATION_NEXT}</Caption>
                     </PaginationNext>
                 </PaginationItem>
             </PaginationContent>

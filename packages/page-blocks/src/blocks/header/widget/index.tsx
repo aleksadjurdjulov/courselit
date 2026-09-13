@@ -193,7 +193,7 @@ export default function Widget({
                                             theme={overiddenTheme}
                                             className="!no-underline"
                                         >
-                                            Dashboard
+                                            Kontrolna tabla
                                         </PrimitiveLink>
                                     </AppLink>
                                 </MenuItem2>
@@ -210,7 +210,9 @@ export default function Widget({
                                         theme={overiddenTheme}
                                         className="!no-underline"
                                     >
-                                        {state.auth.guest ? "Login" : "Logout"}
+                                        {state.auth.guest
+                                            ? "Prijava"
+                                            : "Odjava"}
                                     </PrimitiveLink>
                                 </AppLink>
                             </MenuItem2>

@@ -92,13 +92,13 @@ const MobileNav = (props: MobileNavSettings) => {
                                     setOpen(false);
                                 }}
                                 isButton={false}
-                                label="Dashboard"
+                                label="Kontrolna tabla"
                             />
                         )}
                         <PageLink
                             theme={theme}
                             href={isGuest ? "/login" : "/logout"}
-                            label={isGuest ? "Login" : "Logout"}
+                            label={isGuest ? "Prijava" : "Odjava"}
                             linkFontWeight={props.linkFontWeight}
                             onClick={() => {
                                 setOpen(false);

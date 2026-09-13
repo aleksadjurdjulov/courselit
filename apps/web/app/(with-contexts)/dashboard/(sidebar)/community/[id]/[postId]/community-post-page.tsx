@@ -13,7 +13,11 @@ import {
     ThemeContext,
 } from "@components/contexts";
 import { FetchBuilder } from "@courselit/utils";
-import { formattedLocaleDate, hasCommunityPermission } from "@ui-lib/utils";
+import {
+    formattedLocaleDate,
+    hasCommunityPermission,
+    getCommunityCategoryLabel,
+} from "@ui-lib/utils";
 import LoadingSkeleton from "@components/community/loading-skeleton";
 import { useCommunity } from "@/hooks/use-community";
 import { useMembership } from "@/hooks/use-membership";
@@ -29,6 +33,16 @@ import {
     MANAGE_LINK_TEXT,
     TOAST_TITLE_ERROR,
     TOAST_TITLE_SUCCESS,
+    COURSE_DISCUSSIONS_EDIT,
+    COURSE_DISCUSSIONS_DELETE,
+    COURSE_DISCUSSIONS_REPORT,
+    COURSE_DISCUSSIONS_REPORTED,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER,
+    COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT,
+    COURSE_DISCUSSIONS_REPORT_POST_SUCCESS,
+    BUTTON_CANCEL_TEXT,
 } from "@ui-config/strings";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -420,8 +434,8 @@ export default function CommunityPostPage({
                 .build();
             await fetch.exec();
             toast({
-                title: "Reported",
-                description: "Post has been reported",
+                title: COURSE_DISCUSSIONS_REPORTED,
+                description: COURSE_DISCUSSIONS_REPORT_POST_SUCCESS,
             });
             setShowReportConfirmation(false);
             setPostToReport(null);
@@ -580,7 +594,10 @@ export default function CommunityPostPage({
                                     </div>
                                     <div className="text-xs text-muted-foreground">
                                         {formatTimestamp(currentPost.updatedAt)}{" "}
-                                        • {currentPost.category}
+                                        •{" "}
+                                        {getCommunityCategoryLabel(
+                                            currentPost.category,
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -600,7 +617,7 @@ export default function CommunityPostPage({
                                             }
                                         >
                                             <FlagTriangleRight className="h-4 w-4" />
-                                            Report
+                                            {COURSE_DISCUSSIONS_REPORT}
                                         </DropdownMenuItem>
                                     )}
                                     {profile.userId ===
@@ -613,7 +630,7 @@ export default function CommunityPostPage({
                                             }}
                                         >
                                             <MessageSquare className="h-4 w-4" />
-                                            Edit
+                                            {COURSE_DISCUSSIONS_EDIT}
                                         </DropdownMenuItem>
                                     )}
                                     {((membership &&
@@ -630,7 +647,7 @@ export default function CommunityPostPage({
                                             }
                                         >
                                             <Trash className="h-4 w-4" />
-                                            Delete
+                                            {COURSE_DISCUSSIONS_DELETE}
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>
@@ -709,7 +726,9 @@ export default function CommunityPostPage({
                         onOpenChange={setShowDeleteConfirmation}
                     >
                         <DialogContent>
-                            <DialogTitle>Delete post</DialogTitle>
+                            <DialogTitle>
+                                {COURSE_DISCUSSIONS_DELETE}
+                            </DialogTitle>
                             <DialogDescription>
                                 Are you sure you want to delete this post?
                             </DialogDescription>
@@ -720,13 +739,13 @@ export default function CommunityPostPage({
                                         setShowDeleteConfirmation(false)
                                     }
                                 >
-                                    Cancel
+                                    {BUTTON_CANCEL_TEXT}
                                 </Button>
                                 <Button
                                     variant="destructive"
                                     onClick={confirmDeletePost}
                                 >
-                                    Delete
+                                    {COURSE_DISCUSSIONS_DELETE}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>
@@ -737,12 +756,16 @@ export default function CommunityPostPage({
                         onOpenChange={setShowReportConfirmation}
                     >
                         <DialogContent>
-                            <DialogTitle>Report Post</DialogTitle>
+                            <DialogTitle>
+                                {COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE}
+                            </DialogTitle>
                             <DialogDescription>
-                                Please provide a reason for reporting this post.
+                                {COURSE_DISCUSSIONS_REPORT_DIALOG_DESCRIPTION}
                             </DialogDescription>
                             <Textarea
-                                placeholder="Reason for reporting..."
+                                placeholder={
+                                    COURSE_DISCUSSIONS_REPORT_DIALOG_PLACEHOLDER
+                                }
                                 value={reportReason}
                                 onChange={(e) =>
                                     setReportReason(e.target.value)
@@ -755,14 +778,14 @@ export default function CommunityPostPage({
                                         setShowReportConfirmation(false)
                                     }
                                 >
-                                    Cancel
+                                    {BUTTON_CANCEL_TEXT}
                                 </Button>
                                 <Button
                                     variant="destructive"
                                     onClick={confirmReportPost}
                                     disabled={!reportReason.trim()}
                                 >
-                                    Submit
+                                    {COURSE_DISCUSSIONS_REPORT_DIALOG_SUBMIT}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>

@@ -77,7 +77,7 @@ export function TableBody({
                         </IconButton>
                         {count && (
                             <span className="text-sm">
-                                of {Math.ceil(count / rowsPerPage)}
+                                od {Math.ceil(count / rowsPerPage)}
                             </span>
                         )}
                     </td>

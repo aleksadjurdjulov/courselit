@@ -40,7 +40,7 @@ export const createExtensions = ({
         codeBlock: false,
     }),
     Placeholder.configure({
-        placeholder: placeholder || "Write something…",
+        placeholder: placeholder || "Napišite nešto…",
     }),
     Link.configure({
         openOnClick: false,

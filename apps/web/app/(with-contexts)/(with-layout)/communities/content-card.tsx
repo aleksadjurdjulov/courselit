@@ -17,6 +17,7 @@ import {
     TooltipTrigger,
 } from "@components/ui/tooltip";
 import { truncate } from "@courselit/utils";
+import { getCommunityMembersLabel } from "@ui-lib/utils";
 
 export function CommunityContentCard({
     community,
@@ -59,7 +60,9 @@ export function CommunityContentCard({
                             <Users className="h-4 w-4 mr-2" />
                             <Text2 theme={theme}>
                                 {community.membersCount.toLocaleString()}{" "}
-                                members
+                                {getCommunityMembersLabel(
+                                    community.membersCount,
+                                )}
                             </Text2>
                         </div>
                         {!publicView && (

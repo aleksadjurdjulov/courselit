@@ -9,6 +9,13 @@ import { SkeletonCard } from "@components/skeleton-card";
 import { useContext } from "react";
 import { ThemeContext } from "@components/contexts";
 import { Button, Header3, Text2 } from "@courselit/page-primitives";
+import {
+    COMMUNITIES_LIST_EMPTY_TITLE,
+    COMMUNITIES_LIST_EMPTY_DESCRIPTION_PUBLIC,
+    COMMUNITIES_LIST_EMPTY_DESCRIPTION_PRIVATE,
+    COMMUNITIES_LIST_PAGE_EMPTY,
+    COMMUNITIES_LIST_GO_TO_FIRST_PAGE,
+} from "@ui-config/strings";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -34,10 +41,13 @@ export function CommunitiesList({
         return (
             <div className="flex flex-col items-center justify-center py-12 text-center">
                 <Users className="w-12 h-12 text-muted-foreground mb-4" />
-                <Header3 theme={theme.theme}>No Communities Found</Header3>
+                <Header3 theme={theme.theme}>
+                    {COMMUNITIES_LIST_EMPTY_TITLE}
+                </Header3>
                 <Text2 theme={theme.theme}>
-                    {publicView ? "The team " : "You have "} not added any
-                    communities yet.
+                    {publicView
+                        ? COMMUNITIES_LIST_EMPTY_DESCRIPTION_PUBLIC
+                        : COMMUNITIES_LIST_EMPTY_DESCRIPTION_PRIVATE}
                 </Text2>
             </div>
         );
@@ -47,13 +57,13 @@ export function CommunitiesList({
         return (
             <div className="flex flex-col items-center justify-center py-12 text-center">
                 <Users className="w-12 h-12 text-muted-foreground mb-4" />
-                <Text2 theme={theme.theme}>This page is empty.</Text2>
+                <Text2 theme={theme.theme}>{COMMUNITIES_LIST_PAGE_EMPTY}</Text2>
                 <Button
                     variant="outline"
                     theme={theme.theme}
                     onClick={() => onPageChange(1)}
                 >
-                    Go to first page
+                    {COMMUNITIES_LIST_GO_TO_FIRST_PAGE}
                 </Button>
             </div>
         );

@@ -59,7 +59,7 @@ const PaginatedTableContainer = ({
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationLink className="pointer-events-none">
-                            of {totalPages}
+                            od {totalPages}
                         </PaginationLink>
                     </PaginationItem>
                 </PaginationContent>

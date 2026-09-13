@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/shadcn-utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
+import { PAGINATION_PREVIOUS, PAGINATION_NEXT } from "@ui-config/strings";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     <nav
@@ -61,31 +62,33 @@ PaginationLink.displayName = "PaginationLink";
 
 const PaginationPrevious = ({
     className,
+    children,
     ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
     <PaginationLink
-        aria-label="Go to previous page"
+        aria-label={PAGINATION_PREVIOUS}
         size="default"
         className={cn("gap-1 pl-2.5", className)}
         {...props}
     >
         <ChevronLeft className="h-4 w-4" />
-        <span>Previous</span>
+        {children ?? <span>{PAGINATION_PREVIOUS}</span>}
     </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
 
 const PaginationNext = ({
     className,
+    children,
     ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
     <PaginationLink
-        aria-label="Go to next page"
+        aria-label={PAGINATION_NEXT}
         size="default"
         className={cn("gap-1 pr-2.5", className)}
         {...props}
     >
-        <span>Next</span>
+        {children ?? <span>{PAGINATION_NEXT}</span>}
         <ChevronRight className="h-4 w-4" />
     </PaginationLink>
 );
