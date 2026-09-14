@@ -22,6 +22,15 @@ import {
     COMMUNITY_JOIN,
     COMMUNITY_JOIN_REASON_LABEL,
     COMMUNITY_JOIN_REASON_PLACEHOLDER,
+    COMMUNITY_JOIN_SUCCESS,
+    COMMUNITY_JOIN_REQUEST_SUCCESS,
+    COMMUNITY_INCOMPLETE_PROFILE_TITLE,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_LINK,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX,
+    COMMUNITY_MEMBERSHIP_PENDING,
+    COMMUNITY_MEMBERSHIP_REJECTED,
+    COMMUNITY_REJECTION_REASON_LABEL,
     BTN_SEND,
 } from "@ui-config/strings";
 import { Alert, AlertDescription, AlertTitle } from "@components/ui/alert";
@@ -83,11 +92,18 @@ export default function MembershipStatus({
             const response = await fetchRequest.exec();
             if (response.status) {
                 setIsJoinDialogOpen(false);
+                const status =
+                    typeof response.status === "string"
+                        ? response.status.toLowerCase()
+                        : response.status;
+                setInnerStatus(status);
                 toast({
                     title: TOAST_TITLE_SUCCESS,
-                    description: `Your request to join has been sent.`,
+                    description:
+                        status === Constants.MembershipStatus.ACTIVE
+                            ? COMMUNITY_JOIN_SUCCESS
+                            : COMMUNITY_JOIN_REQUEST_SUCCESS,
                 });
-                setInnerStatus(response.status);
             } else {
                 toast({
                     title: TOAST_TITLE_ERROR,
@@ -112,7 +128,7 @@ export default function MembershipStatus({
                 <Alert>
                     <Clock className="w-4 h-4" />
                     <AlertTitle className="font-semibold">
-                        Membership {innerStatus?.toLowerCase()}
+                        {COMMUNITY_MEMBERSHIP_PENDING}
                     </AlertTitle>
                 </Alert>
             )}
@@ -121,10 +137,11 @@ export default function MembershipStatus({
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle className="font-semibold">
-                        Membership {innerStatus?.toLowerCase()}
+                        {COMMUNITY_MEMBERSHIP_REJECTED}
                     </AlertTitle>
                     <AlertDescription>
-                        Reason: {membership && membership.rejectionReason}
+                        {COMMUNITY_REJECTION_REASON_LABEL}:{" "}
+                        {membership && membership.rejectionReason}
                     </AlertDescription>
                 </Alert>
             )}
@@ -132,14 +149,16 @@ export default function MembershipStatus({
                 <Alert>
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle className="font-semibold">
-                        Incomplete Profile
+                        {COMMUNITY_INCOMPLETE_PROFILE_TITLE}
                     </AlertTitle>
                     <AlertDescription>
-                        Complete your{" "}
+                        {COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX}{" "}
                         <span className="underline">
-                            <Link href={"/dashboard/profile"}>profile</Link>
+                            <Link href={"/dashboard/profile"}>
+                                {COMMUNITY_JOIN_COMPLETE_PROFILE_LINK}
+                            </Link>
                         </span>{" "}
-                        to join this community or post here
+                        {COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX}
                     </AlertDescription>
                 </Alert>
             )}

@@ -45,6 +45,16 @@ import {
     TOAST_TITLE_SUCCESS,
     COMMUNITY_SHOW_MORE,
     COMMUNITY_SHOW_LESS,
+    COMMUNITY_JOIN_SUCCESS,
+    COMMUNITY_JOIN_REQUEST_SUCCESS,
+    COMMUNITY_POST_UPDATE_FAILED,
+    COMMUNITY_POST_ADD_FAILED,
+    COMMUNITY_POST_DELETE_FAILED,
+    COMMUNITY_POST_DELETE_CONFIRM,
+    COMMUNITY_DISABLED_WARNING,
+    COMMUNITY_NOT_FOUND_TITLE,
+    COMMUNITY_NOT_FOUND_DESCRIPTION,
+    COMMUNITY_BACK_TO_HOME,
     COURSE_DISCUSSIONS_DELETE,
     COURSE_DISCUSSIONS_REPORTED,
     COURSE_DISCUSSIONS_REPORT_DIALOG_TITLE,
@@ -147,7 +157,7 @@ export function CommunityForum({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -228,7 +238,7 @@ export function CommunityForum({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -540,10 +550,10 @@ export function CommunityForum({
                     }
                 } else {
                     toast({
-                        title: "Error",
+                        title: TOAST_TITLE_ERROR,
                         description: isEdit
-                            ? "Failed to update post"
-                            : "Failed to add post",
+                            ? COMMUNITY_POST_UPDATE_FAILED
+                            : COMMUNITY_POST_ADD_FAILED,
                     });
                 }
             } catch (err: any) {
@@ -617,8 +627,8 @@ export function CommunityForum({
                 const response = await fetch.exec();
                 if (!response.post) {
                     toast({
-                        title: "Error",
-                        description: "Failed to delete post",
+                        title: TOAST_TITLE_ERROR,
+                        description: COMMUNITY_POST_DELETE_FAILED,
                         variant: "destructive",
                     });
                 } else {
@@ -632,7 +642,7 @@ export function CommunityForum({
                 }
             } catch (err: any) {
                 toast({
-                    title: "Error",
+                    title: TOAST_TITLE_ERROR,
                     description: err.message,
                     variant: "destructive",
                 });
@@ -782,9 +792,10 @@ export function CommunityForum({
     if (loaded && !community) {
         return (
             <NotFound
-                resource="Community"
+                title={COMMUNITY_NOT_FOUND_TITLE}
+                description={COMMUNITY_NOT_FOUND_DESCRIPTION}
                 backLink="/"
-                backLinkText="Back to Home"
+                backLinkText={COMMUNITY_BACK_TO_HOME}
             />
         );
     }
@@ -823,7 +834,11 @@ export function CommunityForum({
             if (response.communityMembershipStatus) {
                 toast({
                     title: TOAST_TITLE_SUCCESS,
-                    description: `Your request to join has been sent.`,
+                    description:
+                        response.communityMembershipStatus.status?.toLowerCase() ===
+                        Constants.MembershipStatus.ACTIVE
+                            ? COMMUNITY_JOIN_SUCCESS
+                            : COMMUNITY_JOIN_REQUEST_SUCCESS,
                 });
             } else {
                 toast({
@@ -890,8 +905,7 @@ export function CommunityForum({
         <div className="container mx-auto p-0">
             {!community?.enabled && (
                 <div className="bg-red-400 p-2 mb-4 text-sm text-white rounded-md">
-                    This community is not enabled. It is not visible to your
-                    audience (including moderators). {""}
+                    {COMMUNITY_DISABLED_WARNING}{" "}
                     <Link
                         href={`/dashboard/community/${id}/manage`}
                         className="underline"
@@ -1029,8 +1043,7 @@ export function CommunityForum({
                                 {COURSE_DISCUSSIONS_DELETE}
                             </DialogTitle>
                             <DialogDescription>
-                                Are you sure you want to delete this post? This
-                                action cannot be undone.
+                                {COMMUNITY_POST_DELETE_CONFIRM}
                             </DialogDescription>
                             <DialogFooter>
                                 <Button

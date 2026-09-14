@@ -45,6 +45,12 @@ import {
     COMMUNITY_JOIN,
     COMMUNITY_JOIN_REASON_LABEL,
     COMMUNITY_JOIN_REASON_PLACEHOLDER,
+    COMMUNITY_LEAVE_CONFIRM_DESCRIPTION,
+    COMMUNITY_LEAVE_CONFIRM_DESCRIPTION_DETAILS,
+    COMMUNITY_MEMBERSHIP_PENDING,
+    COMMUNITY_MEMBERSHIP_REJECTED,
+    COMMUNITY_REJECTION_REASON_LABEL,
+    COMMUNITY_PAGE_URL_COPIED,
     BTN_SEND,
 } from "@ui-config/strings";
 import { Share2 } from "lucide-react";
@@ -111,7 +117,7 @@ export function CommunityInfo({
         navigator.clipboard.writeText(`${address.frontend}/p/${pageId}`);
         toast({
             title: TOAST_TITLE_SUCCESS,
-            description: "Page URL copied to clipboard!",
+            description: COMMUNITY_PAGE_URL_COPIED,
         });
     };
 
@@ -226,12 +232,13 @@ export function CommunityInfo({
                                             {COMMUNITY_LEAVE}
                                         </DialogTitle>
                                         <DialogDescription>
-                                            Are you sure you want to leave this
-                                            community? <br></br> <br></br>
-                                            You’ll lose access to all community
-                                            content, discussions and included
-                                            products. Ongoing subscription will
-                                            also be canceled, if any.
+                                            {
+                                                COMMUNITY_LEAVE_CONFIRM_DESCRIPTION
+                                            }{" "}
+                                            <br></br> <br></br>
+                                            {
+                                                COMMUNITY_LEAVE_CONFIRM_DESCRIPTION_DETAILS
+                                            }
                                         </DialogDescription>
                                     </DialogHeader>
                                     <DialogFooter>
@@ -258,7 +265,7 @@ export function CommunityInfo({
                     membership.status ===
                         Constants.MembershipStatus.PENDING && (
                         <Button disabled className="w-full">
-                            Membership Pending
+                            {COMMUNITY_MEMBERSHIP_PENDING}
                         </Button>
                     )}
                 {membership &&
@@ -266,13 +273,15 @@ export function CommunityInfo({
                         Constants.MembershipStatus.REJECTED && (
                         <>
                             <Button disabled className="w-full">
-                                Membership Rejected
+                                {COMMUNITY_MEMBERSHIP_REJECTED}
                             </Button>
                             {membership.rejectionReason && (
                                 <Alert variant="destructive">
                                     <AlertDescription>
-                                        <b>Rejection reason</b>:{" "}
-                                        {membership.rejectionReason}
+                                        <b>
+                                            {COMMUNITY_REJECTION_REASON_LABEL}
+                                        </b>
+                                        : {membership.rejectionReason}
                                     </AlertDescription>
                                 </Alert>
                             )}

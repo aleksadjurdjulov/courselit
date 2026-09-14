@@ -4,6 +4,13 @@ import Image from "next/image";
 import { Download, Maximize2, Play } from "lucide-react";
 import { CommunityMedia } from "@courselit/common-models";
 import { extractVideoId } from "@courselit/utils";
+import {
+    COMMUNITY_MEDIA_ALT,
+    COMMUNITY_MEDIA_DOWNLOAD,
+    COMMUNITY_MEDIA_GIF_ALT,
+    COMMUNITY_MEDIA_VIEW_FULLSCREEN,
+    COMMUNITY_MEDIA_YOUTUBE_ALT,
+} from "@ui-config/strings";
 
 interface CommunityPostMediaPreviewProps {
     media: CommunityMedia;
@@ -42,7 +49,7 @@ export default function CommunityPostMediaPreview({
                 >
                     <Image
                         src={imageSrc}
-                        alt="Post media"
+                        alt={COMMUNITY_MEDIA_ALT}
                         className={
                             renderActualFile
                                 ? isFullscreenViewer
@@ -63,7 +70,7 @@ export default function CommunityPostMediaPreview({
                                     onRequestFullscreen(media);
                                 }}
                                 className="absolute right-2 top-2 rounded-md bg-black/60 p-1.5 text-white opacity-0 transition-opacity hover:bg-black/80 group-hover:opacity-100"
-                                aria-label="View full screen"
+                                aria-label={COMMUNITY_MEDIA_VIEW_FULLSCREEN}
                             >
                                 <Maximize2 className="h-4 w-4" />
                             </button>
@@ -76,7 +83,7 @@ export default function CommunityPostMediaPreview({
             return (
                 <img
                     src={media.url}
-                    alt="GIF"
+                    alt={COMMUNITY_MEDIA_GIF_ALT}
                     className="h-48 w-48 rounded-md object-cover"
                 />
             );
@@ -123,7 +130,7 @@ export default function CommunityPostMediaPreview({
                 <div className="relative h-48 aspect-video overflow-hidden">
                     <img
                         src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
-                        alt="YouTube thumbnail"
+                        alt={COMMUNITY_MEDIA_YOUTUBE_ALT}
                         className="h-full w-full rounded-md object-cover transition-transform duration-300"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">
@@ -161,7 +168,7 @@ export default function CommunityPostMediaPreview({
                                 <a
                                     href={`/api/media/${encodeURIComponent(media.media.mediaId)}`}
                                     className="rounded-md bg-black/60 p-1.5 text-white hover:bg-black/80"
-                                    aria-label="Download"
+                                    aria-label={COMMUNITY_MEDIA_DOWNLOAD}
                                 >
                                     <Download className="h-4 w-4" />
                                 </a>
@@ -174,7 +181,7 @@ export default function CommunityPostMediaPreview({
                                         onRequestFullscreen(media);
                                     }}
                                     className="rounded-md bg-black/60 p-1.5 text-white hover:bg-black/80"
-                                    aria-label="View full screen"
+                                    aria-label={COMMUNITY_MEDIA_VIEW_FULLSCREEN}
                                 >
                                     <Maximize2 className="h-4 w-4" />
                                 </button>

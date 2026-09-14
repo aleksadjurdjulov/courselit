@@ -5,6 +5,7 @@ import { CommunityReaction } from "@courselit/common-models";
 import { SmilePlus, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmojiPicker } from "./emoji-picker";
+import { COMMUNITY_ADD_REACTION } from "@ui-config/strings";
 
 interface ReactionsBarProps {
     reactions: CommunityReaction[];
@@ -117,7 +118,7 @@ export function ReactionsBar({
                         onClick={(e) => {
                             e.stopPropagation();
                         }}
-                        aria-label="Add reaction"
+                        aria-label={COMMUNITY_ADD_REACTION}
                     >
                         <SmilePlus className="h-4 w-4" />
                     </button>

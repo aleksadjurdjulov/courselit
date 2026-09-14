@@ -33,6 +33,13 @@ import {
     MANAGE_LINK_TEXT,
     TOAST_TITLE_ERROR,
     TOAST_TITLE_SUCCESS,
+    COMMUNITY_POST_DELETE_CONFIRM_SHORT,
+    COMMUNITY_DISABLED_WARNING,
+    COMMUNITY_POST_NOT_FOUND_TITLE,
+    COMMUNITY_POST_NOT_FOUND_DESCRIPTION,
+    COMMUNITY_BACK_TO_COMMUNITY,
+    COMMUNITY_JOIN_SUCCESS,
+    COMMUNITY_JOIN_REQUEST_SUCCESS,
     COURSE_DISCUSSIONS_EDIT,
     COURSE_DISCUSSIONS_DELETE,
     COURSE_DISCUSSIONS_REPORT,
@@ -474,7 +481,11 @@ export default function CommunityPostPage({
             if (response.communityMembershipStatus) {
                 toast({
                     title: TOAST_TITLE_SUCCESS,
-                    description: "Your request to join has been sent.",
+                    description:
+                        response.communityMembershipStatus.status?.toLowerCase() ===
+                        Constants.MembershipStatus.ACTIVE
+                            ? COMMUNITY_JOIN_SUCCESS
+                            : COMMUNITY_JOIN_REQUEST_SUCCESS,
                 });
             }
         } catch (error: any) {
@@ -527,9 +538,10 @@ export default function CommunityPostPage({
     if (!community || !post) {
         return (
             <NotFound
-                resource="Community post"
+                title={COMMUNITY_POST_NOT_FOUND_TITLE}
+                description={COMMUNITY_POST_NOT_FOUND_DESCRIPTION}
                 backLink={`/dashboard/community/${communityId}`}
-                backLinkText="Back to community"
+                backLinkText={COMMUNITY_BACK_TO_COMMUNITY}
             />
         );
     }
@@ -540,8 +552,7 @@ export default function CommunityPostPage({
         <div className="container mx-auto p-0">
             {!community?.enabled && (
                 <div className="mb-4 rounded-md bg-red-400 p-2 text-sm text-white">
-                    This community is not enabled. It is not visible to your
-                    audience (including moderators).{" "}
+                    {COMMUNITY_DISABLED_WARNING}{" "}
                     <Link
                         href={`/dashboard/community/${communityId}/manage`}
                         className="underline"
@@ -730,7 +741,7 @@ export default function CommunityPostPage({
                                 {COURSE_DISCUSSIONS_DELETE}
                             </DialogTitle>
                             <DialogDescription>
-                                Are you sure you want to delete this post?
+                                {COMMUNITY_POST_DELETE_CONFIRM_SHORT}
                             </DialogDescription>
                             <DialogFooter>
                                 <Button

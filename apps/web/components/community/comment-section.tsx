@@ -25,6 +25,10 @@ import {
     COURSE_DISCUSSIONS_COMMENT_PLACEHOLDER,
     COURSE_DISCUSSIONS_POST_COMMENT,
     COMMUNITY_POSTING,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_LINK,
+    COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX,
+    TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 
 function toggleReactionLocally(
@@ -261,7 +265,7 @@ export default function CommentSection({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -294,7 +298,7 @@ export default function CommentSection({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -346,7 +350,7 @@ export default function CommentSection({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         } finally {
@@ -402,7 +406,7 @@ export default function CommentSection({
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -459,7 +463,7 @@ export default function CommentSection({
             // Re-sync from server on failure
             loadComments();
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -526,7 +530,7 @@ export default function CommentSection({
         } catch (err: any) {
             loadComments();
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -566,7 +570,7 @@ export default function CommentSection({
             loadPost();
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
             });
         }
@@ -601,11 +605,13 @@ export default function CommentSection({
         <div className="flex flex-col gap-4">
             {!profile?.name && (
                 <div className="text-center text-gray-500">
-                    Complete your{" "}
+                    {COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX}{" "}
                     <span className="underline">
-                        <Link href={"/dashboard/profile"}>profile</Link>
+                        <Link href={"/dashboard/profile"}>
+                            {COMMUNITY_JOIN_COMPLETE_PROFILE_LINK}
+                        </Link>
                     </span>{" "}
-                    to join this community or post here
+                    {COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX}
                 </div>
             )}
             {profile?.name && (

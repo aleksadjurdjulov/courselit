@@ -972,6 +972,44 @@ export const COMMUNITY_STATUS_PENDING = "na čekanju";
 export const COMMUNITY_STATUS_ACTIVE = "aktivno";
 export const COMMUNITY_STATUS_REJECTED = "odbijeno";
 export const COMMUNITY_STATUS_ACCEPTED = "prihvaćeno";
+export const COMMUNITY_MEMBERSHIP_PENDING = "Članstvo na čekanju";
+export const COMMUNITY_MEMBERSHIP_REJECTED = "Članstvo odbijeno";
+export const COMMUNITY_REJECTION_REASON_LABEL = "Razlog odbijanja";
+export const COMMUNITY_LEAVE_CONFIRM_DESCRIPTION =
+    "Da li ste sigurni da želite da napustite ovu zajednicu?";
+export const COMMUNITY_LEAVE_CONFIRM_DESCRIPTION_DETAILS =
+    "Izgubićete pristup svom sadržaju zajednice, diskusijama i uključenim proizvodima. Aktivna pretplata će takođe biti otkazana, ako postoji.";
+export const COMMUNITY_POST_DELETE_CONFIRM =
+    "Da li ste sigurni da želite da obrišete ovu objavu? Ova radnja se ne može opozvati.";
+export const COMMUNITY_POST_DELETE_CONFIRM_SHORT =
+    "Da li ste sigurni da želite da obrišete ovu objavu?";
+export const COMMUNITY_PAGE_URL_COPIED = "URL stranice je kopiran u clipboard!";
+export const COMMUNITY_POST_UPDATE_FAILED = "Ažuriranje objave nije uspelo";
+export const COMMUNITY_POST_ADD_FAILED = "Dodavanje objave nije uspelo";
+export const COMMUNITY_POST_DELETE_FAILED = "Brisanje objave nije uspelo";
+export const COMMUNITY_DISABLED_WARNING =
+    "Ova zajednica nije omogućena. Nije vidljiva Vašoj publici (uključujući moderatore).";
+export const COMMUNITY_NOT_FOUND_TITLE = "Zajednica nije pronađena";
+export const COMMUNITY_NOT_FOUND_DESCRIPTION =
+    "Nismo mogli da pronađemo zajednicu koju tražite. Možda je uklonjena ili ne postoji.";
+export const COMMUNITY_POST_NOT_FOUND_TITLE = "Objava nije pronađena";
+export const COMMUNITY_POST_NOT_FOUND_DESCRIPTION =
+    "Nismo mogli da pronađemo objavu koju tražite. Možda je uklonjena ili ne postoji.";
+export const COMMUNITY_BACK_TO_HOME = "Nazad na početnu";
+export const COMMUNITY_BACK_TO_COMMUNITY = "Nazad na zajednicu";
+export const NOT_FOUND_DEFAULT_TITLE = "Nije pronađeno";
+export const NOT_FOUND_DEFAULT_DESCRIPTION =
+    "Nismo mogli da pronađemo ono što tražite.";
+export const NOT_FOUND_RESOURCE_TITLE = "{resource} nije pronađen";
+export const NOT_FOUND_RESOURCE_DESCRIPTION =
+    "Nismo mogli da pronađemo resurs koji tražite. Možda je uklonjen ili ne postoji.";
+export const COMMUNITY_EDIT_BANNER = "Izmeni baner";
+export const COMMUNITY_MEDIA_ALT = "Medij objave";
+export const COMMUNITY_MEDIA_GIF_ALT = "GIF";
+export const COMMUNITY_MEDIA_YOUTUBE_ALT = "YouTube sličica";
+export const COMMUNITY_MEDIA_VIEW_FULLSCREEN = "Prikaži preko celog ekrana";
+export const COMMUNITY_MEDIA_DOWNLOAD = "Preuzmi";
+export const COMMUNITY_ADD_REACTION = "Dodaj reakciju";
 export const COMMUNITY_REPORT_COL_CONTENT = "Sadržaj";
 export const COMMUNITY_REPORT_COL_TYPE = "Tip";
 export const COMMUNITY_REPORT_COL_REASON = "Razlog";
@@ -991,9 +1029,19 @@ export const COMMUNITY_MEMBERS_LABEL_FEW = "člana";
 export const COMMUNITY_MEMBERS_LABEL_MANY = "članova";
 export const COMMUNITY_LEAVE = "Napusti zajednicu";
 export const COMMUNITY_JOIN = "Pridruži se";
+export const COMMUNITY_INCOMPLETE_PROFILE_TITLE = "Nepotpun profil";
+export const COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX = "Popunite svoj";
+export const COMMUNITY_JOIN_COMPLETE_PROFILE_LINK = "profil";
+export const COMMUNITY_JOIN_COMPLETE_PROFILE_SUFFIX =
+    "da biste se pridružili ovoj zajednici";
+export const COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX =
+    "da biste se pridružili ovoj zajednici ili objavljivali ovde";
 export const COMMUNITY_JOIN_REASON_LABEL =
     "Zašto želite da se pridružite ovoj zajednici?";
 export const COMMUNITY_JOIN_REASON_PLACEHOLDER = "Razlog za pridruživanje";
+export const COMMUNITY_JOIN_SUCCESS = "Uspešno ste se pridružili zajednici.";
+export const COMMUNITY_JOIN_REQUEST_SUCCESS =
+    "Vaš zahtev za pridruživanje je poslat.";
 export const COMMUNITY_POST_TITLE_PLACEHOLDER = "Naslov";
 export const COMMUNITY_POST_CONTENT_PLACEHOLDER = "Šta Vam je na umu?";
 export const COMMUNITY_POST_TITLE_REQUIRED = "Naslov je obavezan";

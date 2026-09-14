@@ -11,6 +11,7 @@ import {
     COMMUNITY_FIELD_NAME,
     COMMUNITY_NEW_BTN_CAPTION,
     NEW_COMMUNITY_BUTTON,
+    TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -45,7 +46,7 @@ export default function CommunityCreator({ address }: { address: Address }) {
             }
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
                 variant: "destructive",
             });

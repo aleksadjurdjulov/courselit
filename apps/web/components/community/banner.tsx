@@ -9,6 +9,7 @@ import {
     BUTTON_SAVING,
     TOAST_TITLE_SUCCESS,
     COMMUNITY_BANNER_PLACEHOLDER,
+    COMMUNITY_EDIT_BANNER,
     BUTTON_CANCEL_TEXT,
     BUTTON_SAVE,
 } from "@ui-config/strings";
@@ -109,7 +110,9 @@ export default function Banner({
                                 onClick={() => setIsEditing(true)}
                             >
                                 <Pencil className="h-4 w-4" />
-                                <span className="sr-only">Edit banner</span>
+                                <span className="sr-only">
+                                    {COMMUNITY_EDIT_BANNER}
+                                </span>
                             </Button>
                         )}
                     </>

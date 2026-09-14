@@ -41,6 +41,7 @@ import {
     BUTTON_CANCEL_TEXT,
     COURSE_DISCUSSIONS_DELETE_CONFIRM,
     COURSE_DISCUSSIONS_DELETE_CONFIRM_DESCRIPTION,
+    TOAST_TITLE_ERROR,
 } from "@ui-config/strings";
 import { useToast } from "@courselit/components-library";
 import { FetchBuilder } from "@courselit/utils";
@@ -172,7 +173,7 @@ export function Comment({
             });
         } catch (err: any) {
             toast({
-                title: "Error",
+                title: TOAST_TITLE_ERROR,
                 description: err.message,
                 variant: "destructive",
             });
