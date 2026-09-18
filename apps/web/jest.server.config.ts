@@ -34,6 +34,7 @@ const config: Config = {
         "@/hooks/(.*)": "<rootDir>/hooks/$1",
         "@/app/(.*)": "<rootDir>/app/$1",
         "@ui-lib/(.*)": "<rootDir>/ui-lib/$1",
+        "@ui-config/(.*)": "<rootDir>/ui-config/$1",
         "@config/(.*)": "<rootDir>/config/$1",
         "@/models/(.*)": "<rootDir>/models/$1",
         "@components/(.*)": "<rootDir>/components/$1",

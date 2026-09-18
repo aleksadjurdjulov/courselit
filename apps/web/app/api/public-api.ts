@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import DomainModel, { Domain } from "@models/Domain";
 import ApiKey from "@/models/ApiKey";
 import UserModel from "@models/User";
+import { getBackendAddress } from "@/app/actions";
 
 export type PublicApiErrorCode =
     | "bad_request"
@@ -95,12 +96,8 @@ type PublicApiAuthWithBodyResult =
     | PublicApiAuthWithBodySuccess
     | PublicApiAuthFailure;
 
-function getRequestOrigin(req: NextRequest) {
-    try {
-        return new URL(req.url).origin;
-    } catch {
-        return req.headers.get("origin") || "http://localhost";
-    }
+async function getRequestOrigin(req: NextRequest) {
+    return getBackendAddress(req.headers);
 }
 
 export async function validatePublicApiRequest(
@@ -157,7 +154,7 @@ export async function validatePublicApiRequest(
         ctx: {
             user,
             subdomain: domain,
-            address: getRequestOrigin(req),
+            address: await getRequestOrigin(req),
         },
     };
 }

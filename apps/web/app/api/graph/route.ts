@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import schema from "@/graphql";
 import { graphql } from "graphql";
-import { getAddress } from "@/lib/utils";
+import { getBackendAddress } from "@/app/actions";
 import User from "@models/User";
 import { auth } from "@/auth";
 import { als } from "@/async-local-storage";
@@ -71,12 +71,10 @@ export async function POST(req: NextRequest) {
         query = body.query.query;
         variables = body.query.variables;
     }
-    const hostname = req.headers.get("host") || "";
-    const protocol = req.headers.get("x-forwarded-proto") || "http";
     const contextValue = {
         user,
         subdomain: domain,
-        address: getAddress(hostname, protocol),
+        address: await getBackendAddress(req.headers),
     };
     const response = await graphql({
         schema,

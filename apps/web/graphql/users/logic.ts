@@ -44,7 +44,10 @@ import {
     createInternalPaymentPlan,
     getInternalPaymentPlan,
 } from "../paymentplans/logic";
-import { convertFiltersToDBConditions } from "@courselit/common-logic";
+import {
+    convertFiltersToDBConditions,
+    getSiteUrl,
+} from "@courselit/common-logic";
 import { InternalMembership } from "@courselit/orm-models";
 import CertificateModel from "@models/Certificate";
 import CertificateTemplateModel, {
@@ -234,7 +237,7 @@ export const inviteCustomer = async (
     try {
         const emailBody = pug.render(courseEnrollTemplate, {
             courseName: course.title,
-            loginLink: `${ctx.address}/login`,
+            loginLink: `${getSiteUrl(ctx.subdomain, ctx.address)}/login`,
             hideCourseLitBranding:
                 ctx.subdomain.settings?.hideCourseLitBranding,
         });

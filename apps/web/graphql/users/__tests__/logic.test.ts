@@ -14,6 +14,10 @@ jest.mock("@/lib/trigger-sequences", () => ({
     triggerSequences: jest.fn(),
 }));
 
+jest.mock("@/services/queue", () => ({
+    addMailJob: jest.fn(),
+}));
+
 import mongoose from "mongoose";
 import {
     finalizeUserCreation,
@@ -21,6 +25,7 @@ import {
     getUser,
     updateUser,
     findMembership,
+    inviteCustomer,
 } from "../logic";
 import CertificateModel from "@models/Certificate";
 import UserModel from "@models/User";
@@ -31,10 +36,13 @@ import Domain from "@models/Domain";
 import PageModel from "@models/Page";
 import MembershipModel from "@models/Membership";
 import CommunityModel from "@models/Community";
+import PaymentPlanModel from "@models/PaymentPlan";
 import { Constants, UIConstants } from "@courselit/common-models";
 import { seedNotificationPreferencesForUser } from "../../notifications/logic";
 import { recordActivity } from "@/lib/record-activity";
 import { triggerSequences } from "@/lib/trigger-sequences";
+import { addMailJob } from "@/services/queue";
+import constants from "@/config/constants";
 
 const seedNotificationPreferencesForUserMock =
     seedNotificationPreferencesForUser as jest.Mock;
@@ -1023,5 +1031,108 @@ describe("findMembership", () => {
         });
 
         expect(result).toBeNull();
+    });
+});
+
+describe("inviteCustomer", () => {
+    const suitePrefix = `invite-${Date.now()}`;
+    const id = (suffix: string) => `${suitePrefix}-${suffix}`;
+    const email = (suffix: string) => `${suffix}-${suitePrefix}@example.com`;
+    const addMailJobMock = addMailJob as jest.Mock;
+
+    let testDomain: any;
+    let adminUser: any;
+    let publishedCourse: any;
+    let ctx: any;
+    const originalDomain = process.env.DOMAIN;
+    const originalProtocol = process.env.PROTOCOL;
+    const originalMultitenant = process.env.MULTITENANT;
+
+    beforeAll(async () => {
+        testDomain = await Domain.create({
+            name: id("domain"),
+            email: email("owner"),
+            customDomain: "school.example.com",
+        });
+
+        adminUser = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("admin"),
+            email: email("admin"),
+            name: "Admin",
+            permissions: [
+                UIConstants.permissions.manageUsers,
+                UIConstants.permissions.manageAnyCourse,
+            ],
+            active: true,
+            unsubscribeToken: id("unsub-admin"),
+            purchases: [],
+        });
+
+        await PaymentPlanModel.create({
+            domain: testDomain._id,
+            planId: id("internal-plan"),
+            userId: adminUser.userId,
+            entityId: "internal",
+            entityType: Constants.MembershipEntityType.COURSE,
+            type: "free",
+            name: constants.internalPaymentPlanName,
+            internal: true,
+            interval: "monthly",
+            cost: 0,
+            currencyISOCode: "USD",
+        });
+
+        publishedCourse = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course"),
+            title: "Invite Course",
+            creatorId: adminUser.userId,
+            groups: [],
+            lessons: [],
+            type: Constants.CourseType.COURSE,
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-slug"),
+            published: true,
+        });
+
+        ctx = {
+            user: adminUser,
+            subdomain: testDomain,
+            address: "http://0.0.0.0:80",
+        };
+    });
+
+    afterEach(() => {
+        addMailJobMock.mockClear();
+        process.env.DOMAIN = originalDomain;
+        process.env.PROTOCOL = originalProtocol;
+        process.env.MULTITENANT = originalMultitenant;
+    });
+
+    afterAll(async () => {
+        await MembershipModel.deleteMany({ domain: testDomain._id });
+        await PaymentPlanModel.deleteMany({ domain: testDomain._id });
+        await CourseModel.deleteMany({ domain: testDomain._id });
+        await UserModel.deleteMany({ domain: testDomain._id });
+        await Domain.deleteOne({ _id: testDomain._id });
+    });
+
+    it("emails a login link to the deployed site, not the bind address", async () => {
+        process.env.PROTOCOL = "https";
+
+        await inviteCustomer(
+            email("student"),
+            [],
+            publishedCourse.courseId,
+            ctx,
+        );
+
+        expect(addMailJobMock).toHaveBeenCalledTimes(1);
+        const mailPayload = addMailJobMock.mock.calls[0][0];
+        expect(mailPayload.body).toContain("https://school.example.com/login");
+        expect(mailPayload.body).not.toContain("0.0.0.0");
     });
 });

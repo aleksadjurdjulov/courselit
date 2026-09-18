@@ -32,6 +32,12 @@ services:
             - EMAIL_HOST=${EMAIL_HOST}
             - EMAIL_FROM=${EMAIL_FROM}
 
+            # Public site hostname used for invite/download email links when
+            # the request Host is a Docker bind address (0.0.0.0). Omit the
+            # protocol here; set PROTOCOL separately (defaults to https).
+            # - DOMAIN=${DOMAIN}
+            # - PROTOCOL=${PROTOCOL:-https}
+
             # CourseLit configures a super admin user when it boots up for the very first time
             # The email that you provide here will become the identifier for that super admin.
             - SUPER_ADMIN_EMAIL=${SUPER_ADMIN_EMAIL?'SUPER_ADMIN_EMAIL environment variable is not defined'}

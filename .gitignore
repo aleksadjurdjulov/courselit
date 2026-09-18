@@ -13,6 +13,7 @@ coverage
 
 # Text editors configurations
 .vscode
+.idea
 .rgignore
 
 # Env file
