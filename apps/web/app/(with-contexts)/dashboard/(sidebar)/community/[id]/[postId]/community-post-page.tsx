@@ -38,8 +38,6 @@ import {
     COMMUNITY_POST_NOT_FOUND_TITLE,
     COMMUNITY_POST_NOT_FOUND_DESCRIPTION,
     COMMUNITY_BACK_TO_COMMUNITY,
-    COMMUNITY_JOIN_SUCCESS,
-    COMMUNITY_JOIN_REQUEST_SUCCESS,
     COURSE_DISCUSSIONS_EDIT,
     COURSE_DISCUSSIONS_DELETE,
     COURSE_DISCUSSIONS_REPORT,
@@ -456,47 +454,6 @@ export default function CommunityPostPage({
         }
     };
 
-    const handleJoin = async (joiningReason?: string) => {
-        const query = `
-            mutation JoinCommunity($id: String!, $joiningReason: String!) {
-                communityMembershipStatus: joinCommunity(id: $id, joiningReason: $joiningReason) {
-                    status
-                    rejectionReason
-                    role
-                } 
-            }
-        `;
-        try {
-            const fetchRequest = new FetchBuilder()
-                .setUrl(`${address.backend}/api/graph`)
-                .setPayload({
-                    query,
-                    variables: { id: communityId, joiningReason },
-                })
-                .setIsGraphQLEndpoint(true)
-                .build();
-            const response = await fetchRequest.exec();
-            setMembership(response.communityMembershipStatus);
-            setRefreshCommunityStatus((prev) => prev + 1);
-            if (response.communityMembershipStatus) {
-                toast({
-                    title: TOAST_TITLE_SUCCESS,
-                    description:
-                        response.communityMembershipStatus.status?.toLowerCase() ===
-                        Constants.MembershipStatus.ACTIVE
-                            ? COMMUNITY_JOIN_SUCCESS
-                            : COMMUNITY_JOIN_REQUEST_SUCCESS,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: TOAST_TITLE_ERROR,
-                description: error.message,
-                variant: "destructive",
-            });
-        }
-    };
-
     const handleLeave = async () => {
         const query = `
             mutation LeaveCommunity($id: String!) {
@@ -567,15 +524,8 @@ export default function CommunityPostPage({
                     membership?.status.toLowerCase() ===
                         Constants.MembershipStatus.ACTIVE ? null : (
                         <MembershipStatus
-                            id={communityId}
                             membership={membership}
-                            joiningReasonText={community?.joiningReasonText}
                             key={refreshCommunityStatus}
-                            paymentPlan={community?.paymentPlans?.find(
-                                (plan) =>
-                                    plan.planId ===
-                                    community?.defaultPaymentPlan,
-                            )}
                         />
                     )}
 
@@ -854,13 +804,7 @@ export default function CommunityPostPage({
                         }
                         memberCount={community.membersCount}
                         membership={membership}
-                        paymentPlan={community.paymentPlans?.find(
-                            (plan) =>
-                                plan.planId === community.defaultPaymentPlan,
-                        )}
-                        joiningReasonText={community.joiningReasonText}
                         pageId={community.pageId}
-                        onJoin={handleJoin}
                         onLeave={handleLeave}
                     />
                 </div>

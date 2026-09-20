@@ -1486,3 +1486,200 @@ describe("Community Logic - Reactions", () => {
         ).toBe(0);
     });
 });
+
+describe("Free community auto-join", () => {
+    const SUITE_PREFIX = `free-comm-${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+    const id = (suffix: string) => `${SUITE_PREFIX}-${suffix}`;
+    const email = (suffix: string) => `${suffix}-${SUITE_PREFIX}@example.com`;
+
+    let domain: any;
+    let user: any;
+
+    beforeAll(async () => {
+        domain = await DomainModel.create({
+            name: id("domain"),
+            email: email("domain"),
+        });
+        user = await UserModel.create({
+            domain: domain._id,
+            userId: id("user"),
+            email: email("user"),
+            name: "Member",
+            active: true,
+            unsubscribeToken: id("unsub"),
+        });
+    });
+
+    afterEach(async () => {
+        await CommunityModel.deleteMany({ domain: domain._id });
+        await PaymentPlanModel.deleteMany({ domain: domain._id });
+        await MembershipModel.deleteMany({ domain: domain._id });
+    });
+
+    afterAll(async () => {
+        await UserModel.deleteMany({ domain: domain._id });
+        await DomainModel.deleteOne({ _id: domain._id });
+    });
+
+    it("lists only enabled communities with a free payment plan", async () => {
+        const { getFreeCommunitiesForDomain } = await import(
+            "@courselit/common-logic"
+        );
+
+        const freeCommunity = await CommunityModel.create({
+            domain: domain._id,
+            communityId: id("free"),
+            name: "Free Community",
+            slug: id("free"),
+            pageId: id("free"),
+            enabled: true,
+            autoAcceptMembers: true,
+        });
+        await CommunityModel.create({
+            domain: domain._id,
+            communityId: id("disabled"),
+            name: "Disabled Community",
+            slug: id("disabled"),
+            pageId: id("disabled"),
+            enabled: false,
+            autoAcceptMembers: true,
+        });
+        await CommunityModel.create({
+            domain: domain._id,
+            communityId: id("paid-only"),
+            name: "Paid Community",
+            slug: id("paid-only"),
+            pageId: id("paid-only"),
+            enabled: true,
+            autoAcceptMembers: true,
+        });
+
+        await PaymentPlanModel.create({
+            domain: domain._id,
+            planId: id("free-plan"),
+            userId: id("owner"),
+            entityId: freeCommunity.communityId,
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            type: Constants.PaymentPlanType.FREE,
+            name: "Free",
+            archived: false,
+        });
+        await PaymentPlanModel.create({
+            domain: domain._id,
+            planId: id("disabled-free-plan"),
+            userId: id("owner"),
+            entityId: id("disabled"),
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            type: Constants.PaymentPlanType.FREE,
+            name: "Free",
+            archived: false,
+        });
+        await PaymentPlanModel.create({
+            domain: domain._id,
+            planId: id("paid-plan"),
+            userId: id("owner"),
+            entityId: id("paid-only"),
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            type: Constants.PaymentPlanType.ONE_TIME,
+            name: "Paid",
+            oneTimeAmount: 10,
+            archived: false,
+        });
+
+        const result = await getFreeCommunitiesForDomain(domain._id);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].communityId).toBe(freeCommunity.communityId);
+        expect(result[0].paymentPlan.planId).toBe(id("free-plan"));
+    });
+
+    it("activates memberships for free communities on registration", async () => {
+        const { autoJoinUserToFreeCommunities } = await import(
+            "@/lib/auto-join-free-communities"
+        );
+
+        const community = await CommunityModel.create({
+            domain: domain._id,
+            communityId: id("join-free"),
+            name: "Join Free",
+            slug: id("join-free"),
+            pageId: id("join-free"),
+            enabled: true,
+            autoAcceptMembers: true,
+        });
+        const paymentPlan = await PaymentPlanModel.create({
+            domain: domain._id,
+            planId: id("join-free-plan"),
+            userId: id("owner"),
+            entityId: community.communityId,
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            type: Constants.PaymentPlanType.FREE,
+            name: "Free",
+            archived: false,
+        });
+
+        await autoJoinUserToFreeCommunities({
+            domainId: domain._id,
+            userId: user.userId,
+        });
+
+        const membership = await MembershipModel.findOne({
+            domain: domain._id,
+            userId: user.userId,
+            entityId: community.communityId,
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+        });
+
+        expect(membership).toBeTruthy();
+        expect(membership?.status).toBe(Constants.MembershipStatus.ACTIVE);
+        expect(membership?.role).toBe(Constants.MembershipRole.POST);
+        expect(membership?.paymentPlanId).toBe(paymentPlan.planId);
+    });
+
+    it("is idempotent when the user is already an active member", async () => {
+        const { autoJoinUserToFreeCommunities } = await import(
+            "@/lib/auto-join-free-communities"
+        );
+
+        const community = await CommunityModel.create({
+            domain: domain._id,
+            communityId: id("already-member"),
+            name: "Already Member",
+            slug: id("already-member"),
+            pageId: id("already-member"),
+            enabled: true,
+            autoAcceptMembers: true,
+        });
+        const paymentPlan = await PaymentPlanModel.create({
+            domain: domain._id,
+            planId: id("already-member-plan"),
+            userId: id("owner"),
+            entityId: community.communityId,
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            type: Constants.PaymentPlanType.FREE,
+            name: "Free",
+            archived: false,
+        });
+        await MembershipModel.create({
+            domain: domain._id,
+            userId: user.userId,
+            entityId: community.communityId,
+            entityType: Constants.MembershipEntityType.COMMUNITY,
+            paymentPlanId: paymentPlan.planId,
+            status: Constants.MembershipStatus.ACTIVE,
+            role: Constants.MembershipRole.POST,
+        });
+
+        await autoJoinUserToFreeCommunities({
+            domainId: domain._id,
+            userId: user.userId,
+        });
+
+        const memberships = await MembershipModel.find({
+            domain: domain._id,
+            userId: user.userId,
+            entityId: community.communityId,
+        });
+        expect(memberships).toHaveLength(1);
+    });
+});

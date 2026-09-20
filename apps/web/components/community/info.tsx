@@ -4,30 +4,16 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
     Constants,
     Membership,
-    PaymentPlan,
     TextEditorContent,
-    UIConstants,
 } from "@courselit/common-models";
-import { FormEvent, Fragment, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import {
-    getPlanPrice,
     hasCommunityPermission,
     getCommunityMembersLabel,
 } from "@ui-lib/utils";
-import {
-    Form,
-    FormField,
-    getSymbolFromCurrency,
-    Link,
-    useToast,
-} from "@courselit/components-library";
+import { Link, useToast } from "@courselit/components-library";
 import { TextRenderer } from "@courselit/page-blocks";
-import {
-    AddressContext,
-    ProfileContext,
-    SiteInfoContext,
-    ThemeContext,
-} from "@components/contexts";
+import { AddressContext, ThemeContext } from "@components/contexts";
 import {
     Dialog,
     DialogContent,
@@ -35,28 +21,22 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@components/ui/dialog";
 import {
     COMMUNITY_SETTINGS,
     TOAST_TITLE_SUCCESS,
     COMMUNITY_LEAVE,
     BUTTON_CANCEL_TEXT,
-    COMMUNITY_JOIN,
-    COMMUNITY_JOIN_REASON_LABEL,
-    COMMUNITY_JOIN_REASON_PLACEHOLDER,
     COMMUNITY_LEAVE_CONFIRM_DESCRIPTION,
     COMMUNITY_LEAVE_CONFIRM_DESCRIPTION_DETAILS,
     COMMUNITY_MEMBERSHIP_PENDING,
     COMMUNITY_MEMBERSHIP_REJECTED,
     COMMUNITY_REJECTION_REASON_LABEL,
     COMMUNITY_PAGE_URL_COPIED,
-    BTN_SEND,
 } from "@ui-config/strings";
 import { Share2 } from "lucide-react";
 import WidgetErrorBoundary from "@components/public/base-layout/template/widget-error-boundary";
 import { truncate } from "@courselit/utils";
-const { permissions } = UIConstants;
 
 interface CommunityInfoProps {
     id: string;
@@ -64,10 +44,7 @@ interface CommunityInfoProps {
     description: TextEditorContent;
     image: string;
     memberCount: number;
-    paymentPlan?: PaymentPlan;
-    joiningReasonText?: string;
     pageId: string;
-    onJoin: (joiningReason?: string) => void;
     onLeave: () => void;
     membership?: Pick<Membership, "status" | "rejectionReason" | "role">;
 }
@@ -79,30 +56,13 @@ export function CommunityInfo({
     image,
     memberCount,
     membership,
-    paymentPlan,
-    joiningReasonText,
     pageId,
-    onJoin,
     onLeave,
 }: CommunityInfoProps) {
     const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
-    const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
-    const [joiningReason, setJoiningReason] = useState("");
-    const { amount, period } = paymentPlan
-        ? getPlanPrice(paymentPlan)
-        : { amount: 0, period: "" };
     const address = useContext(AddressContext);
-    const siteinfo = useContext(SiteInfoContext);
-    const { profile } = useContext(ProfileContext);
-    const currencySymbol =
-        getSymbolFromCurrency(siteinfo.currencyISOCode || "USD") || "$";
     const { toast } = useToast();
     const { theme } = useContext(ThemeContext);
-
-    const handleJoinSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        onJoin(joiningReason);
-    };
 
     const handleLeaveClick = () => {
         setShowLeaveConfirmation(true);
@@ -159,59 +119,6 @@ export function CommunityInfo({
                         {getCommunityMembersLabel(memberCount)}
                     </p>
                 </div>
-                {!membership && (
-                    <Fragment>
-                        {amount > 0 && (
-                            <Link
-                                href={`/checkout?id=${id}&type=${Constants.MembershipEntityType.COMMUNITY}`}
-                                className="w-full"
-                            >
-                                <Button className="w-full">
-                                    {COMMUNITY_JOIN} {currencySymbol}
-                                    {amount} {period}
-                                </Button>
-                            </Link>
-                        )}
-                        {amount <= 0 && (
-                            <Dialog
-                                open={isJoinDialogOpen}
-                                onOpenChange={setIsJoinDialogOpen}
-                            >
-                                <DialogTrigger asChild>
-                                    <Button className="w-full">
-                                        {COMMUNITY_JOIN} {currencySymbol}
-                                        {amount} {period}
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <Form onSubmit={handleJoinSubmit}>
-                                        <div className="space-y-4 mt-4">
-                                            <FormField
-                                                label={
-                                                    joiningReasonText ||
-                                                    COMMUNITY_JOIN_REASON_LABEL
-                                                }
-                                                value={joiningReason}
-                                                onChange={(e) =>
-                                                    setJoiningReason(
-                                                        e.target.value,
-                                                    )
-                                                }
-                                                placeholder={
-                                                    COMMUNITY_JOIN_REASON_PLACEHOLDER
-                                                }
-                                                required
-                                            />
-                                            <Button type="submit">
-                                                {BTN_SEND}
-                                            </Button>
-                                        </div>
-                                    </Form>
-                                </DialogContent>
-                            </Dialog>
-                        )}
-                    </Fragment>
-                )}
                 {membership &&
                     membership.status === Constants.MembershipStatus.ACTIVE && (
                         <>

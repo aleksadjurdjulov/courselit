@@ -62,6 +62,7 @@ const { permissions } = UIConstants;
 import { sealMedia } from "@/services/medialit";
 import { seedNotificationPreferencesForUser } from "../notifications/logic";
 import { sanitizeEmail } from "@/lib/sanitize-email";
+import { autoJoinUserToFreeCommunities } from "@/lib/auto-join-free-communities";
 
 const removeAdminFieldsFromUserObject = (user: any) => ({
     id: user._id,
@@ -503,6 +504,11 @@ export async function finalizeUserCreation(
             entityId: user.userId,
         });
     }
+
+    await autoJoinUserToFreeCommunities({
+        domainId: domain as mongoose.Types.ObjectId,
+        userId: user.userId,
+    });
 }
 
 export async function getSegments(ctx: GQLContext): Promise<UserSegment[]> {

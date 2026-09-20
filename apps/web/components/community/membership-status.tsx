@@ -1,29 +1,8 @@
-import { FormEvent, useContext, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Constants, Membership, PaymentPlan } from "@courselit/common-models";
+import { useContext } from "react";
+import { Constants, Membership } from "@courselit/common-models";
+import { Link } from "@courselit/components-library";
+import { ProfileContext } from "@components/contexts";
 import {
-    CircularProgress,
-    Form,
-    FormField,
-    getSymbolFromCurrency,
-    Link,
-    useToast,
-} from "@courselit/components-library";
-import { FetchBuilder } from "@courselit/utils";
-import {
-    AddressContext,
-    ProfileContext,
-    SiteInfoContext,
-} from "@components/contexts";
-import {
-    TOAST_TITLE_ERROR,
-    TOAST_TITLE_SUCCESS,
-    COMMUNITY_JOIN,
-    COMMUNITY_JOIN_REASON_LABEL,
-    COMMUNITY_JOIN_REASON_PLACEHOLDER,
-    COMMUNITY_JOIN_SUCCESS,
-    COMMUNITY_JOIN_REQUEST_SUCCESS,
     COMMUNITY_INCOMPLETE_PROFILE_TITLE,
     COMMUNITY_JOIN_COMPLETE_PROFILE_PREFIX,
     COMMUNITY_JOIN_COMPLETE_PROFILE_LINK,
@@ -31,100 +10,27 @@ import {
     COMMUNITY_MEMBERSHIP_PENDING,
     COMMUNITY_MEMBERSHIP_REJECTED,
     COMMUNITY_REJECTION_REASON_LABEL,
-    BTN_SEND,
 } from "@ui-config/strings";
 import { Alert, AlertDescription, AlertTitle } from "@components/ui/alert";
 import { Clock } from "@courselit/icons";
 import { AlertCircle } from "lucide-react";
-import { getPlanPrice } from "@ui-lib/utils";
 
 export default function MembershipStatus({
-    id,
     membership,
-    joiningReasonText,
-    paymentPlan,
 }: {
-    id: string;
     membership?: Pick<Membership, "status" | "rejectionReason" | "role">;
-    joiningReasonText?: string;
-    paymentPlan?: PaymentPlan;
 }) {
-    const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
-    const [joiningReason, setJoiningReason] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [innerStatus, setInnerStatus] = useState(membership?.status);
-    const address = useContext(AddressContext);
-    const siteinfo = useContext(SiteInfoContext);
-    const { toast } = useToast();
     const { profile } = useContext(ProfileContext);
-    const { amount, period } = paymentPlan
-        ? getPlanPrice(paymentPlan)
-        : { amount: 0, period: "" };
-    const currencySymbol =
-        getSymbolFromCurrency(siteinfo.currencyISOCode || "USD") || "$";
-
-    const handleJoinSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        const query = `
-            mutation JoinCommunity(
-                $id: String!
-                $joiningReason: String!
-            ) {
-                status: joinCommunity(
-                    id: $id
-                    joiningReason: $joiningReason
-                ) 
-            }
-        `;
-        try {
-            setLoading(true);
-            const fetchRequest = new FetchBuilder()
-                .setUrl(`${address.backend}/api/graph`)
-                .setPayload({
-                    query,
-                    variables: {
-                        id,
-                        joiningReason,
-                    },
-                })
-                .setIsGraphQLEndpoint(true)
-                .build();
-            const response = await fetchRequest.exec();
-            if (response.status) {
-                setIsJoinDialogOpen(false);
-                const status =
-                    typeof response.status === "string"
-                        ? response.status.toLowerCase()
-                        : response.status;
-                setInnerStatus(status);
-                toast({
-                    title: TOAST_TITLE_SUCCESS,
-                    description:
-                        status === Constants.MembershipStatus.ACTIVE
-                            ? COMMUNITY_JOIN_SUCCESS
-                            : COMMUNITY_JOIN_REQUEST_SUCCESS,
-                });
-            } else {
-                toast({
-                    title: TOAST_TITLE_ERROR,
-                    description: response.error,
-                });
-            }
-        } catch (error) {
-            console.error("Error updating community:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     if (!membership) {
         return null;
     }
 
+    const status = membership.status?.toLowerCase();
+
     return (
         <div className="space-y-4">
-            {innerStatus?.toLowerCase() ===
-                Constants.MembershipStatus.PENDING && (
+            {status === Constants.MembershipStatus.PENDING && (
                 <Alert>
                     <Clock className="w-4 h-4" />
                     <AlertTitle className="font-semibold">
@@ -132,8 +38,7 @@ export default function MembershipStatus({
                     </AlertTitle>
                 </Alert>
             )}
-            {innerStatus?.toLowerCase() ===
-                Constants.MembershipStatus.REJECTED && (
+            {status === Constants.MembershipStatus.REJECTED && (
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle className="font-semibold">
@@ -141,7 +46,7 @@ export default function MembershipStatus({
                     </AlertTitle>
                     <AlertDescription>
                         {COMMUNITY_REJECTION_REASON_LABEL}:{" "}
-                        {membership && membership.rejectionReason}
+                        {membership.rejectionReason}
                     </AlertDescription>
                 </Alert>
             )}
@@ -161,60 +66,6 @@ export default function MembershipStatus({
                         {COMMUNITY_JOIN_COMPLETE_PROFILE_OR_POST_SUFFIX}
                     </AlertDescription>
                 </Alert>
-            )}
-            {!innerStatus && profile?.name && paymentPlan && (
-                <>
-                    {amount > 0 && (
-                        <Link
-                            href={`/checkout?id=${id}&type=${Constants.MembershipEntityType.COMMUNITY}`}
-                        >
-                            <Button>
-                                {COMMUNITY_JOIN} {currencySymbol}
-                                {amount} {period}
-                            </Button>
-                        </Link>
-                    )}
-                    {amount <= 0 && (
-                        <Dialog
-                            open={isJoinDialogOpen}
-                            onOpenChange={setIsJoinDialogOpen}
-                        >
-                            <DialogTrigger asChild>
-                                <Button>
-                                    {COMMUNITY_JOIN} {currencySymbol}
-                                    {amount} {period}
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <Form onSubmit={handleJoinSubmit}>
-                                    <div className="space-y-4 mt-4">
-                                        <FormField
-                                            label={
-                                                joiningReasonText ||
-                                                COMMUNITY_JOIN_REASON_LABEL
-                                            }
-                                            value={joiningReason}
-                                            onChange={(e) =>
-                                                setJoiningReason(e.target.value)
-                                            }
-                                            placeholder={
-                                                COMMUNITY_JOIN_REASON_PLACEHOLDER
-                                            }
-                                            required
-                                        />
-                                        <Button
-                                            type="submit"
-                                            disabled={loading}
-                                        >
-                                            {loading && <CircularProgress />}
-                                            {BTN_SEND}
-                                        </Button>
-                                    </div>
-                                </Form>
-                            </DialogContent>
-                        </Dialog>
-                    )}
-                </>
             )}
         </div>
     );

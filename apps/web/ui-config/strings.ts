@@ -392,14 +392,15 @@ export const PROFILE_PAGE_MESSAGE_NOT_LOGGED_IN = "da vidite svoj profil.";
 export const PROFILE_PAGE_HEADER = "Profil";
 export const MY_CONTENT_HEADER = "Moj sadržaj";
 export const MY_CONTENT_PRODUCTS_TAB = "Proizvodi";
-export const MY_CONTENT_FEED_TAB = "Fid";
+export const MY_CONTENT_FEED_TAB = "Zajednice";
 export const MY_CONTENT_EMPTY_PRODUCTS =
     "Još niste upisani ni na jedan proizvod.";
 export const MY_CONTENT_EMPTY_COMMUNITIES =
     "Još se niste pridružili nijednoj zajednici.";
 export const MY_CONTENT_BROWSE_PRODUCTS = "Pregledaj proizvode";
 export const MY_CONTENT_BROWSE_COMMUNITIES = "Pregledaj zajednice";
-export const MY_CONTENT_FEED_EMPTY_TITLE = "Još nema objava u Vašem fidu";
+export const MY_CONTENT_FEED_EMPTY_TITLE =
+    "Još nema objava u Vašim zajednicama";
 export const MY_CONTENT_FEED_EMPTY_DESCRIPTION =
     "Pridružite se zajednicama i učestvujte u diskusijama da biste ovde videli objave.";
 export const MY_CONTENT_FEED_COMMUNITIES_TITLE = "Vaše zajednice";

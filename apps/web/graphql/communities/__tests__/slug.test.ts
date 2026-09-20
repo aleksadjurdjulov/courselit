@@ -103,6 +103,7 @@ describe("Community Slug Tests", () => {
                 communityId: result.communityId,
             });
             expect(community?.slug).toBe(community?.pageId);
+            expect(community?.autoAcceptMembers).toBe(true);
         });
 
         it("should auto-suffix slug when name collides", async () => {

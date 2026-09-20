@@ -14,6 +14,10 @@ jest.mock("@/lib/trigger-sequences", () => ({
     triggerSequences: jest.fn(),
 }));
 
+jest.mock("@/lib/auto-join-free-communities", () => ({
+    autoJoinUserToFreeCommunities: jest.fn(),
+}));
+
 jest.mock("@/services/queue", () => ({
     addMailJob: jest.fn(),
 }));
@@ -41,6 +45,7 @@ import { Constants, UIConstants } from "@courselit/common-models";
 import { seedNotificationPreferencesForUser } from "../../notifications/logic";
 import { recordActivity } from "@/lib/record-activity";
 import { triggerSequences } from "@/lib/trigger-sequences";
+import { autoJoinUserToFreeCommunities } from "@/lib/auto-join-free-communities";
 import { addMailJob } from "@/services/queue";
 import constants from "@/config/constants";
 
@@ -48,6 +53,8 @@ const seedNotificationPreferencesForUserMock =
     seedNotificationPreferencesForUser as jest.Mock;
 const recordActivityMock = recordActivity as jest.Mock;
 const triggerSequencesMock = triggerSequences as jest.Mock;
+const autoJoinUserToFreeCommunitiesMock =
+    autoJoinUserToFreeCommunities as jest.Mock;
 
 describe("getUser", () => {
     const domainId = new mongoose.Types.ObjectId();
@@ -198,6 +205,10 @@ describe("finalizeUserCreation", () => {
             entityId: user.userId,
         });
         expect(triggerSequencesMock).not.toHaveBeenCalled();
+        expect(autoJoinUserToFreeCommunitiesMock).toHaveBeenCalledWith({
+            domainId,
+            userId: user.userId,
+        });
     });
 
     it("should trigger newsletter side effects for subscribed users", async () => {

@@ -25,7 +25,7 @@ export const CommunitySchema = new mongoose.Schema<InternalCommunity>(
         banner: { type: mongoose.Schema.Types.Mixed, default: null },
         enabled: { type: Boolean, default: false },
         categories: { type: [String], default: ["General"] },
-        autoAcceptMembers: { type: Boolean, default: false },
+        autoAcceptMembers: { type: Boolean, default: true },
         joiningReasonText: { type: String },
         pageId: { type: String, required: true },
         defaultPaymentPlan: { type: String },

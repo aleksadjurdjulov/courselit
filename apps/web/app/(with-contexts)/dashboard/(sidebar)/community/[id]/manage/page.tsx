@@ -136,7 +136,7 @@ export default function Page(props: {
     const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
     const [enabled, setEnabled] = useState(false);
-    const [autoAcceptMembers, setAutoAcceptMembers] = useState(false);
+    const [autoAcceptMembers, setAutoAcceptMembers] = useState(true);
     const [banner, setBanner] = useState(TextEditorEmptyDoc);
     const [description, setDescription] = useState(TextEditorEmptyDoc);
     const [refresh, setRefresh] = useState(0);

@@ -143,6 +143,7 @@ export async function createCommunity({
             name,
             slug: pageId,
             pageId,
+            autoAcceptMembers: true,
         });
     } catch (err) {
         if (isDuplicateKeyError(err)) {
