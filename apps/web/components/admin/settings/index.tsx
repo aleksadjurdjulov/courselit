@@ -33,6 +33,8 @@ import {
     SITE_MAILING_ADDRESS_SETTING_EXPLANATION,
     SITE_SETTINGS_COURSELIT_BRANDING_CAPTION,
     SITE_SETTINGS_COURSELIT_BRANDING_SUB_CAPTION,
+    SITE_SETTINGS_INVITE_ONLY_CAPTION,
+    SITE_SETTINGS_INVITE_ONLY_SUB_CAPTION,
     SITE_SETTINGS_RAZORPAY_KEY_TEXT,
     MEDIA_SELECTOR_UPLOAD_BTN_CAPTION,
     MEDIA_SELECTOR_REMOVE_BTN_CAPTION,
@@ -166,7 +168,8 @@ const Settings = (props: SettingsProps) => {
                         codeInjectionHead,
                         codeInjectionBody,
                         mailingAddress,
-                        hideCourseLitBranding
+                        hideCourseLitBranding,
+                        inviteOnly
                     }
                 },
                 apikeys: getApikeys {
@@ -209,6 +212,7 @@ const Settings = (props: SettingsProps) => {
             mailingAddress: settingsResponse.mailingAddress || "",
             hideCourseLitBranding:
                 settingsResponse.hideCourseLitBranding ?? false,
+            inviteOnly: settingsResponse.inviteOnly ?? false,
             lemonsqueezyOneTimeVariantId:
                 settingsResponse.lemonsqueezyOneTimeVariantId || "",
             lemonsqueezySubscriptionMonthlyVariantId:
@@ -229,11 +233,12 @@ const Settings = (props: SettingsProps) => {
     ) => {
         event.preventDefault();
         const query = `
-            mutation UpdateSiteInfo($title: String, $subtitle: String, $hideCourseLitBranding: Boolean){
+            mutation UpdateSiteInfo($title: String, $subtitle: String, $hideCourseLitBranding: Boolean, $inviteOnly: Boolean){
                 settings: updateSiteInfo(siteData: {
                     title: $title,
                     subtitle: $subtitle,
-                    hideCourseLitBranding: $hideCourseLitBranding
+                    hideCourseLitBranding: $hideCourseLitBranding,
+                    inviteOnly: $inviteOnly
                 }) {
                     settings {
                         title,
@@ -259,7 +264,8 @@ const Settings = (props: SettingsProps) => {
                         codeInjectionHead,
                         codeInjectionBody,
                         mailingAddress,
-                        hideCourseLitBranding
+                        hideCourseLitBranding,
+                        inviteOnly
                     }
                 }
             }`;
@@ -274,6 +280,7 @@ const Settings = (props: SettingsProps) => {
                         subtitle: newSettings.subtitle,
                         hideCourseLitBranding:
                             newSettings.hideCourseLitBranding,
+                        inviteOnly: newSettings.inviteOnly,
                     },
                 })
                 .build();
@@ -326,7 +333,8 @@ const Settings = (props: SettingsProps) => {
                         codeInjectionHead,
                         codeInjectionBody,
                         mailingAddress,
-                        hideCourseLitBranding
+                        hideCourseLitBranding,
+                        inviteOnly
                     }
                 }
             }`;
@@ -405,7 +413,8 @@ const Settings = (props: SettingsProps) => {
                     codeInjectionHead,
                     codeInjectionBody,
                     mailingAddress,
-                    hideCourseLitBranding
+                    hideCourseLitBranding,
+                    inviteOnly
                 }
             }
         }`;
@@ -470,7 +479,8 @@ const Settings = (props: SettingsProps) => {
                     codeInjectionHead,
                     codeInjectionBody,
                     mailingAddress,
-                    hideCourseLitBranding
+                    hideCourseLitBranding,
+                    inviteOnly
                 }
             }
         }`;
@@ -577,7 +587,8 @@ const Settings = (props: SettingsProps) => {
                         codeInjectionHead,
                         codeInjectionBody,
                         mailingAddress,
-                        hideCourseLitBranding
+                        hideCourseLitBranding,
+                        inviteOnly
                     }
                 }
             }`;
@@ -656,7 +667,8 @@ const Settings = (props: SettingsProps) => {
                         codeInjectionHead,
                         codeInjectionBody,
                         mailingAddress,
-                        hideCourseLitBranding
+                        hideCourseLitBranding,
+                        inviteOnly
                     }
                 }
             }`;
@@ -797,6 +809,28 @@ const Settings = (props: SettingsProps) => {
                         </div>
 
                         <div>
+                            <PageBuilderPropertyHeader
+                                label={SITE_SETTINGS_INVITE_ONLY_CAPTION}
+                            />
+                            <div className="flex justify-between text-[#8D8D8D]">
+                                <p className="text-sm">
+                                    {SITE_SETTINGS_INVITE_ONLY_SUB_CAPTION}
+                                </p>
+                                <Checkbox
+                                    disabled={loading}
+                                    checked={Boolean(newSettings.inviteOnly)}
+                                    onChange={(value: boolean) => {
+                                        setNewSettings(
+                                            Object.assign({}, newSettings, {
+                                                inviteOnly: value,
+                                            }),
+                                        );
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        <div>
                             <Button
                                 type="submit"
                                 value={BUTTON_SAVE}
@@ -807,12 +841,14 @@ const Settings = (props: SettingsProps) => {
                                         subtitle: settings.subtitle,
                                         hideCourseLitBranding:
                                             settings.hideCourseLitBranding,
+                                        inviteOnly: settings.inviteOnly,
                                     }) ===
                                         JSON.stringify({
                                             title: newSettings.title,
                                             subtitle: newSettings.subtitle,
                                             hideCourseLitBranding:
                                                 newSettings.hideCourseLitBranding,
+                                            inviteOnly: newSettings.inviteOnly,
                                         }) ||
                                     !newSettings.title ||
                                     loading

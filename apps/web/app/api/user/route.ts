@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
             permissions,
             lead: constants.leadApi,
             subscribedToUpdates,
+            bypassInviteOnly: true,
         });
 
         return NextResponse.json(

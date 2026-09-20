@@ -182,6 +182,7 @@ export async function GET(req: Request) {
         domainEmail: domain!.email,
         domainTitle: domain!.settings?.title,
         hideCourseLitBranding: domain!.settings?.hideCourseLitBranding,
+        inviteOnly: domain!.settings?.inviteOnly,
         ssoTrustedDomain: domain!.settings?.ssoTrustedDomain,
     };
 

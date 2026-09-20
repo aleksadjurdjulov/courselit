@@ -54,6 +54,7 @@ export async function proxy(request: NextRequest) {
             "hideCourseLitBranding",
             resp.hideCourseLitBranding || false,
         );
+        requestHeaders.set("inviteOnly", String(Boolean(resp.inviteOnly)));
         if (resp.ssoTrustedDomain) {
             requestHeaders.set("ssoTrustedDomain", resp.ssoTrustedDomain);
         }

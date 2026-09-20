@@ -30,6 +30,7 @@ import {
     updateUser,
     findMembership,
     inviteCustomer,
+    createUser,
 } from "../logic";
 import CertificateModel from "@models/Certificate";
 import UserModel from "@models/User";
@@ -1145,5 +1146,83 @@ describe("inviteCustomer", () => {
         const mailPayload = addMailJobMock.mock.calls[0][0];
         expect(mailPayload.body).toContain("https://school.example.com/login");
         expect(mailPayload.body).not.toContain("0.0.0.0");
+    });
+});
+
+describe("createUser invite-only", () => {
+    const suitePrefix = `invite-only-${Date.now()}`;
+    const id = (suffix: string) => `${suitePrefix}-${suffix}`;
+    const email = (suffix: string) => `${suffix}-${suitePrefix}@example.com`;
+
+    let openDomain: any;
+    let inviteOnlyDomain: any;
+
+    beforeAll(async () => {
+        openDomain = await Domain.create({
+            name: id("open"),
+            email: email("open-owner"),
+            settings: { title: "Open school", inviteOnly: false },
+        });
+        inviteOnlyDomain = await Domain.create({
+            name: id("closed"),
+            email: email("closed-owner"),
+            settings: { title: "Invite only school", inviteOnly: true },
+        });
+    });
+
+    afterAll(async () => {
+        await UserModel.deleteMany({
+            domain: { $in: [openDomain._id, inviteOnlyDomain._id] },
+        });
+        await Domain.deleteMany({
+            _id: { $in: [openDomain._id, inviteOnlyDomain._id] },
+        });
+    });
+
+    it("blocks public createUser when invite-only is enabled", async () => {
+        await expect(
+            createUser({
+                domain: inviteOnlyDomain,
+                email: email("blocked"),
+                lead: constants.leadNewsletter,
+            }),
+        ).rejects.toThrow(responses.signup_disabled);
+    });
+
+    it("allows createUser when invite-only is bypassed", async () => {
+        const user = await createUser({
+            domain: inviteOnlyDomain,
+            email: email("api-user"),
+            lead: constants.leadApi,
+            bypassInviteOnly: true,
+        });
+
+        expect(user.email).toBe(email("api-user"));
+    });
+
+    it("allows createUser when invite-only is disabled", async () => {
+        const user = await createUser({
+            domain: openDomain,
+            email: email("public-user"),
+            lead: constants.leadWebsite,
+        });
+
+        expect(user.email).toBe(email("public-user"));
+    });
+
+    it("allows returning an existing user even when invite-only is enabled", async () => {
+        const existing = await createUser({
+            domain: inviteOnlyDomain,
+            email: email("existing"),
+            bypassInviteOnly: true,
+        });
+
+        const again = await createUser({
+            domain: inviteOnlyDomain,
+            email: email("existing"),
+            lead: constants.leadNewsletter,
+        });
+
+        expect(again.userId).toBe(existing.userId);
     });
 });

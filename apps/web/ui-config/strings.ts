@@ -96,6 +96,9 @@ export const SITE_SETTINGS_DEFAULT_TITLE = "CourseLit";
 export const SITE_SETTINGS_COURSELIT_BRANDING_CAPTION =
     "Ukloni CourseLit brending";
 export const SITE_SETTINGS_COURSELIT_BRANDING_SUB_CAPTION = `Sakrij "Powered by CourseLit" na Vašim CourseLit kursevima i sajtu.`;
+export const SITE_SETTINGS_INVITE_ONLY_CAPTION = "Samo pozivnice";
+export const SITE_SETTINGS_INVITE_ONLY_SUB_CAPTION =
+    "Dozvoli kreiranje naloga samo preko API-ja ili administratorske pozivnice. Javna registracija je onemogućena.";
 export const SITE_SETTINGS_PAGE_HEADING = "Podešavanja";
 export const HEADER_COURSELIT = "O CourseLit-u";
 export const MEDIA_SELECTOR_UPLOAD_BTN_CAPTION = "Otpremi sliku";

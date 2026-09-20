@@ -162,6 +162,8 @@ export const responses = {
     provider_not_configured: "Konfigurišite provajdera pre omogućavanja",
     provider_invalid_configuration: "Nevažeća konfiguracija provajdera",
     page_id_already_exists: "Ovaj URL slug je već zauzet. Izaberite drugi.",
+    signup_disabled:
+        "Registracija je onemogućena. Pridružite se samo putem pozivnice.",
 };
 
 export const internal = {

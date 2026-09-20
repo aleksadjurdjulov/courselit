@@ -162,6 +162,7 @@ export const getSiteInfo = cache(
                     codeInjectionBody,
                     mailingAddress,
                     hideCourseLitBranding,
+                    inviteOnly,
                     razorpayKey,
                     lemonsqueezyStoreId,
                     lemonsqueezyOneTimeVariantId,

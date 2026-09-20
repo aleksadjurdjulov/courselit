@@ -77,6 +77,15 @@ curl -X POST https://yourdomain.com/api/user \
 }'
 ```
 
+### Invite-only schools
+
+If **Invite only** is enabled under **Settings → Branding**, public self-registration is disabled. New users can only be created through:
+
+- this API (`POST /api/user`)
+- the admin [Invite customers](/en/products/invite-customers) flow
+
+Existing users can still sign in with email OTP (or other enabled login providers). Newsletter signup and lead-magnet downloads will not create accounts while invite-only is on.
+
 ### Response Example
 
 ```json

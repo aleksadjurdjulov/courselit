@@ -25,6 +25,11 @@ jest.mock("@/auth", () => ({
     getAuth: mockGetAuth,
 }));
 
+jest.mock("@/lib/invite-only", () => ({
+    findUserByEmailForDomain: jest.fn().mockResolvedValue(null),
+    getDomainInviteOnlyStatus: jest.fn().mockResolvedValue(false),
+}));
+
 jest.mock("better-auth/next-js", () => ({
     toNextJsHandler: () => ({
         GET: mockHandlerGet,
@@ -34,11 +39,20 @@ jest.mock("better-auth/next-js", () => ({
 
 import { getBackendAddress } from "@/app/actions";
 import { getAuth } from "@/auth";
+import {
+    findUserByEmailForDomain,
+    getDomainInviteOnlyStatus,
+} from "@/lib/invite-only";
 import { POST, rewriteAuthRequestOrigin } from "../[...all]/route";
+
+const findUserByEmailForDomainMock = findUserByEmailForDomain as jest.Mock;
+const getDomainInviteOnlyStatusMock = getDomainInviteOnlyStatus as jest.Mock;
 
 describe("Auth Route Origin Rewrite", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        getDomainInviteOnlyStatusMock.mockResolvedValue(false);
+        findUserByEmailForDomainMock.mockResolvedValue(null);
     });
 
     it("rewrites auth requests to the forwarded school origin", async () => {
@@ -144,5 +158,100 @@ describe("Auth Route Origin Rewrite", () => {
         expect(rewrittenRequest.url).toBe(
             "https://domain1.clqa.site/api/auth/sign-in/sso",
         );
+    });
+
+    it("fakes OTP send success for unknown emails when invite-only is enabled", async () => {
+        (getBackendAddress as jest.Mock).mockResolvedValue(
+            "https://domain1.clqa.site",
+        );
+        getDomainInviteOnlyStatusMock.mockResolvedValue(true);
+        findUserByEmailForDomainMock.mockResolvedValue(null);
+
+        const req = new Request(
+            "https://domain1.clqa.site/api/auth/email-otp/send-verification-otp",
+            {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    domain: "domain1",
+                    domainId: "507f1f77bcf86cd799439011",
+                    inviteonly: "true",
+                },
+                body: JSON.stringify({
+                    email: "new@example.com",
+                    type: "sign-in",
+                }),
+            },
+        );
+
+        const response = await POST(req);
+        const payload = await response.json();
+
+        expect(payload).toEqual({ success: true });
+        expect(mockHandlerPost).not.toHaveBeenCalled();
+    });
+
+    it("rejects OTP sign-in for unknown emails when invite-only is enabled", async () => {
+        (getBackendAddress as jest.Mock).mockResolvedValue(
+            "https://domain1.clqa.site",
+        );
+        getDomainInviteOnlyStatusMock.mockResolvedValue(true);
+        findUserByEmailForDomainMock.mockResolvedValue(null);
+
+        const req = new Request(
+            "https://domain1.clqa.site/api/auth/sign-in/email-otp",
+            {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    domain: "domain1",
+                    domainId: "507f1f77bcf86cd799439011",
+                    inviteonly: "true",
+                },
+                body: JSON.stringify({
+                    email: "new@example.com",
+                    otp: "123456",
+                }),
+            },
+        );
+
+        const response = await POST(req);
+        const payload = await response.json();
+
+        expect(response.status).toBe(400);
+        expect(payload.code).toBe("INVALID_OTP");
+        expect(mockHandlerPost).not.toHaveBeenCalled();
+    });
+
+    it("allows OTP sign-in for existing users when invite-only is enabled", async () => {
+        (getBackendAddress as jest.Mock).mockResolvedValue(
+            "https://domain1.clqa.site",
+        );
+        getDomainInviteOnlyStatusMock.mockResolvedValue(true);
+        findUserByEmailForDomainMock.mockResolvedValue({
+            email: "member@example.com",
+        });
+        mockHandlerPost.mockResolvedValue(new Response(null, { status: 200 }));
+
+        const req = new Request(
+            "https://domain1.clqa.site/api/auth/sign-in/email-otp",
+            {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    domain: "domain1",
+                    domainId: "507f1f77bcf86cd799439011",
+                    inviteonly: "true",
+                },
+                body: JSON.stringify({
+                    email: "member@example.com",
+                    otp: "123456",
+                }),
+            },
+        );
+
+        await POST(req);
+
+        expect(mockHandlerPost).toHaveBeenCalledTimes(1);
     });
 });

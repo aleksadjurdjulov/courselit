@@ -59,6 +59,7 @@ const siteType = new GraphQLObjectType({
         codeInjectionBody: { type: GraphQLString },
         mailingAddress: { type: GraphQLString },
         hideCourseLitBranding: { type: GraphQLBoolean },
+        inviteOnly: { type: GraphQLBoolean },
         logins: { type: new GraphQLList(GraphQLString) },
     },
 });
@@ -73,6 +74,7 @@ const siteUpdateType = new GraphQLInputObjectType({
         codeInjectionBody: { type: GraphQLString },
         mailingAddress: { type: GraphQLString },
         hideCourseLitBranding: { type: GraphQLBoolean },
+        inviteOnly: { type: GraphQLBoolean },
     },
 });
 

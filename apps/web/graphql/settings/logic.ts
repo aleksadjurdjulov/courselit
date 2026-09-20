@@ -172,6 +172,8 @@ export const updateSiteInfo = async (
 
     await (domain as any).save();
 
+    invalidateDomainCache(ctx.subdomain.name);
+
     return domain;
 };
 

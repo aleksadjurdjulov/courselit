@@ -235,7 +235,17 @@ const createAuthConfig = (baseURL = ""): any => ({
     databaseHooks: {
         user: {
             create: {
-                before: async (user) => {
+                before: async (user, ctx) => {
+                    const domain = await getAuthDomain({
+                        user: user as Record<string, unknown>,
+                        ctx,
+                    });
+                    if (domain.settings?.inviteOnly) {
+                        throw new APIError("BAD_REQUEST", {
+                            message: responses.signup_disabled,
+                        });
+                    }
+
                     return {
                         data: {
                             email: sanitizeEmail(user.email),

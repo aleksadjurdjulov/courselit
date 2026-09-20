@@ -210,6 +210,7 @@ export const inviteCustomer = async (
             domain: ctx.subdomain!,
             email: sanitizedEmail,
             subscribedToUpdates: true,
+            bypassInviteOnly: true,
         });
     }
 
@@ -401,6 +402,7 @@ export async function createUser({
     superAdmin = false,
     subscribedToUpdates = true,
     permissions = [],
+    bypassInviteOnly = false,
 }: {
     domain: Domain;
     name?: string;
@@ -413,18 +415,31 @@ export async function createUser({
     superAdmin?: boolean;
     subscribedToUpdates?: boolean;
     permissions?: string[];
+    bypassInviteOnly?: boolean;
 }): Promise<User> {
     if (permissions.length) {
         checkForInvalidPermissions(permissions);
     }
 
+    const sanitizedEmail = sanitizeEmail(email);
+
+    if (!bypassInviteOnly && !superAdmin && domain.settings?.inviteOnly) {
+        const existingUser = await UserModel.findOne({
+            domain: domain._id,
+            email: sanitizedEmail,
+        }).lean();
+        if (!existingUser) {
+            throw new Error(responses.signup_disabled);
+        }
+    }
+
     const rawResult = await UserModel.findOneAndUpdate(
-        { domain: domain._id, email },
+        { domain: domain._id, email: sanitizedEmail },
         {
             $setOnInsert: {
                 domain: domain._id,
                 name,
-                email: sanitizeEmail(email),
+                email: sanitizedEmail,
                 active: true,
                 purchases: [],
                 permissions: superAdmin
