@@ -32,7 +32,7 @@ export class EmailChannel implements NotificationChannel {
             payload.actor?.name ||
             payload.actor?.email ||
             payload.actor?.userId ||
-            "Someone";
+            "Neko";
         const notificationDetails = await getNotificationEmailContent({
             activityType: payload.activityType,
             entityId: payload.entityId,

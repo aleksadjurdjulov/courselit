@@ -87,7 +87,7 @@ export function buildNotificationEmailTemplate({
         blockType: "text",
         settings: {
             content: isConversation
-                ? `**${encodePlainTextForMarkdown(actorName)}** · ${encodePlainTextForMarkdown(conversationLabel || "New activity")}`
+                ? `**${encodePlainTextForMarkdown(actorName)}** · ${encodePlainTextForMarkdown(conversationLabel || "Nova aktivnost")}`
                 : `**${encodePlainTextForMarkdown(actorName)}**`,
             fontSize: "14px",
             lineHeight: "1.4",
@@ -126,7 +126,7 @@ export function buildNotificationEmailTemplate({
     }
 
     if (parentText) {
-        const contextLabel = parentLabel || "Earlier comment";
+        const contextLabel = parentLabel || "Prethodni komentar";
         content.push({
             blockType: "text",
             settings: {
@@ -172,7 +172,7 @@ export function buildNotificationEmailTemplate({
         content.push({
             blockType: "text",
             settings: {
-                content: "You can reply to this email to respond directly",
+                content: "Odgovorite na ovaj email",
                 fontSize: "13px",
                 foregroundColor: "#666666",
                 paddingTop: "8px",
@@ -185,7 +185,9 @@ export function buildNotificationEmailTemplate({
         {
             blockType: "link",
             settings: {
-                text: isConversation ? "View discussion" : "View notification",
+                text: isConversation
+                    ? "Pogledajte diskusiju"
+                    : "Pogledajte obaveštenje",
                 url: notificationUrl,
                 alignment: "center",
                 isButton: true,
@@ -208,7 +210,7 @@ export function buildNotificationEmailTemplate({
         {
             blockType: "text",
             settings: {
-                content: `[Unsubscribe from email notifications](${unsubscribeUrl})`,
+                content: `[Otkažite email obaveštenja](${unsubscribeUrl})`,
                 alignment: "center",
                 fontSize: "12px",
                 foregroundColor: "#666666",

@@ -14,6 +14,7 @@ export const responses = {
     sign_in_mail_body: "Kliknite na sledeći link da se prijavite.",
     sign_in_link_text: "Prijavi se",
     course_enroll_email_subject_prefix: "Upisani ste na kurs:",
+    download_email_subject_prefix: "Vaše preuzimanje:",
 
     // graphql responses
     past_date: "Datum ne može biti u prošlosti",

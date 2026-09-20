@@ -130,7 +130,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} created a post '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je objavio '${truncate(post.title, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}`,
                     hrefPrefix,
@@ -158,7 +158,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} commented on ${recipientUserId === post.userId ? "your" : "a"} post '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je komentarisao ${recipientUserId === post.userId ? "Vašu objavu" : "objavu"} '${truncate(post.title, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}#${entityId}`,
                     hrefPrefix,
@@ -205,14 +205,14 @@ export async function getNotificationMessageAndHref({
 
             const prefix = parentReply
                 ? recipientUserId === parentReply.userId
-                    ? "your"
-                    : "a"
+                    ? "Vaš komentar"
+                    : "komentar"
                 : recipientUserId === comment.userId
-                  ? "your"
-                  : "a";
+                  ? "Vaš komentar"
+                  : "komentar";
 
             return {
-                message: `${actorName} replied to ${prefix} comment on '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je odgovorio na ${prefix} na '${truncate(post.title, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}#${entityId}`,
                     hrefPrefix,
@@ -237,7 +237,7 @@ export async function getNotificationMessageAndHref({
             const emoji = (metadata?.emoji as string) || COMMUNITY_HEART_EMOJI;
 
             return {
-                message: `${actorName} reacted ${emoji} to your post '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je reagovao ${emoji} na Vašu objavu '${truncate(post.title, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}`,
                     hrefPrefix,
@@ -262,7 +262,7 @@ export async function getNotificationMessageAndHref({
             const emoji = (metadata?.emoji as string) || COMMUNITY_HEART_EMOJI;
 
             return {
-                message: `${actorName} reacted ${emoji} to your comment '${truncate(comment.content, 20).trim()}' on '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je reagovao ${emoji} na Vaš komentar '${truncate(comment.content, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}#${entityId}`,
                     hrefPrefix,
@@ -301,7 +301,7 @@ export async function getNotificationMessageAndHref({
             const emoji = (metadata?.emoji as string) || COMMUNITY_HEART_EMOJI;
 
             return {
-                message: `${actorName} reacted ${emoji} to your reply '${truncate(reply.content, 20).trim()}' on '${truncate(post.title, 20).trim()}' in ${community.name}`,
+                message: `${actorName} je reagovao ${emoji} na Vaš odgovor '${truncate(reply.content, 20).trim()}' u ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/${post.postId}#${entityId}`,
                     hrefPrefix,
@@ -319,7 +319,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} requested to join ${community.name}`,
+                message: `${actorName} želi da se pridruži zajednici ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/manage/memberships`,
                     hrefPrefix,
@@ -337,7 +337,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} granted your request to join ${community.name}`,
+                message: `${actorName} Vam je odobrio pristup zajednici ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}`,
                     hrefPrefix,
@@ -355,7 +355,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} joined ${community.name}`,
+                message: `${actorName} se pridružio zajednici ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/manage/memberships`,
                     hrefPrefix,
@@ -373,7 +373,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} left ${community.name}`,
+                message: `${actorName} je napustio zajednicu ${community.name}`,
                 href: toHref(
                     `/dashboard/community/${community.communityId}/manage/memberships`,
                     hrefPrefix,
@@ -383,13 +383,13 @@ export async function getNotificationMessageAndHref({
 
         case Constants.ActivityType.NEWSLETTER_SUBSCRIBED:
             return {
-                message: `${actorName} subscribed to the updates`,
+                message: `${actorName} se prijavio na novosti`,
                 href: toHref(`/dashboard/users/${entityId}`, hrefPrefix),
             };
 
         case Constants.ActivityType.NEWSLETTER_UNSUBSCRIBED:
             return {
-                message: `${actorName} unsubscribed from the updates`,
+                message: `${actorName} se odjavio od novosti`,
                 href: toHref(`/dashboard/users/${entityId}`, hrefPrefix),
             };
 
@@ -400,7 +400,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} enrolled in ${truncate(course.title, 20).trim()}`,
+                message: `${actorName} se upisao na ${truncate(course.title, 20).trim()}`,
                 href: toHref(
                     `/dashboard/product/${course.courseId}/customers`,
                     hrefPrefix,
@@ -410,7 +410,7 @@ export async function getNotificationMessageAndHref({
 
         case Constants.ActivityType.USER_CREATED:
             return {
-                message: `${actorName} signed up`,
+                message: `${actorName} je napravio nalog`,
                 href: toHref(`/dashboard/users/${entityId}`, hrefPrefix),
             };
 
@@ -421,7 +421,7 @@ export async function getNotificationMessageAndHref({
             }
 
             return {
-                message: `${actorName} downloaded ${truncate(course.title, 20).trim()}`,
+                message: `${actorName} je preuzeo ${truncate(course.title, 20).trim()}`,
                 href: toHref(
                     `/dashboard/product/${course.courseId}/customers`,
                     hrefPrefix,
@@ -469,12 +469,20 @@ export async function getNotificationMessageAndHref({
                 query.set("preview", "true");
             }
 
+            const contentTypeLabel =
+                contentType === Constants.ProductDiscussionContentType.REPLY
+                    ? "odgovor"
+                    : "komentar";
+            const courseTitle = truncate(course.title, 20).trim();
+
             return {
                 message:
                     activityType ===
                     Constants.ActivityType.COURSE_DISCUSSION_REACTED
-                        ? `${actorName} reacted to your ${contentType === Constants.ProductDiscussionContentType.REPLY ? Constants.ProductDiscussionContentType.REPLY : Constants.ProductDiscussionContentType.COMMENT} on ${truncate(course.title, 20).trim()}`
-                        : `${actorName} ${eventType === "reply_created" ? "replied" : "commented"} on ${truncate(course.title, 20).trim()}`,
+                        ? `${actorName} je reagovao na Vaš ${contentTypeLabel} u kursu ${courseTitle}`
+                        : eventType === "reply_created"
+                          ? `${actorName} je odgovorio u kursu ${courseTitle}`
+                          : `${actorName} je komentarisao u kursu ${courseTitle}`,
                 href: toHref(
                     `/course/${course.slug}/${course.courseId}/${lessonId}?${query.toString()}${
                         targetId && targetHash ? `#${targetHash}` : ""
@@ -486,7 +494,7 @@ export async function getNotificationMessageAndHref({
 
         default:
             return {
-                message: `${actorName} triggered ${humanizeActivityType(activityType)}`,
+                message: `${actorName} — ${humanizeActivityType(activityType)}`,
                 href: toHref("/dashboard", hrefPrefix),
             };
     }

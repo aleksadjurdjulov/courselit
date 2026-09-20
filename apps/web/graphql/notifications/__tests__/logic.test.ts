@@ -310,7 +310,7 @@ describe("Notification Preferences", () => {
         expect(response?.href).toBe(
             `/dashboard/community/${community.communityId}/${post.postId}`,
         );
-        expect(response?.message).toContain("created a post");
+        expect(response?.message).toContain("je objavio");
         expect(response?.message).toContain("Community A");
     });
 
@@ -360,7 +360,9 @@ describe("Notification Preferences", () => {
                 "lesson",
             )}?discussion=open&preview=true#discussion-comment-${id("comment")}`,
         );
-        expect(response?.message).toContain("commented on Discussion Course");
+        expect(response?.message).toContain(
+            "je komentarisao u kursu Discussion Course",
+        );
 
         const learnerNotification = await NotificationModel.create({
             domain: domain._id,
@@ -411,7 +413,7 @@ describe("Notification Preferences", () => {
         });
 
         expect(reactionResponse?.message).toContain(
-            "reacted to your reply on Discussion Course",
+            "je reagovao na Vaš odgovor u kursu Discussion Course",
         );
         expect(reactionResponse?.href).toBe(
             `/course/${course.slug}/${course.courseId}/${id(

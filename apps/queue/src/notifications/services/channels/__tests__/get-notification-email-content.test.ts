@@ -228,7 +228,7 @@ describe("getNotificationEmailContent", () => {
             commentText: "The product-discussion reply.",
             parentText: "The parent discussion comment.",
             threadTitle: "Default resolver course",
-            conversationLabel: "New reply",
+            conversationLabel: "Novi odgovor",
             replyContext: {
                 product: {
                     productId: "course-default",
@@ -330,10 +330,10 @@ describe("getNotificationEmailContent", () => {
         });
 
         expect(content).toMatchObject({
-            subject: "Alex created a post 'Welcome to the commu...' in General",
+            subject: "Alex je objavio 'Welcome to the commu...' u General",
             commentText: "First line\nSecond line\n\nThird paragraph",
             threadTitle: "Welcome to the community",
-            conversationLabel: "New post",
+            conversationLabel: "Nova objava",
             replyContext: {
                 community: { communityId: "community-1", postId: "post-1" },
             },
@@ -356,7 +356,7 @@ describe("getNotificationEmailContent", () => {
             parentText: "An earlier reply",
             parentAuthorName: "Jamie",
             threadTitle: "Welcome to the community",
-            conversationLabel: "New reply",
+            conversationLabel: "Novi odgovor",
             replyContext: {
                 community: {
                     communityId: "community-1",
@@ -423,9 +423,9 @@ describe("getNotificationEmailContent", () => {
             commentText: "A parent comment",
             parentText: "The full post body",
             parentAuthorName: "Post author",
-            parentLabel: "Original post",
+            parentLabel: "Objava",
             threadTitle: "Welcome to the community",
-            conversationLabel: "New comment",
+            conversationLabel: "Novi komentar",
             replyContext: {
                 community: {
                     communityId: "community-1",
@@ -457,7 +457,7 @@ describe("getNotificationEmailContent", () => {
         expect(content).toMatchObject({
             commentText: "A course reply",
             threadTitle: "Course discussion",
-            conversationLabel: "New reply",
+            conversationLabel: "Novi odgovor",
             replyContext: {
                 product: {
                     productId: "course-1",
@@ -490,7 +490,7 @@ describe("getNotificationEmailContent", () => {
         expect(content).toMatchObject({
             commentText: "A course comment",
             threadTitle: "Course discussion",
-            conversationLabel: "New comment",
+            conversationLabel: "Novi komentar",
             replyContext: {
                 product: {
                     productId: "course-1",
@@ -577,8 +577,8 @@ describe("getNotificationEmailContent", () => {
         });
 
         expect(content).toEqual({
-            subject: "Alex enrolled in Course discussion",
-            message: "Alex enrolled in Course discussion",
+            subject: "Alex se upisao na Course discussion",
+            message: "Alex se upisao na Course discussion",
             href: "/dashboard/product/course-1/customers",
         });
     });

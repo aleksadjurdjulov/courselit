@@ -32,17 +32,17 @@ html
                 text-align: center;
             }
     body
-        p   Thank you for signing up for #{courseName}.
+        p   Hvala! Vaš fajl za #{courseName} je spreman.
         div(class="cta-container") 
             a(
                 href=\`\${downloadLink}\`
                 class="cta"
-            ) Download now
-        p   Best,
+            ) Preuzmite sada
+        p   Srdačan pozdrav,
         p   #{name}
         p 
-            |   To access all of your content, 
-            |   #[a(href=\`\${loginLink}\`) log in] here.
+            |   Da pristupite celom sadržaju, 
+            |   #[a(href=\`\${loginLink}\`) prijavite se] ovde.
         if !hideCourseLitBranding
             div(class="courselit-branding-container")
                 a(

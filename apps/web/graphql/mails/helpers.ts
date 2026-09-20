@@ -104,7 +104,7 @@ export async function createTemplateAndSendMail({
 
     await addMailJob({
         to: [user.email],
-        subject: `Thank you for signing up for ${course.title}`,
+        subject: `${responses.download_email_subject_prefix} ${course.title}`,
         body: emailBody,
         from: getEmailFrom({
             name: ctx.subdomain?.settings?.title || ctx.subdomain.name,

@@ -25,7 +25,7 @@ export interface NotificationEmailContent {
     parentAuthorName?: string;
     parentLabel?: string;
     threadTitle?: string;
-    conversationLabel?: "New post" | "New comment" | "New reply";
+    conversationLabel?: "Nova objava" | "Novi komentar" | "Novi odgovor";
     replyContext?: ReplyByEmailContext;
 }
 
@@ -74,7 +74,7 @@ export async function getNotificationEmailContent(
                 ...content,
                 commentText: excerpt(post.content, COMMENT_TEXT_LIMIT),
                 threadTitle: post.title,
-                conversationLabel: "New post",
+                conversationLabel: "Nova objava",
                 replyContext: {
                     community: {
                         communityId: post.communityId,
@@ -103,9 +103,9 @@ export async function getNotificationEmailContent(
                 parentAuthorName: options.resolveUserName
                     ? await options.resolveUserName(post.userId)
                     : undefined,
-                parentLabel: "Original post",
+                parentLabel: "Objava",
                 threadTitle: post.title,
-                conversationLabel: "New comment",
+                conversationLabel: "Novi komentar",
                 replyContext: {
                     community: {
                         communityId: comment.communityId,
@@ -156,7 +156,7 @@ export async function getNotificationEmailContent(
                         ? await options.resolveUserName(parent.userId)
                         : undefined,
                 threadTitle: post.title,
-                conversationLabel: "New reply",
+                conversationLabel: "Novi odgovor",
                 replyContext: {
                     community: {
                         communityId: comment.communityId,
@@ -247,7 +247,7 @@ async function getCourseDiscussionEmailContent(
         parentText,
         parentAuthorName,
         threadTitle: course.title,
-        conversationLabel: replyId ? "New reply" : "New comment",
+        conversationLabel: replyId ? "Novi odgovor" : "Novi komentar",
         replyContext: {
             product: {
                 productId,

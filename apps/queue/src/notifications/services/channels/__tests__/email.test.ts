@@ -14,6 +14,7 @@ import {
 import { EmailChannel } from "../email";
 
 jest.mock("@courselit/common-logic", () => ({
+    ...jest.requireActual("@courselit/common-logic"),
     getNotificationEmailContent: jest.fn(),
 }));
 
@@ -100,9 +101,9 @@ describe("EmailChannel", () => {
 
         mockedGetNotificationEmailContent.mockResolvedValue({
             subject:
-                "Test Instructor granted your request to join Test Course community",
+                "Test Instructor Vam je odobrio pristup zajednici Test Course community",
             message:
-                "Test Instructor granted your request to join Test Course community",
+                "Test Instructor Vam je odobrio pristup zajednici Test Course community",
             href: "https://school.courselit.test/community/post",
         });
     });
@@ -120,26 +121,28 @@ describe("EmailChannel", () => {
         const mail = mockedAddMailJob.mock.calls[0][0];
 
         expect(mail.subject).toBe(
-            "Test Instructor granted your request to join Test Course community",
+            "Test Instructor Vam je odobrio pristup zajednici Test Course community",
         );
         expect(mail.body).toContain("Test Instructor");
         expect(mail.body).toContain("https://cdn.example.com/avatar.png");
         expect(mail.body).toContain("padding:24px 24px 10px 24px");
-        expect(mail.body).toContain(
-            "Test Instructor granted your request to join Test Course community",
+        expect(
+            getVisibleEmailText(getVisibleEmailDocument(mail.body)),
+        ).toContain(
+            "Test Instructor Vam je odobrio pristup zajednici Test Course community",
         );
-        expect(mail.body).toContain("View notification");
+        expect(mail.body).toContain("Pogledajte obaveštenje");
         expect(mail.body).toContain(
             "https://school.courselit.test/community/post",
         );
-        expect(mail.body).toContain("Unsubscribe from email notifications");
+        expect(mail.body).toContain("Otkažite email obaveštenja");
         expect(mail.body).toContain(
             "https://school.courselit.test/api/unsubscribe/unsubscribe-token",
         );
         expect(mail.body).toContain("Powered by");
         expect(mail.body).toContain("CourseLit");
-        expect(mail.body.indexOf("View notification")).toBeLessThan(
-            mail.body.indexOf("Unsubscribe from email notifications"),
+        expect(mail.body.indexOf("Pogledajte obaveštenje")).toBeLessThan(
+            mail.body.indexOf("Otkažite email obaveštenja"),
         );
         expect(mail.body).toContain("background-color:#000000");
         expect(mail.body).not.toContain("background-color:#07077b");
@@ -297,14 +300,14 @@ describe("EmailChannel", () => {
 
     it("renders conversation details and uses a discussion CTA", async () => {
         mockedGetNotificationEmailContent.mockResolvedValue({
-            subject: "Test Instructor commented on a post",
-            message: "Test Instructor commented on a post",
+            subject: "Test Instructor je komentarisao objavu",
+            message: "Test Instructor je komentarisao objavu",
             href: "https://school.courselit.test/community/post",
             threadTitle: "A discussion title",
             parentAuthorName: "Jamie",
             parentText: "The parent comment",
             commentText: "A new comment\nwith another line",
-            conversationLabel: "New reply",
+            conversationLabel: "Novi odgovor",
             replyContext: {
                 community: {
                     communityId: "community-id",
@@ -320,38 +323,38 @@ describe("EmailChannel", () => {
         const document = getVisibleEmailDocument(mail.body);
         const visibleText = getVisibleEmailText(document);
 
-        expect(mail.subject).toBe("Test Instructor commented on a post");
-        expect(visibleText).toContain("Test Instructor · New reply");
-        expect(visibleText).toContain("Jamie · Earlier comment");
+        expect(mail.subject).toBe("Test Instructor je komentarisao objavu");
+        expect(visibleText).toContain("Test Instructor · Novi odgovor");
+        expect(visibleText).toContain("Jamie · Prethodni komentar");
         expect(visibleText).toContain("The parent comment");
         expect(visibleText).toContain("A new comment with another line");
         expect(visibleText).not.toContain(
-            "Test Instructor commented on a post",
+            "Test Instructor je komentarisao objavu",
         );
         expect(
             Array.from(document.querySelectorAll("div")).some(
                 (element) =>
-                    element.textContent?.includes("Earlier comment") &&
+                    element.textContent?.includes("Prethodni komentar") &&
                     element
                         .getAttribute("style")
                         ?.includes("background-color:#f7f7f7"),
             ),
         ).toBe(true);
-        expect(visibleText).toContain("View discussion");
-        expect(visibleText).not.toContain("View notification");
+        expect(visibleText).toContain("Pogledajte diskusiju");
+        expect(visibleText).not.toContain("Pogledajte obaveštenje");
     });
 
     it("labels original post context in new-comment emails", async () => {
         mockedGetNotificationEmailContent.mockResolvedValue({
-            subject: "Test Instructor commented on your post",
-            message: "Test Instructor commented on your post",
+            subject: "Test Instructor je komentarisao Vašu objavu",
+            message: "Test Instructor je komentarisao Vašu objavu",
             href: "https://school.courselit.test/community/post",
             threadTitle: "A discussion title",
             parentAuthorName: "Jamie",
             parentText: "The original post body",
-            parentLabel: "Original post",
+            parentLabel: "Objava",
             commentText: "A new comment",
-            conversationLabel: "New comment",
+            conversationLabel: "Novi komentar",
             replyContext: {
                 community: {
                     communityId: "community-id",
@@ -368,10 +371,10 @@ describe("EmailChannel", () => {
             getVisibleEmailDocument(mail.body),
         );
 
-        expect(visibleText).toContain("Jamie · Original post");
+        expect(visibleText).toContain("Jamie · Objava");
         expect(visibleText).toContain("The original post body");
         expect(visibleText).toContain("A new comment");
-        expect(visibleText).not.toContain("Earlier comment");
+        expect(visibleText).not.toContain("Prethodni komentar");
     });
 
     it("adds Reply-To and a reply hint for an enabled conversation notification", async () => {
@@ -384,12 +387,12 @@ describe("EmailChannel", () => {
         };
         mockedIsReplyByEmailEnabled.mockReturnValue(true);
         mockedGetNotificationEmailContent.mockResolvedValue({
-            subject: "Test Instructor commented on a post",
-            message: "Test Instructor commented on a post",
+            subject: "Test Instructor je komentarisao objavu",
+            message: "Test Instructor je komentarisao objavu",
             href: "https://school.courselit.test/community/post",
             threadTitle: "A discussion title",
             commentText: "A new comment",
-            conversationLabel: "New comment",
+            conversationLabel: "Novi komentar",
             replyContext,
         });
 
@@ -412,7 +415,7 @@ describe("EmailChannel", () => {
         );
         expect(
             getVisibleEmailText(getVisibleEmailDocument(mail.body)),
-        ).toContain("You can reply to this email to respond directly");
+        ).toContain("Odgovorite na ovaj email");
     });
 
     it("does not mint a reply token for a non-conversation notification", async () => {
@@ -426,7 +429,7 @@ describe("EmailChannel", () => {
         expect(mail.headers).not.toHaveProperty("Reply-To");
         expect(
             getVisibleEmailText(getVisibleEmailDocument(mail.body)),
-        ).not.toContain("You can reply to this email to respond directly");
+        ).not.toContain("Odgovorite na ovaj email");
     });
 
     it("does not queue an email when reply token minting fails", async () => {
@@ -435,11 +438,11 @@ describe("EmailChannel", () => {
             new Error("database unavailable"),
         );
         mockedGetNotificationEmailContent.mockResolvedValue({
-            subject: "Test Instructor commented on a post",
-            message: "Test Instructor commented on a post",
+            subject: "Test Instructor je komentarisao objavu",
+            message: "Test Instructor je komentarisao objavu",
             href: "https://school.courselit.test/community/post",
             commentText: "A new comment",
-            conversationLabel: "New comment",
+            conversationLabel: "Novi komentar",
             replyContext: {
                 community: {
                     communityId: "community-id",
