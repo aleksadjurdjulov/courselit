@@ -1,55 +1,35 @@
+import { emailBrandStyles } from "./email-brand";
+
 const digitalDownloadTemplate = `
 doctype html
 html
     head
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
         style(type='text/css').
-            .cta-container {
-                margin: 32px 0px;
-                text-align: center;
-            }
-            .cta {
-                border: 1px solid #07077b;
-                border-radius: 4px;
-                padding: 4px 8px;
-                text-decoration: none;
-                color: white;
-                background-color: #07077b;
-                font-weight: bold;
-            }
-            .cta:hover {
-                background-color: #060665;
-            }
-            .courselit-branding-container {
-                margin: 40px 0px;
-            }
-            .courselit-branding-cta {
-                text-decoration: none;
-                color: #000000;
-                padding: 6px 10px;
-                background-color: #FFFFFF;
-                border: 1px solid;
-                border-radius: 6px;
-                text-align: center;
-            }
+${emailBrandStyles}
     body
-        p   Hvala! Vaš fajl za #{courseName} je spreman.
-        div(class="cta-container") 
-            a(
-                href=\`\${downloadLink}\`
-                class="cta"
-            ) Preuzmite sada
-        p   Srdačan pozdrav,
-        p   #{name}
-        p 
-            |   Da pristupite celom sadržaju, 
-            |   #[a(href=\`\${loginLink}\`) prijavite se] ovde.
-        if !hideCourseLitBranding
-            div(class="courselit-branding-container")
-                a(
-                    href="https://courselit.app"
-                    target="_blank"
-                    class="courselit-branding-cta"
-                ) Powered by <strong> CourseLit </strong>
+        div(class="email-page")
+            div(class="email-card")
+                p(class="email-title") Hvala! Vaš fajl za #{courseName} je spreman.
+                div(class="cta-container")
+                    a(
+                        href=\`\${downloadLink}\`
+                        class="cta"
+                    ) Preuzmite sada
+                p(class="sign-off") Srdačan pozdrav,
+                p(class="email-body") #{name}
+                p(class="email-muted")
+                    | Da pristupite celom sadržaju, 
+                    a(href=\`\${loginLink}\` class="email-link") prijavite se
+                    |  ovde.
+                if !hideCourseLitBranding
+                    div(class="courselit-branding-container")
+                        a(
+                            href="https://courselit.app"
+                            target="_blank"
+                            class="courselit-branding-cta"
+                        ) Powered by <strong> CourseLit </strong>
 `;
 
 export default digitalDownloadTemplate;

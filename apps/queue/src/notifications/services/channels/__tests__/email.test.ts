@@ -144,7 +144,7 @@ describe("EmailChannel", () => {
         expect(mail.body.indexOf("Pogledajte obaveštenje")).toBeLessThan(
             mail.body.indexOf("Otkažite email obaveštenja"),
         );
-        expect(mail.body).toContain("background-color:#000000");
+        expect(mail.body).toContain("background-color:#00afa3");
         expect(mail.body).not.toContain("background-color:#07077b");
         expect(mail.body).toContain("padding:12px 24px 56px 24px");
         expect(mail.body).toContain("padding:32px 24px 16px 24px");
@@ -337,7 +337,7 @@ describe("EmailChannel", () => {
                     element.textContent?.includes("Prethodni komentar") &&
                     element
                         .getAttribute("style")
-                        ?.includes("background-color:#f7f7f7"),
+                        ?.includes("background-color:#f2e9da"),
             ),
         ).toBe(true);
         expect(visibleText).toContain("Pogledajte diskusiju");
