@@ -130,7 +130,7 @@ function renderPage(profile?: Record<string, any>) {
         <AddressContext.Provider
             value={{ backend: "http://localhost:3000", frontend: "" }}
         >
-            <SiteInfoContext.Provider value={{ currencyISOCode: "USD" } as any}>
+            <SiteInfoContext.Provider value={{ currencyISOCode: "RSD" } as any}>
                 <ProfileContext.Provider value={{ profile, setProfile } as any}>
                     <ThemeContext.Provider value={{ theme: {} } as any}>
                         <React.Suspense fallback={<div>Loading</div>}>
@@ -151,8 +151,8 @@ describe("Course introduction page", () => {
             description: JSON.stringify({ type: "doc", content: [] }),
             courseId: "course-1",
             slug: "course-slug",
-            cost: 0,
-            costType: "free",
+            cost: 20999,
+            costType: "paid",
             isPreview: false,
             firstLesson: "lesson-1",
         });
@@ -168,11 +168,15 @@ describe("Course introduction page", () => {
             ).toBeInTheDocument();
         });
 
-        expect(document.body).toHaveTextContent("$0");
-        expect(screen.getByText("free")).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: "Buy now" })).toHaveAttribute(
+        expect(document.body).toHaveTextContent(/20\.999/);
+        expect(document.body).toHaveTextContent("RSD");
+        expect(screen.getByRole("link", { name: "Kupi kurs" })).toHaveAttribute(
             "href",
-            "/checkout?type=course&id=course-1",
+            "https://pay.futurefizio.com/buy?product=course-slug",
+        );
+        expect(screen.getByRole("link", { name: "Kupi sve" })).toHaveAttribute(
+            "href",
+            "https://pay.futurefizio.com/buy?product=all",
         );
     });
 
@@ -190,7 +194,10 @@ describe("Course introduction page", () => {
         });
 
         expect(
-            screen.queryByRole("link", { name: "Buy now" }),
+            screen.queryByRole("link", { name: "Kupi kurs" }),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("link", { name: "Kupi sve" }),
         ).not.toBeInTheDocument();
     });
 });

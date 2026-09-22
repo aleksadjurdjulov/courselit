@@ -10,7 +10,7 @@ import { ProductCard, ProductCardSkeleton } from "@courselit/page-blocks";
 import { SiteInfoContext } from "@components/contexts";
 import { getPlanPrice, truncate } from "@ui-lib/utils";
 import { Button, Subheader1 } from "@courselit/page-primitives";
-import { getSymbolFromCurrency } from "@courselit/components-library";
+import { formatCurrency } from "@courselit/utils";
 import { ThemeStyle } from "@courselit/page-models";
 const ITEMS_PER_PAGE = 9;
 
@@ -99,21 +99,15 @@ function getBadgeText(course: Course, siteinfo: SiteInfo) {
 
     if (!defaultPlan) {
         const amount = course.cost ?? 0;
-        return (
-            <>
-                {getSymbolFromCurrency(siteinfo.currencyISOCode || "USD")}
-                <span>{amount.toFixed(2)}</span>
-            </>
-        );
+        return <>{formatCurrency(amount, siteinfo.currencyISOCode || "USD")}</>;
     }
 
     const { amount, period } = getPlanPrice(defaultPlan);
 
     return (
         <>
-            {getSymbolFromCurrency(siteinfo.currencyISOCode || "USD")}
-            <span>{amount.toFixed(2)}</span>
-            <span className="ml-1">{period}</span>
+            {formatCurrency(amount, siteinfo.currencyISOCode || "USD")}
+            {period ? <span className="ml-1">{period}</span> : null}
         </>
     );
 }

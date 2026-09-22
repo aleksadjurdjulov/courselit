@@ -211,7 +211,7 @@ const getInitialLayout = (type: "course" | "download") => {
         layout.push({
             name: "content",
             settings: {
-                title: "Curriculum",
+                title: "Sadržaj",
                 headerAlignment: "center",
             },
         });

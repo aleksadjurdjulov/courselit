@@ -161,15 +161,24 @@ describe("Payment Initiate Route", () => {
         expect(response.status).toBe(400);
     });
 
-    it("returns 404 if payment plan does not belong to the entity", async () => {
+    it("returns 410 if course checkout is requested", async () => {
         mockRequest.json = jest.fn().mockResolvedValue({
             id: "course-123",
             type: Constants.MembershipEntityType.COURSE,
             planId: "planA",
         });
-        (Course.findOne as jest.Mock).mockResolvedValue({
-            title: "Test Course",
-            paymentPlans: ["planC", "planB"],
+
+        const response = await POST(mockRequest);
+        expect(response.status).toBe(410);
+        const body = await response.json();
+        expect(body.message).toMatch(/FutureFizio/i);
+    });
+
+    it("returns 404 if payment plan does not belong to the entity", async () => {
+        mockRequest.json = jest.fn().mockResolvedValue({
+            id: "community-123",
+            type: Constants.MembershipEntityType.COMMUNITY,
+            planId: "planA",
         });
 
         // Override PaymentPlan.exists to return false (plan doesn't belong to entity)

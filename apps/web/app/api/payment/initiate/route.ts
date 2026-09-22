@@ -61,6 +61,16 @@ export async function POST(req: NextRequest) {
             return Response.json({ message: "Bad request" }, { status: 400 });
         }
 
+        if (type === Constants.MembershipEntityType.COURSE) {
+            return Response.json(
+                {
+                    message:
+                        "Course checkout is disabled. Use FutureFizio payment pages.",
+                },
+                { status: 410 },
+            );
+        }
+
         const entity = await getEntity(type, id, domain._id);
         if (!entity) {
             return Response.json(

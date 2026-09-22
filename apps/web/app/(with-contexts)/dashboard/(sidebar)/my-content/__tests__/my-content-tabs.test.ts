@@ -58,7 +58,7 @@ const tabs = [
         href: "/dashboard/my-content/feed",
     },
     {
-        label: "Products",
+        label: "Kursevi",
         href: "/dashboard/my-content/products",
     },
 ];
@@ -98,7 +98,7 @@ describe("MyContentTabs", () => {
             expect(screen.queryByText("Feed")).not.toBeInTheDocument();
         });
 
-        expect(screen.getByTestId("active-tab")).toHaveTextContent("Products");
+        expect(screen.getByTestId("active-tab")).toHaveTextContent("Kursevi");
         expect(mockReplace).not.toHaveBeenCalled();
     });
 });

@@ -30,7 +30,7 @@ export default function AdminWidget({
     address,
     theme,
 }: AdminWidgetProps): JSX.Element {
-    const [title, setTitle] = useState(settings.title || "Curriculum");
+    const [title, setTitle] = useState(settings.title || "Sadržaj");
     const [description, setDescription] = useState(settings.description);
     const [headerAlignment, setHeaderAlignment] = useState<Alignment>(
         settings.headerAlignment || "center",

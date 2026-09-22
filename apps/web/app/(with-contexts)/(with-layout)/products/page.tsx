@@ -5,6 +5,7 @@ import { ProductsList } from "./products-list";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Header1, Section } from "@courselit/page-primitives";
 import { ThemeContext } from "@components/contexts";
+import { PAGE_HEADER_ALL_COURSES } from "@ui-config/strings";
 
 export default function CoursesPage() {
     const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ export default function CoursesPage() {
     return (
         <Section theme={theme.theme}>
             <div className="flex flex-col gap-4 min-h-[80vh]">
-                <Header1 theme={theme.theme}>Products</Header1>
+                <Header1 theme={theme.theme}>{PAGE_HEADER_ALL_COURSES}</Header1>
                 <ProductsList
                     theme={theme.theme}
                     page={page}

@@ -322,7 +322,7 @@ describe("Payment Initiate Integration Tests - Included Products", () => {
     });
 
     describe("Complete Flow - Course Entity with Included Products", () => {
-        it("handles course entities with included products", async () => {
+        it("rejects course checkout (FutureFizio payment pages)", async () => {
             mockRequest.json = jest.fn().mockResolvedValue({
                 id: mockCourseId,
                 type: Constants.MembershipEntityType.COURSE,
@@ -341,7 +341,7 @@ describe("Payment Initiate Integration Tests - Included Products", () => {
             });
 
             const response = await POST(mockRequest);
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(410);
         });
     });
 

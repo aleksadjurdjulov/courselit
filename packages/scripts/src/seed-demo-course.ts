@@ -70,7 +70,7 @@ function courseLayout() {
         {
             name: "content",
             settings: {
-                title: "Curriculum",
+                title: "Sadržaj",
                 headerAlignment: "center",
             },
         },

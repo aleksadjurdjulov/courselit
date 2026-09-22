@@ -5,14 +5,15 @@ import {
     TextEditorContent,
     WidgetProps,
 } from "@courselit/common-models";
-import {
-    Image,
-    Link,
-    useToast,
-    getSymbolFromCurrency,
-} from "@courselit/components-library";
+import { Image, Link, useToast } from "@courselit/components-library";
 import { TextRenderer } from "../../components";
-import { FetchBuilder, getPlanPrice } from "@courselit/utils";
+import {
+    FetchBuilder,
+    getPlanPrice,
+    getFutureFizioBuyAllUrl,
+    getFutureFizioBuyCourseUrl,
+    formatCurrency,
+} from "@courselit/utils";
 import { DEFAULT_FAILURE_MESSAGE, DEFAULT_SUCCESS_MESSAGE } from "./constants";
 import Settings from "./settings";
 import { Users } from "lucide-react";
@@ -196,6 +197,16 @@ export default function Widget({
               ? product.title
               : product.name)) as string;
 
+    const currencyCode = (
+        state.siteinfo.currencyISOCode || "RSD"
+    ).toUpperCase();
+    const planAmount = getPlanPrice(
+        product.paymentPlans?.find(
+            (x) => x.planId === product.defaultPaymentPlan,
+        ),
+    ).amount;
+    const priceLabel = formatCurrency(planAmount, currencyCode);
+
     return (
         <Section theme={overiddenTheme} id={cssId}>
             <div
@@ -232,18 +243,7 @@ export default function Widget({
                         {type === Constants.PageType.PRODUCT &&
                             !isLeadMagnet && (
                                 <Preheader theme={overiddenTheme}>
-                                    {getSymbolFromCurrency(
-                                        state.siteinfo.currencyISOCode,
-                                    )}
-                                    {
-                                        getPlanPrice(
-                                            product.paymentPlans.find(
-                                                (x) =>
-                                                    x.planId ===
-                                                    product.defaultPaymentPlan,
-                                            ),
-                                        ).amount
-                                    }
+                                    {priceLabel}
                                 </Preheader>
                             )}
                         <div className="pb-1 mb-4">
@@ -325,13 +325,25 @@ export default function Widget({
                             )}
                         {type === Constants.PageType.PRODUCT &&
                             !isLeadMagnet && (
-                                <Link
-                                    href={`/checkout?type=course&id=${product.courseId}`}
-                                >
-                                    <Button theme={overiddenTheme}>
-                                        {buttonCaption || "Buy now"}
-                                    </Button>
-                                </Link>
+                                <div className="flex flex-wrap gap-2">
+                                    <Link
+                                        href={getFutureFizioBuyCourseUrl(
+                                            String(
+                                                product.slug ||
+                                                    product.courseId,
+                                            ),
+                                        )}
+                                    >
+                                        <Button theme={overiddenTheme}>
+                                            {buttonCaption || "Kupi kurs"}
+                                        </Button>
+                                    </Link>
+                                    <Link href={getFutureFizioBuyAllUrl()}>
+                                        <Button theme={overiddenTheme}>
+                                            Kupi sve
+                                        </Button>
+                                    </Link>
+                                </div>
                             )}
                         {type === Constants.PageType.SITE && buttonAction && (
                             <Link href={buttonAction}>

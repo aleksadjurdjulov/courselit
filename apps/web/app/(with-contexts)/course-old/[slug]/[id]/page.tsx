@@ -5,19 +5,15 @@ import { isEnrolled } from "@ui-lib/utils";
 import { ArrowRight } from "@courselit/icons";
 import {
     COURSE_PROGRESS_START,
-    ENROLL_BUTTON_TEXT,
     BTN_VIEW_CERTIFICATE,
 } from "@ui-config/strings";
 import { checkPermission } from "@courselit/utils";
 import { Profile, UIConstants } from "@courselit/common-models";
-import {
-    Link,
-    Button2,
-    getSymbolFromCurrency,
-    Image,
-} from "@courselit/components-library";
+import { Link, Button2, Image } from "@courselit/components-library";
 import { TextRenderer } from "@courselit/page-blocks";
 import { TableOfContent } from "@components/table-of-content";
+import BuyButtons from "@components/public/buy-buttons";
+import { formatCurrency } from "@courselit/utils";
 import {
     AddressContext,
     ProfileContext,
@@ -97,19 +93,12 @@ export default function ProductPage(props: {
                     <div>
                         <div className="flex justify-between items-center">
                             <div className="font-medium flex items-center">
-                                {getSymbolFromCurrency(
-                                    siteInfo.currencyISOCode ?? "",
+                                {formatCurrency(
+                                    product.cost ?? 0,
+                                    siteInfo.currencyISOCode || "RSD",
                                 )}
-                                {product.cost}
-                                <span className="text-sm text-muted-foreground ml-1">
-                                    {product.costType ?? ""}
-                                </span>
                             </div>
-                            <Link
-                                href={`/checkout?type=course&id=${product.courseId}`}
-                            >
-                                <Button2>{ENROLL_BUTTON_TEXT}</Button2>
-                            </Link>
+                            <BuyButtons slug={product.slug} />
                         </div>
                     </div>
                 )}

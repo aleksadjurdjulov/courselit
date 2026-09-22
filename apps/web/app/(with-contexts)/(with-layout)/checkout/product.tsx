@@ -5,7 +5,7 @@ import Checkout, { Product } from "@components/public/payments/checkout";
 import { Constants, PaymentPlan, Course } from "@courselit/common-models";
 import type { MembershipEntityType } from "@courselit/common-models";
 import { useToast } from "@courselit/components-library";
-import { FetchBuilder } from "@courselit/utils";
+import { FetchBuilder, getFutureFizioBuyCourseUrl } from "@courselit/utils";
 import { TOAST_TITLE_ERROR } from "@ui-config/strings";
 import { notFound, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -117,15 +117,11 @@ export default function ProductCheckout() {
         try {
             const response = await fetch.exec();
             if (response.course) {
-                setProduct({
-                    id: response.course.courseId,
-                    name: response.course.title,
-                    slug: response.course.slug,
-                    featuredImage: response.course.featuredImage?.file,
-                    type: MembershipEntityType.COURSE,
-                    defaultPaymentPlanId: response.course.defaultPaymentPlan,
-                });
-                setPaymentPlans([...response.course.paymentPlans]);
+                // CourseLit checkout is disabled; send buyers to FutureFizio.
+                window.location.replace(
+                    getFutureFizioBuyCourseUrl(response.course.slug),
+                );
+                return;
             } else {
                 setProductNotFound(true);
             }

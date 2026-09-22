@@ -160,7 +160,7 @@ function getSidebarItems({
             isActive: path === "/dashboard/overview",
         });
         navMainItems.push({
-            title: "Products",
+            title: "Kursevi",
             url: "/dashboard/products",
             icon: Box,
             isActive:

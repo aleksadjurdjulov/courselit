@@ -113,7 +113,7 @@ export const responses = {
     cannot_delete_last_email: "Ne možete obrisati poslednji email u sekvenci",
     invalid_drip_email: "Drip email mora imati naslov i sadržaj",
     cannot_invite_to_unpublished_product:
-        "Ne možete pozvati korisnike na neobjavljeni proizvod",
+        "Ne možete pozvati korisnike na neobjavljeni kurs",
     rejection_reason_missing: "Razlog odbijanja nedostaje",
     joining_reason_missing: "Razlog pridruživanja je obavezan",
     invalid_category: "Nevažeća kategorija",
@@ -140,7 +140,7 @@ export const responses = {
         "Ne možete promeniti ulogu poslednjeg moderatora",
     cannot_delete_last_category: "Ne možete obrisati poslednju kategoriju",
     lead_magnet_invalid_settings:
-        "Proizvod mora imati tačno jedan besplatni plan plaćanja da bi lead magnet bio omogućen",
+        "Kurs mora imati tačno jedan besplatni plan plaćanja da bi lead magnet bio omogućen",
     certificate_invalid_settings:
         "Sertifikat može biti omogućen samo za kurseve",
     sso_provider_already_exists: "SSO provajder sa istim ID-jem već postoji",

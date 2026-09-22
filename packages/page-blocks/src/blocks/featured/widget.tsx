@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Course, SiteInfo, WidgetProps } from "@courselit/common-models";
-import {
-    SkeletonCard,
-    getSymbolFromCurrency,
-} from "@courselit/components-library";
+import { SkeletonCard } from "@courselit/components-library";
 import { TextRenderer } from "../../components";
-import { FetchBuilder, getPlanPrice } from "@courselit/utils";
+import { FetchBuilder, getPlanPrice, formatCurrency } from "@courselit/utils";
 import Settings from "./settings";
 import { Header1, Subheader1, Section } from "@courselit/page-primitives";
 import { ProductCard } from "../../components";
@@ -168,9 +165,8 @@ function getBadgeText(course: Course, siteinfo: SiteInfo) {
 
     return (
         <>
-            {getSymbolFromCurrency(siteinfo.currencyISOCode || "USD")}
-            <span>{amount.toFixed(2)}</span>
-            <span className="ml-1">{period}</span>
+            {formatCurrency(amount, siteinfo.currencyISOCode || "USD")}
+            {period ? <span className="ml-1">{period}</span> : null}
         </>
     );
 }

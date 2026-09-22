@@ -17,14 +17,13 @@ import {
     COURSE_PROGRESS_PREV,
     COURSE_PROGRESS_MARK_COMPLETED,
     COURSE_PROGRESS_COMPLETED,
-    ENROLL_BUTTON_TEXT,
     TOAST_TITLE_ERROR,
     NOT_ENROLLED_HEADER,
 } from "@/ui-config/strings";
 import { Link, Skeleton, useToast } from "@courselit/components-library";
 import { TextRenderer } from "@courselit/page-blocks";
+import BuyButtons from "@components/public/buy-buttons";
 import {
-    Constants,
     TextEditorContent,
     type Address,
     type Lesson,
@@ -246,13 +245,7 @@ export const LessonViewer = ({
                             {error}.
                         </Text1>
                         {error === "You are not enrolled in the course" && (
-                            <Link
-                                href={`/checkout?type=${Constants.MembershipEntityType.COURSE}&id=${productId}`}
-                            >
-                                <Button theme={theme.theme}>
-                                    {ENROLL_BUTTON_TEXT}
-                                </Button>
-                            </Link>
+                            <BuyButtons slug={slug} />
                         )}
                     </div>
                 )}

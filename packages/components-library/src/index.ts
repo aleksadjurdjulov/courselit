@@ -51,7 +51,7 @@ export * from "./admin-widget-panel";
 export * from "./menu";
 export * from "./toast2";
 export * from "./paginated-table";
-import getSymbolFromCurrency from "currency-symbol-map";
+import getSymbolFromCurrency from "./get-symbol-from-currency";
 export * from "./content-card";
 export * from "./skeleton-card";
 export * from "./image";

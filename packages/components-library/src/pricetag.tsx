@@ -1,5 +1,5 @@
 import * as React from "react";
-import getSymbolFromCurrency from "currency-symbol-map";
+import { formatCurrency } from "@courselit/utils";
 
 interface PriceTagProps {
     cost: number;
@@ -12,10 +12,7 @@ const PriceTag = (props: PriceTagProps) => {
     const costText =
         cost <= 0
             ? props.freeCostCaption
-            : `${
-                  getSymbolFromCurrency(props.currencyISOCode.toUpperCase()) ||
-                  props.currencyISOCode.toUpperCase() + " "
-              }${cost}`;
+            : formatCurrency(cost, props.currencyISOCode || "USD");
 
     return <div className="font-medium">{costText}</div>;
 };

@@ -38,11 +38,11 @@ export const BUTTON_CANCEL_SCHEDULED_MAIL = "Otkaži slanje";
 export const MEDIA_SEARCH_INPUT_PLACEHOLDER = "Pretražite medije";
 export const LOAD_MORE_TEXT = "Učitaj još";
 export const MANAGE_MEDIA_BUTTON_TEXT = "Ubaci medij";
-export const MANAGE_COURSES_PAGE_HEADING = "Proizvodi";
+export const MANAGE_COURSES_PAGE_HEADING = "Kursevi";
 export const COURSE_CUSTOMERS_PAGE_HEADING = "Kupci";
 export const MANAGE_COMMUNITIES_PAGE_HEADING = "Zajednice";
 export const MANAGE_PAGES_PAGE_HEADING = "Stranice";
-export const BREADCRUMBS_EDIT_LESSON_COURSE_NAME = "Proizvod";
+export const BREADCRUMBS_EDIT_LESSON_COURSE_NAME = "Kurs";
 export const NEW_PAGE_HEADING = "Nova stranica";
 export const USERS_MANAGER_PAGE_HEADING = "Korisnici";
 export const BTN_MANAGE_TAGS = "Upravljaj oznakama";
@@ -60,7 +60,7 @@ export const DELETE_TAG_POPUP_HEADER = "Obriši oznaku";
 export const DELETE_TAG_POPUP_DESC =
     "Ovo će ukloniti oznaku sa korisnika i obrisati oznaku. Korisnici će ostati u sistemu.";
 export const NEW_COURSE_PAGE_HEADING = "Dodaj kurs";
-export const EDIT_PRODUCT_HEADER = "Izmeni proizvod";
+export const EDIT_PRODUCT_HEADER = "Izmeni kurs";
 export const EDIT_BLOG = "Izmeni blog";
 export const EDIT_EMAIL = "Izmeni email";
 export const MEDIA_MANAGER_DIALOG_TITLE = "Dodaj medij";
@@ -70,7 +70,7 @@ export const DIALOG_TITLE_FEATURED_IMAGE = "Izaberi medij";
 export const BUTTON_SET_FEATURED_IMAGE = "Izaberi";
 export const BUTTON_SELECT_MEDIA = "Izaberi medij";
 export const FORM_FIELD_FEATURED_IMAGE = "Istaknuta slika";
-export const BTN_DELETE_COURSE = "Obriši proizvod";
+export const BTN_DELETE_COURSE = "Obriši kurs";
 export const BTN_EXIT_COURSE = "Izađi";
 export const BTN_EXIT_COURSE_TOOLTIP = "Izađi iz kursa";
 export const BTN_TOGGLE_THEME = "Promeni temu";
@@ -130,7 +130,7 @@ export const SITE_SETTINGS_PAYMENT_METHOD_RESET_TOOLTIP =
 export const SITE_SETTINGS_PAYMENT_METHOD_RESET_CONFIRM_TITLE =
     "Resetovati način plaćanja?";
 export const SITE_SETTINGS_PAYMENT_METHOD_RESET_CONFIRM_DESCRIPTION =
-    "Nakon resetovanja, svi plaćeni planovi svih proizvoda neće uspeti na kasi sa greškom. Besplatni planovi će nastaviti da rade.";
+    "Nakon resetovanja, svi plaćeni planovi svih kurseva neće uspeti na kasi sa greškom. Besplatni planovi će nastaviti da rade.";
 export const SITE_SETTINGS_PAYMENT_METHOD_RESET_CONFIRM_ACTION = "Resetuj";
 export const FREE_COST = "BESPLATNO";
 export const SIDEBAR_TEXT_COURSE_ABOUT = "Uvod";
@@ -140,9 +140,9 @@ export const COURSE_DISCUSSIONS_TOOLTIP = "Diskusije";
 export const COURSE_DISCUSSIONS_DESCRIPTION =
     "Omogući diskusije po lekcijama za ovaj kurs";
 export const DISCUSSIONS_DISABLED_MESSAGE =
-    "Diskusije su onemogućene za ovaj proizvod.";
+    "Diskusije su onemogućene za ovaj kurs.";
 export const DISCUSSIONS_ENABLED_MESSAGE =
-    "Diskusije su omogućene za ovaj proizvod.";
+    "Diskusije su omogućene za ovaj kurs.";
 export const COURSE_DISCUSSIONS_VIEW_ALL = "Prikaži sve diskusije";
 export const COURSE_DISCUSSIONS_EMPTY = "Još nema diskusija";
 export const COURSE_DISCUSSIONS_COMMENT_PLACEHOLDER = "Dodajte komentar...";
@@ -284,7 +284,7 @@ export const LESSON_VISIBILITY = "Vidljivost";
 export const LESSON_VISIBILITY_TOOLTIP =
     "Kada nije objavljena, ova lekcija je sakrivena od upisanih polaznika.";
 export const DELETE_LESSON_POPUP_HEADER = "Obriši lekciju";
-export const APP_MESSAGE_COURSE_DELETED = "Proizvod je obrisan";
+export const APP_MESSAGE_COURSE_DELETED = "Kurs je obrisan";
 export const APP_MESSAGE_LESSON_DELETED = "Lekcija je obrisana";
 export const APP_MESSAGE_LESSON_SAVED = "Detalji lekcije su sačuvani";
 export const APP_MESSAGE_COURSE_SAVED = "Izmene su sačuvane";
@@ -293,6 +293,8 @@ export const ENROLL_IN_THE_COURSE =
 export const NOT_ENROLLED_HEADER = "Sadržaj je zaključan";
 export const USER_ERROR_HEADER = "Ups!";
 export const ENROLL_BUTTON_TEXT = "Kupi sada";
+export const BUY_COURSE_BUTTON_TEXT = "Kupi kurs";
+export const BUY_ALL_COURSES_BUTTON_TEXT = "Kupi sve";
 export const CHECKOUT_BUTTON_TEXT = "Završi kupovinu";
 export const BUTTON_DELETE_MEDIA = "Obriši";
 export const DELETE_MEDIA_POPUP_HEADER = "Obrisati ovaj fajl?";
@@ -394,13 +396,12 @@ export const HEADER_YOUR_PROFILE = "Vaš profil";
 export const PROFILE_PAGE_MESSAGE_NOT_LOGGED_IN = "da vidite svoj profil.";
 export const PROFILE_PAGE_HEADER = "Profil";
 export const MY_CONTENT_HEADER = "Moj sadržaj";
-export const MY_CONTENT_PRODUCTS_TAB = "Proizvodi";
+export const MY_CONTENT_PRODUCTS_TAB = "Kursevi";
 export const MY_CONTENT_FEED_TAB = "Zajednice";
-export const MY_CONTENT_EMPTY_PRODUCTS =
-    "Još niste upisani ni na jedan proizvod.";
+export const MY_CONTENT_EMPTY_PRODUCTS = "Još niste upisani ni na jedan kurs.";
 export const MY_CONTENT_EMPTY_COMMUNITIES =
     "Još se niste pridružili nijednoj zajednici.";
-export const MY_CONTENT_BROWSE_PRODUCTS = "Pregledaj proizvode";
+export const MY_CONTENT_BROWSE_PRODUCTS = "Pregledaj kurseve";
 export const MY_CONTENT_BROWSE_COMMUNITIES = "Pregledaj zajednice";
 export const MY_CONTENT_FEED_EMPTY_TITLE =
     "Još nema objava u Vašim zajednicama";
@@ -417,7 +418,7 @@ export const NOTIFICATION_SETTINGS_COLUMN_ACTIVITY = "Aktivnost";
 export const NOTIFICATION_SETTINGS_EMPTY_STATE =
     "Nema dostupnih podešavanja obaveštenja za Vaš nalog.";
 export const NOTIFICATION_SETTINGS_GROUP_GENERAL = "Opšte";
-export const NOTIFICATION_SETTINGS_GROUP_PRODUCT_MANAGEMENT = "Proizvod";
+export const NOTIFICATION_SETTINGS_GROUP_PRODUCT_MANAGEMENT = "Kurs";
 export const NOTIFICATION_SETTINGS_GROUP_USER_MANAGEMENT = "Korisnik";
 export const NOTIFICATION_SETTINGS_GROUP_COMMUNITY_MANAGEMENT = "Zajednica";
 export const NOTIFICATIONS_POPOVER_TITLE = "Obaveštenja";
@@ -450,7 +451,7 @@ export const USER_FILTER_CLEAR = "Obriši filtere";
 export const USER_FILTER_DROPDOWN_LABEL = "Dodaj filter";
 export const USER_FILTER_BTN_LABEL = "Filteri";
 export const USER_FILTER_CATEGORY_EMAIL = "Email";
-export const USER_FILTER_CATEGORY_PRODUCT = "Proizvod";
+export const USER_FILTER_CATEGORY_PRODUCT = "Kurs";
 export const USER_FILTER_CATEGORY_COMMUNITY = "Zajednica";
 export const USER_FILTER_CATEGORY_LAST_ACTIVE = "Poslednja aktivnost";
 export const USER_FILTER_CATEGORY_SIGNED_UP = "Registracija";
@@ -474,7 +475,7 @@ export const USER_FILTER_LABEL_DEFAULT = "Svi";
 export const USER_FILTER_AGGREGATOR_HEADER = "Poklopi";
 export const USER_FILTER_AGGREGATOR_ALL = "Sve";
 export const USER_FILTER_AGGREGATOR_ANY = "Bilo koje";
-export const USER_FILTER_PRODUCT_DROPDOWN_LABEL = "Izaberi proizvod";
+export const USER_FILTER_PRODUCT_DROPDOWN_LABEL = "Izaberi kurs";
 export const USER_FILTER_COMMUNITY_DROPDOWN_LABEL = "Izaberi zajednicu";
 export const USER_FILTER_TAGGED_DROPDOWN_LABEL = "Izaberi oznaku";
 export const USER_FILTER_PERMISSION_DROPDOWN_LABEL = "Izaberi dozvolu";
@@ -495,10 +496,10 @@ export const USER_FILTER_SIGNED_UP_AFTER = "Posle";
 export const USER_FILTER_SIGNED_UP_ON = "Na";
 export const USER_FILTER_DATE_RANGE_DROPDOWN_LABEL = "Izaberi datum";
 export const DOCUMENTATION_LINK_LABEL = "Saznajte više";
-export const PERM_COURSE_MANAGE = "Upravljaj proizvodima";
-export const PERM_COURSE_MANAGE_ANY = "Upravljaj svim proizvodima";
+export const PERM_COURSE_MANAGE = "Upravljaj kursevima";
+export const PERM_COURSE_MANAGE_ANY = "Upravljaj svim kursevima";
 export const PERM_COURSE_PUBLISH = "Objavi sadržaj";
-export const PERM_ENROLL_IN_COURSE = "Kupi proizvode";
+export const PERM_ENROLL_IN_COURSE = "Kupi kurseve";
 export const PERM_MEDIA_MANAGE = "Upravljaj fajlovima";
 export const PERM_MEDIA_MANAGE_ANY = "Upravljaj svim fajlovima";
 export const PERM_SITE = "Upravljaj stranicama";
@@ -529,7 +530,7 @@ export const LOGOUT = "Odjava";
 export const LOGOUT_MESSAGE = "Da li ste sigurni da želite da se odjavite?";
 export const USER_TABLE_HEADER_NAME = "Detalji";
 export const USER_TABLE_HEADER_STATUS = "Status";
-export const USER_TABLE_HEADER_PRODUCTS = "Proizvodi";
+export const USER_TABLE_HEADER_PRODUCTS = "Kursevi";
 export const USER_TABLE_HEADER_COMMUNITIES = "Zajednice";
 export const USER_TABLE_HEADER_JOINED = "Pridružen";
 export const USER_TABLE_HEADER_LAST_ACTIVE = "Poslednja prijava";
@@ -553,17 +554,17 @@ export const PRODUCT_TABLE_CONTEXT_MENU_EDIT_PAGE = "Izmeni stranicu";
 export const PRODUCT_TABLE_CONTEXT_MENU_INVITE_A_CUSTOMER = "Pozovi kupca";
 export const BTN_INVITE = "Pozovi";
 export const BTN_GO_BACK = "Nazad";
-export const BTN_NEW_PRODUCT = "Novi proizvod";
+export const BTN_NEW_PRODUCT = "Novi kurs";
 export const BTN_NEW_PAGE = "Nova stranica";
-export const PAGE_HEADER_NEW_PRODUCT = "Novi proizvod";
+export const PAGE_HEADER_NEW_PRODUCT = "Novi kurs";
 export const FORM_NEW_PRODUCT_TITLE = "Naslov";
-export const FORM_NEW_PRODUCT_TYPE = "Tip proizvoda";
+export const FORM_NEW_PRODUCT_TYPE = "Tip kursa";
 export const FORM_NEW_PRODUCT_TITLE_PLC = "npr. 'Photoshop za početnike'";
-export const FORM_NEW_PRODUCT_SELECT = "Tip proizvoda";
+export const FORM_NEW_PRODUCT_SELECT = "Tip kursa";
 export const BTN_CONTINUE = "Nastavi";
-export const DELETE_PRODUCT_POPUP_HEADER = "Obriši proizvod";
+export const DELETE_PRODUCT_POPUP_HEADER = "Obriši kurs";
 export const DELETE_PRODUCT_POPUP_TEXT =
-    "Ovo je nepovratna radnja i svi podaci i analitika vezani za ovaj proizvod biće obrisani.";
+    "Ovo je nepovratna radnja i svi podaci i analitika vezani za ovaj kurs biće obrisani.";
 export const FORM_NEW_PRODUCT_MENU_COURSE_SUBTITLE =
     "Interaktivni kurs koji se sastoji od slika, videa, teksta i više.";
 export const FORM_NEW_PRODUCT_MENU_DOWNLOADS_SUBTITLE =
@@ -602,7 +603,7 @@ export const PAYMENT_PLAN_ARCHIVE_TITLE =
 export const PAYMENT_PLAN_ARCHIVE_DESCRIPTION =
     "Ova radnja se ne može opozvati. Plan plaćanja će biti trajno arhiviran.";
 export const PAYMENT_PLAN_ARCHIVE_ACTION = "Arhiviraj";
-export const PAYMENT_PLAN_INCLUDED_PRODUCTS_SUFFIX = "proizvoda";
+export const PAYMENT_PLAN_INCLUDED_PRODUCTS_SUFFIX = "kurseva";
 export const PRICING_PAID_SUBTITLE =
     "Ljudi mogu pristupiti sadržaju nakon jednokratnog plaćanja. Korisnik mora biti prijavljen.";
 export const PRICING_PAID_NO_PAYMENT_METHOD =
@@ -611,7 +612,7 @@ export const PUBLISH_TAB_STATUS_TITLE = "Status";
 export const PUBLISH_TAB_STATUS_SUBTITLE = "Učinite kurs javnim ili privatnim.";
 export const PUBLISH_TAB_VISIBILITY_TITLE = "Vidljivost";
 export const PUBLISH_TAB_VISIBILITY_SUBTITLE =
-    "Proizvod ostaje sakriven i može se pristupiti samo direktnim URL-om.";
+    "Kurs ostaje sakriven i može se pristupiti samo direktnim URL-om.";
 export const PAGE_TITLE_EDIT_PAGE = "Izmeni";
 export const PAGE_TITLE_VIEW_PAGE = "Prikaži";
 export const PAGE_HEADER_EDIT_PAGE = "Izmeni stranicu";
@@ -689,7 +690,7 @@ export const SIDEBAR_MENU_MAILS = "Emailovi";
 export const SIDEBAR_MENU_USERS = "Korisnici";
 export const SIDEBAR_MENU_SETTINGS = "Podešavanja";
 export const SIDEBAR_MENU_PAGES = "Stranice";
-export const SIDEBAR_MENU_PRODUCTS = "Proizvodi";
+export const SIDEBAR_MENU_PRODUCTS = "Kursevi";
 export const SIDEBAR_MENU_DASHBOARD = "Početna";
 export const SIDEBAR_MENU_BLOGS = "Blogovi";
 export const PAGE_HEADER_EDIT_USER = "Izmeni korisnika";
@@ -830,11 +831,11 @@ export const USER_TAGS_SUBHEADER = "Oznake";
 export const BTN_DELETE_USER = "Obriši korisnika";
 export const USER_DELETE_DIALOG_TITLE = "Obrisati korisnika?";
 export const USER_DELETE_DIALOG_DESCRIPTION =
-    "Ova radnja je nepovratna. Proizvodi i zajednice u vlasništvu ovog korisnika biće preneti na Vas, a ostali podaci biće obrisani.";
+    "Ova radnja je nepovratna. Kursevi i zajednice u vlasništvu ovog korisnika biće preneti na Vas, a ostali podaci biće obrisani.";
 export const USER_DELETE_DIALOG_MIGRATION_HEADING =
     "Šta će biti prebačeno na Vaš nalog";
 export const USER_DELETE_DIALOG_MIGRATION_ITEM_PRODUCTS =
-    "Proizvodi, lekcije i stranice koje je kreirao ovaj korisnik biće dodeljeni Vama.";
+    "Kursevi, lekcije i stranice koje je kreirao ovaj korisnik biće dodeljeni Vama.";
 export const USER_DELETE_DIALOG_MIGRATION_ITEM_EMAIL =
     "Email šabloni, sekvence i isporuke koje je kreirao ovaj korisnik biće dodeljeni Vama.";
 export const USER_DELETE_DIALOG_MIGRATION_ITEM_AUDIENCE =
@@ -845,7 +846,7 @@ export const USER_DELETE_DIALOG_DELETION_HEADING = "Šta će biti obrisano";
 export const USER_DELETE_DIALOG_DELETION_ITEM_COMMUNICATION =
     "Obaveštenja, statusi emailova, ocene lekcija, linkovi za preuzimanje, sertifikati i evidencije aktivnosti.";
 export const USER_DELETE_DIALOG_DELETION_ITEM_COMMUNITY =
-    "Objave, komentari, odgovori, pretplate, prijave i povezani lajkovi u zajednici. Lajkovi, pretplate i prijave diskusija proizvoda (pisani komentari i odgovori biće anonimizovani).";
+    "Objave, komentari, odgovori, pretplate, prijave i povezani lajkovi u zajednici. Lajkovi, pretplate i prijave diskusija kurseva (pisani komentari i odgovori biće anonimizovani).";
 export const USER_DELETE_DIALOG_DELETION_ITEM_COMMERCE =
     "Članstva, fakture, upisi na kurseve i unosi marketinških sekvenci.";
 export const USER_DELETE_DIALOG_DELETION_ITEM_ACCOUNT =
@@ -982,7 +983,7 @@ export const COMMUNITY_REJECTION_REASON_LABEL = "Razlog odbijanja";
 export const COMMUNITY_LEAVE_CONFIRM_DESCRIPTION =
     "Da li ste sigurni da želite da napustite ovu zajednicu?";
 export const COMMUNITY_LEAVE_CONFIRM_DESCRIPTION_DETAILS =
-    "Izgubićete pristup svom sadržaju zajednice, diskusijama i uključenim proizvodima. Aktivna pretplata će takođe biti otkazana, ako postoji.";
+    "Izgubićete pristup svom sadržaju zajednice, diskusijama i uključenim kursevima. Aktivna pretplata će takođe biti otkazana, ako postoji.";
 export const COMMUNITY_POST_DELETE_CONFIRM =
     "Da li ste sigurni da želite da obrišete ovu objavu? Ova radnja se ne može opozvati.";
 export const COMMUNITY_POST_DELETE_CONFIRM_SHORT =
@@ -1087,11 +1088,11 @@ export const SETTINGS_RESOURCE_PAYMENT = "Podesi plaćanje";
 export const SETTINGS_RESOURCE_API = "API dokumentacija";
 export const EDIT_CONTENT_MENU_ITEM = "Izmeni sadržaj";
 export const PRODUCT_UNPUBLISHED_WARNING =
-    "Ovaj proizvod nije objavljen. Nije vidljiv Vašoj publici.";
+    "Ovaj kurs nije objavljen. Nije vidljiv Vašoj publici.";
 export const SEQUENCE_UNPUBLISHED_WARNING =
     "Ova sekvenca nije zakazana za slanje. Pokrenite je da biste je poslali publici.";
 export const PRODUCT_EMPTY_WARNING =
-    "Vaš proizvod je prazan. Dodajte sadržaj da bi izgledao zanimljivije.";
+    "Vaš kurs je prazan. Dodajte sadržaj da bi izgledao zanimljivije.";
 export const BLOG_UPDATED_PREFIX = "Ažurirano";
 export const HEADER_HELP = "Pomoć";
 export const CHECKOUT_PAGE_ORDER_SUMMARY = "Pregled porudžbine";
@@ -1104,11 +1105,11 @@ export const BLOG_LIST_EMPTY_DESCRIPTION_PUBLIC =
     "Tim još nije objavio nijednu objavu.";
 export const BLOG_LIST_EMPTY_DESCRIPTION_PRIVATE =
     "Još niste objavili nijednu objavu.";
-export const PRODUCTS_LIST_EMPTY_TITLE = "Nema pronađenih proizvoda";
+export const PRODUCTS_LIST_EMPTY_TITLE = "Nema pronađenih kurseva";
 export const PRODUCTS_LIST_EMPTY_DESCRIPTION_PUBLIC =
-    "Tim još nije dodao nijedan proizvod.";
+    "Tim još nije dodao nijedan kurs.";
 export const PRODUCTS_LIST_EMPTY_DESCRIPTION_PRIVATE =
-    "Još niste dodali nijedan proizvod.";
+    "Još niste dodali nijedan kurs.";
 export const COMMUNITIES_LIST_EMPTY_TITLE = "Nema pronađenih zajednica";
 export const COMMUNITIES_LIST_EMPTY_DESCRIPTION_PUBLIC =
     "Tim još nije dodao nijednu zajednicu.";

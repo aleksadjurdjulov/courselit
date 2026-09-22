@@ -94,6 +94,7 @@ export async function getPageResponse(
                     tags: course.tags,
                     featuredImage: course.featuredImage,
                     courseId: course.courseId,
+                    slug: course.slug,
                     leadMagnet: course.leadMagnet,
                     defaultPaymentPlan: course.defaultPaymentPlan,
                     paymentPlans: (
@@ -237,7 +238,7 @@ export async function initSharedWidgets(ctx: GQLContext) {
             settings: {
                 links: [
                     {
-                        label: "Products",
+                        label: "Kursevi",
                         href: "/products",
                         isButton: false,
                         isPrimary: false,

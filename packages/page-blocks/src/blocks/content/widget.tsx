@@ -29,6 +29,20 @@ import {
 } from "@courselit/page-primitives";
 import { ThemeStyle } from "@courselit/page-models";
 
+function getLessonsLabel(count: number): string {
+    const abs = Math.abs(count || 0);
+    const mod10 = abs % 10;
+    const mod100 = abs % 100;
+
+    if (mod10 === 1 && mod100 !== 11) {
+        return "lekcija";
+    }
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
+        return "lekcije";
+    }
+    return "lekcija";
+}
+
 interface CourseWithGroups extends Course {
     groups: Group[];
     lessons: Lesson[];
@@ -213,7 +227,9 @@ export default function Widget({
                             {group}
                         </Text1>
                         <Badge variant="outline">
-                            {`${formattedCourse[group].length} lessons`}
+                            {`${formattedCourse[group].length} ${getLessonsLabel(
+                                formattedCourse[group].length,
+                            )}`}
                         </Badge>
                     </div>
                 </AccordionTrigger>
