@@ -46,6 +46,10 @@ export default function LoginSiteHeader({ fallback }: { fallback: ReactNode }) {
         return <>{fallback}</>;
     }
 
+    if (!fallback) {
+        return null;
+    }
+
     return (
         <header className="sticky top-0 z-[1000] bg-[#f4f1ed] shadow-[0_3px_20px_-3px_rgba(0,0,0,0.2)]">
             <div className="mx-auto flex w-full max-w-[1212px] items-center justify-between px-4">
