@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { ThemeContext } from "@components/contexts";
 import { authClient } from "@/lib/auth-client";
 import { useToast } from "@courselit/components-library";
+import "@/components/public/base-layout/login-site-header.css";
 
 export default function ClientSide() {
     const { theme } = useContext(ThemeContext);
@@ -30,13 +31,24 @@ export default function ClientSide() {
     };
 
     return (
-        <Section theme={theme.theme}>
-            <div className="flex flex-col gap-4">
-                <Text1 theme={theme.theme}>{LOGOUT_MESSAGE}</Text1>
-                <div>
-                    <Button theme={theme.theme} onClick={handleLogout}>
-                        {LOGOUT}
-                    </Button>
+        <Section theme={theme.theme} className="ff-login min-h-screen">
+            <div className="flex min-h-screen flex-col">
+                <div className="mx-auto flex w-full grow items-center justify-center px-4 lg:max-w-[1200px]">
+                    <div className="flex w-full flex-col items-center gap-4 lg:w-[360px]">
+                        <Text1
+                            theme={theme.theme}
+                            className="ff-login-copy text-center"
+                        >
+                            {LOGOUT_MESSAGE}
+                        </Text1>
+                        <Button
+                            theme={theme.theme}
+                            onClick={handleLogout}
+                            className="ff-login-button w-full"
+                        >
+                            {LOGOUT}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </Section>

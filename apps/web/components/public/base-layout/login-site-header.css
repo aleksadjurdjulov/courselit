@@ -1,13 +1,39 @@
 @import url("https://api.fontshare.com/v2/css?f[]=satoshi@500,700&display=swap");
 
+html .courselit-theme:has(.ff-login),
+html.dark .courselit-theme:has(.ff-login),
 .ff-login-page,
+html.dark .ff-login-page {
+    background-color: #f4f1ed !important;
+    color: #22262d;
+    --background: 34.3 24.1% 94.3%;
+    --foreground: 218.2 13.9% 15.5%;
+    --card: 0 0% 100%;
+    --card-foreground: 218.2 13.9% 15.5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 218.2 13.9% 15.5%;
+    --primary: 175.9 100% 34.3%;
+    --primary-foreground: 218.2 13.9% 15.5%;
+    --secondary: 35 20% 88.2%;
+    --secondary-foreground: 218.2 13.9% 15.5%;
+    --muted: 35 20% 88.2%;
+    --muted-foreground: 218.2 10% 35%;
+    --accent: 175.9 45% 90%;
+    --accent-foreground: 175.9 100% 22%;
+    --border: 34 15% 86%;
+    --input: 34 15% 86%;
+    --ring: 175.9 100% 34.3%;
+}
+
+.courselit-theme:has(.ff-login) .bg-background,
 .ff-login-page .bg-background {
     background-color: #f4f1ed !important;
+    color: #22262d;
 }
 
 .ff-login {
     background-color: #f4f1ed !important;
-    color: #22262d;
+    color: #22262d !important;
     font-family: Satoshi, Arial, sans-serif;
     font-size: 1.125rem;
     font-weight: 500;
@@ -23,19 +49,20 @@
 }
 
 .ff-login .ff-login-copy {
-    color: #22262d;
+    color: #22262d !important;
     font-size: 1.125rem;
     font-weight: 500;
     line-height: 1.5;
     text-align: center;
 }
 
+.courselit-theme:has(.ff-login) .ff-login-input,
 .ff-login .ff-login-input {
     height: 50px;
     border-radius: 10px;
     border: 1px solid #22262d33;
     background-color: #fff !important;
-    color: #22262d;
+    color: #22262d !important;
     font-size: 1.125rem;
     font-weight: 500;
     box-shadow: none;
@@ -51,6 +78,7 @@
     box-shadow: 0 0 0 2px #00afa333;
 }
 
+.courselit-theme:has(.ff-login) .ff-login-button,
 .ff-login .ff-login-button {
     min-height: 50px;
     height: auto;
@@ -72,6 +100,7 @@
     color: #f4f1ed !important;
 }
 
+.courselit-theme:has(.ff-login) .ff-login-button-secondary,
 .ff-login .ff-login-button-secondary {
     min-height: 50px;
     border-radius: 10px;

@@ -177,12 +177,6 @@ export default function LoginForm({
         }
     }, [showCode]);
 
-    useEffect(() => {
-        const page = document.querySelector(".courselit-theme");
-        page?.classList.add("ff-login-page");
-        return () => page?.classList.remove("ff-login-page");
-    }, []);
-
     const requestCode = async function (e: FormEvent) {
         e.preventDefault();
         setLoading(true);

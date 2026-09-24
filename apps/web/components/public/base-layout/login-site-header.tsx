@@ -32,7 +32,7 @@ export default function LoginSiteHeader({ fallback }: { fallback: ReactNode }) {
     const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
 
-    if (pathname !== "/login") {
+    if (pathname !== "/login" && pathname !== "/logout") {
         return <>{fallback}</>;
     }
 
