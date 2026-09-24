@@ -46,6 +46,7 @@ import { ADMIN_PERMISSIONS } from "@ui-config/constants";
 import { authClient } from "@/lib/auth-client";
 import type { RuntimeLoginProvider } from "@/lib/login-providers";
 import ExternalLoginButton from "@/components/auth/external-login-button";
+import "@/components/public/base-layout/login-site-header.css";
 
 export default function LoginForm({
     redirectTo,
@@ -176,6 +177,12 @@ export default function LoginForm({
         }
     }, [showCode]);
 
+    useEffect(() => {
+        const page = document.querySelector(".courselit-theme");
+        page?.classList.add("ff-login-page");
+        return () => page?.classList.remove("ff-login-page");
+    }, []);
+
     const requestCode = async function (e: FormEvent) {
         e.preventDefault();
         setLoading(true);
@@ -202,10 +209,10 @@ export default function LoginForm({
     };
 
     return (
-        <Section theme={theme.theme}>
-            <div className="flex flex-col gap-4 min-h-[80vh]">
-                <div className="flex justify-center grow items-center px-4 mx-auto lg:max-w-[1200px] w-full">
-                    <div className="flex flex-col gap-4">
+        <Section theme={theme.theme} className="ff-login min-h-screen">
+            <div className="flex min-h-screen flex-col gap-4">
+                <div className="mx-auto flex w-full grow items-center justify-center px-4 lg:max-w-[1200px]">
+                    <div className="flex w-full flex-col gap-4 lg:w-[360px]">
                         {siteinfo.logins?.includes(
                             Constants.LoginProvider.EMAIL,
                         ) && (
@@ -230,13 +237,13 @@ export default function LoginForm({
                                     <div>
                                         <Text1
                                             theme={theme.theme}
-                                            className="mb-4"
+                                            className="ff-login-copy mb-4"
                                         >
                                             {LOGIN_FORM_LABEL}
                                         </Text1>
                                         <Form
                                             onSubmit={requestCode}
-                                            className="flex flex-col gap-4 w-full lg:w-[360px] mx-auto"
+                                            className="mx-auto flex w-full flex-col gap-4"
                                         >
                                             <Input
                                                 type="email"
@@ -249,10 +256,12 @@ export default function LoginForm({
                                                     setEmail(e.target.value)
                                                 }
                                                 theme={theme.theme}
+                                                className="ff-login-input"
                                             />
                                             <Button
                                                 theme={theme.theme}
                                                 disabled={loading}
+                                                className="ff-login-button"
                                             >
                                                 {loading
                                                     ? LOADING
@@ -265,13 +274,13 @@ export default function LoginForm({
                                     <div>
                                         <Text1
                                             theme={theme.theme}
-                                            className="mb-4"
+                                            className="ff-login-copy mb-4"
                                         >
                                             {LOGIN_CODE_INTIMATION_MESSAGE}{" "}
                                             <strong>{email}</strong>
                                         </Text1>
                                         <Form
-                                            className="flex flex-col gap-4 mb-4 w-full lg:w-[360px] mx-auto"
+                                            className="mx-auto mb-4 flex w-full flex-col gap-4"
                                             onSubmit={signInUser}
                                         >
                                             <Input
@@ -286,10 +295,12 @@ export default function LoginForm({
                                                 }
                                                 theme={theme.theme}
                                                 ref={codeInputRef}
+                                                className="ff-login-input"
                                             />
                                             <Button
                                                 theme={theme.theme}
                                                 disabled={loading}
+                                                className="ff-login-button"
                                             >
                                                 {loading ? LOADING : BTN_LOGIN}
                                             </Button>
@@ -298,17 +309,17 @@ export default function LoginForm({
                                         <div className="flex justify-center items-center gap-1 text-sm">
                                             <Caption
                                                 theme={theme.theme}
-                                                className="text-center flex items-center gap-1"
+                                                className="ff-login-note flex items-center gap-1 text-center"
                                             >
                                                 {LOGIN_NO_CODE}
                                                 <button
                                                     onClick={requestCode}
-                                                    className="underline"
+                                                    className="ff-login-link"
                                                     disabled={loading}
                                                 >
                                                     <PageLink
                                                         theme={theme.theme}
-                                                        className="text-xs"
+                                                        className="ff-login-link text-sm"
                                                     >
                                                         {loading
                                                             ? LOADING
@@ -326,7 +337,7 @@ export default function LoginForm({
                                 key={provider.key}
                                 provider={provider}
                                 theme={theme.theme}
-                                className="w-full lg:w-[360px] mx-auto"
+                                className="ff-login-button-secondary mx-auto w-full"
                                 onClick={async () => {
                                     await authClient.signIn.sso({
                                         providerId: provider.providerId,
@@ -335,12 +346,13 @@ export default function LoginForm({
                                 }}
                             />
                         ))}
-                        <Caption theme={theme.theme} className="text-center">
+                        <Caption
+                            theme={theme.theme}
+                            className="ff-login-note text-center"
+                        >
                             {LOGIN_FORM_DISCLAIMER}
-                            <Link href="/p/terms">
-                                <span className="underline">
-                                    {LOGIN_FORM_TERMS_LINK}
-                                </span>
+                            <Link href="/p/terms" className="ff-login-link">
+                                {LOGIN_FORM_TERMS_LINK}
                             </Link>
                         </Caption>
                     </div>

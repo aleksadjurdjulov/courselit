@@ -47,6 +47,7 @@ import {
     SITE_SETTINGS_SECTION_MAILS,
     SITE_SETTINGS_SECTION_PAYMENT,
     TEMPLATES,
+    LOGIN_NAV_LOGO_ALT,
 } from "@ui-config/strings";
 import { NavSecondary } from "./nav-secondary";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -54,6 +55,7 @@ import { ComponentProps, useContext, useEffect, useState } from "react";
 import { CircularProgress } from "@components/circular-progress";
 import { hasPermissionToAccessSetupChecklist } from "@/lib/utils";
 import { ADMIN_PERMISSIONS } from "@ui-config/constants";
+import { isRegularUser } from "@/lib/is-regular-user";
 import { getSetupChecklist } from "@/app/(with-contexts)/dashboard/(sidebar)/action";
 const { permissions } = UIConstants;
 
@@ -100,21 +102,31 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/">
-                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
-                                    <Image
-                                        borderRadius={1}
-                                        src={siteInfo.logo?.file || ""}
-                                        alt="logo"
-                                        className="w-full h-full object-cover"
+                            {isRegularUser(profile) ? (
+                                <Link href="/dashboard/my-content">
+                                    <img
+                                        src="/future-fizio-hub-logo.png"
+                                        alt={LOGIN_NAV_LOGO_ALT}
+                                        className="h-8 w-auto max-w-[160px] object-left group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:object-cover"
                                     />
-                                </div>
-                                <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">
-                                        {siteInfo.title}
-                                    </span>
-                                </div>
-                            </Link>
+                                </Link>
+                            ) : (
+                                <Link href="/">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
+                                        <Image
+                                            borderRadius={1}
+                                            src={siteInfo.logo?.file || ""}
+                                            alt="logo"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold">
+                                            {siteInfo.title}
+                                        </span>
+                                    </div>
+                                </Link>
+                            )}
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

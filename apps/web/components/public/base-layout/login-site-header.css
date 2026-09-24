@@ -1,0 +1,108 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@500,700&display=swap");
+
+.ff-login-page,
+.ff-login-page .bg-background {
+    background-color: #f4f1ed !important;
+}
+
+.ff-login {
+    background-color: #f4f1ed !important;
+    color: #22262d;
+    font-family: Satoshi, Arial, sans-serif;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.ff-login p,
+.ff-login span,
+.ff-login a,
+.ff-login button,
+.ff-login input {
+    font-family: Satoshi, Arial, sans-serif;
+}
+
+.ff-login .ff-login-copy {
+    color: #22262d;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.ff-login .ff-login-input {
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #22262d33;
+    background-color: #fff !important;
+    color: #22262d;
+    font-size: 1.125rem;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.ff-login .ff-login-input::placeholder {
+    color: #22262d99;
+}
+
+.ff-login .ff-login-input:focus-visible {
+    border-color: #00afa3;
+    outline: none;
+    box-shadow: 0 0 0 2px #00afa333;
+}
+
+.ff-login .ff-login-button {
+    min-height: 50px;
+    height: auto;
+    border: none;
+    border-radius: 10px;
+    background-color: #00afa3 !important;
+    color: #22262d !important;
+    padding: 10px 40px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    box-shadow: none;
+    transition:
+        color 0.325s,
+        background-color 0.325s;
+}
+
+.ff-login .ff-login-button:hover:not(:disabled) {
+    background-color: #00afa3 !important;
+    color: #f4f1ed !important;
+}
+
+.ff-login .ff-login-button-secondary {
+    min-height: 50px;
+    border-radius: 10px;
+    border: 1px solid #22262d !important;
+    background-color: transparent !important;
+    color: #22262d !important;
+    font-size: 1.125rem;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+.ff-login .ff-login-button-secondary:hover:not(:disabled) {
+    border-color: #00afa3 !important;
+    background-color: transparent !important;
+    color: #00afa3 !important;
+}
+
+.ff-login .ff-login-note {
+    color: #22262db3;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.ff-login .ff-login-link {
+    color: #22262d;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ff-login .ff-login-link:hover {
+    color: #00afa3;
+}

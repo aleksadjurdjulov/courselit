@@ -13,6 +13,7 @@ import {
     PREVIEW_COURSE_MENU_ITEM,
     SIDEBAR_TEXT_COURSE_ABOUT,
     SIDEBAR_TEXT_COURSE_DISCUSSIONS,
+    LOGIN_NAV_LOGO_ALT,
 } from "@ui-config/strings";
 import { Profile, Constants } from "@courselit/common-models";
 import {
@@ -71,6 +72,8 @@ import {
 } from "@/lib/course-viewer-session-params";
 import { Badge } from "@/components/ui/badge";
 import ProductDiscussionPanel from "@/components/public/product-discussions/panel";
+import { isRegularUser } from "@/lib/is-regular-user";
+import "@/components/public/base-layout/future-fizio-learner.css";
 
 function MobileStateSync() {
     const { open, setOpenMobile, isMobile } = useSidebar();
@@ -149,7 +152,11 @@ export default function ProductPage({
                     "--sidebar-width-mobile": "20rem",
                 } as React.CSSProperties
             }
-            className="courselit-theme"
+            className={
+                isRegularUser(profile)
+                    ? "courselit-theme ff-learner"
+                    : "courselit-theme"
+            }
         >
             <AppSidebar
                 course={product}
@@ -192,7 +199,9 @@ export default function ProductPage({
                                 </TooltipContent>
                             </Tooltip>
                         )}
-                        <NextThemeSwitcher variant="ghost" />
+                        {!isRegularUser(profile) && (
+                            <NextThemeSwitcher variant="ghost" />
+                        )}
                         <Tooltip>
                             <TooltipTrigger>
                                 <Button variant="ghost" size="icon" asChild>
@@ -312,19 +321,29 @@ export function AppSidebar({
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard/my-content">
-                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
-                                    <Image
-                                        borderRadius={1}
-                                        src={siteinfo.logo?.file || ""}
-                                        alt="logo"
-                                        className="w-full h-full object-cover"
+                            {isRegularUser(profile) ? (
+                                <Link href="/dashboard/my-content">
+                                    <img
+                                        src="/future-fizio-hub-logo.png"
+                                        alt={LOGIN_NAV_LOGO_ALT}
+                                        className="h-8 w-auto max-w-[160px]"
                                     />
-                                </div>
-                                <div className="grid flex-1 text-left leading-tight text-foreground font-semibold">
-                                    {siteinfo.title}
-                                </div>
-                            </Link>
+                                </Link>
+                            ) : (
+                                <Link href="/dashboard/my-content">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
+                                        <Image
+                                            borderRadius={1}
+                                            src={siteinfo.logo?.file || ""}
+                                            alt="logo"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="grid flex-1 text-left leading-tight text-foreground font-semibold">
+                                        {siteinfo.title}
+                                    </div>
+                                </Link>
+                            )}
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

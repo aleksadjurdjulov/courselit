@@ -3,6 +3,7 @@ import { State, WidgetInstance } from "@courselit/common-models";
 import { Footer, Header } from "@courselit/page-blocks";
 import { Toaster } from "@courselit/components-library";
 import EditableWidget from "./editable-widget";
+import LoginSiteHeader from "../login-site-header";
 import { generateThemeStyles } from "@/lib/theme-styles";
 import { Theme } from "@courselit/page-models";
 
@@ -79,20 +80,24 @@ const Template = (props: TemplateProps) => {
 
     return (
         <div className="flex flex-col bg-background courselit-theme">
-            {header && (
-                <EditableWidget
-                    item={header}
-                    editing={editing}
-                    pageData={normalizedPageData}
-                    onEditClick={onEditClick}
-                    allowsWidgetAddition={true}
-                    onAddWidgetBelow={onAddWidgetBelow}
-                    onMoveWidgetDown={onMoveWidgetDown}
-                    onMoveWidgetUp={onMoveWidgetUp}
-                    index={0}
-                    state={state}
-                />
-            )}
+            <LoginSiteHeader
+                fallback={
+                    header ? (
+                        <EditableWidget
+                            item={header}
+                            editing={editing}
+                            pageData={normalizedPageData}
+                            onEditClick={onEditClick}
+                            allowsWidgetAddition={true}
+                            onAddWidgetBelow={onAddWidgetBelow}
+                            onMoveWidgetDown={onMoveWidgetDown}
+                            onMoveWidgetUp={onMoveWidgetUp}
+                            index={0}
+                            state={state}
+                        />
+                    ) : null
+                }
+            />
             {childrenOnTop && (
                 <div className="min-h-screen bg-background">
                     {children}

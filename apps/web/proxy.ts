@@ -41,6 +41,14 @@ export async function proxy(request: NextRequest) {
         });
     }
 
+    if (request.nextUrl.pathname === "/verify-domain") {
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
+    }
+
     if (request.nextUrl.pathname.startsWith("/course/")) {
         requestHeaders.set(
             COURSE_VIEWER_CURRENT_URL_HEADER,

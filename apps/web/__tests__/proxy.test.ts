@@ -66,6 +66,15 @@ describe("unauthenticated page access", () => {
         expect(getSession).not.toHaveBeenCalled();
     });
 
+    it("lets verify-domain run without calling itself", async () => {
+        const response = await proxy(
+            new NextRequest("https://school.example/verify-domain"),
+        );
+
+        expect(global.fetch).not.toHaveBeenCalled();
+        expect(response.headers.get("x-middleware-next")).toBe("1");
+    });
+
     it("allows the login page without a session", async () => {
         const response = await proxy(
             new NextRequest("https://school.example/login"),
