@@ -7,8 +7,12 @@ function isLoginPath(pathname: string) {
     return pathname === "/login" || pathname.startsWith("/login/");
 }
 
+function isPublicLegalPath(pathname: string) {
+    return pathname === "/p/terms" || pathname === "/p/privacy";
+}
+
 function requiresAuthentication(pathname: string) {
-    if (isLoginPath(pathname)) {
+    if (isLoginPath(pathname) || isPublicLegalPath(pathname)) {
         return false;
     }
     if (pathname.startsWith("/api/") || pathname === "/healthy") {

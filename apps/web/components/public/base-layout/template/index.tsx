@@ -1,11 +1,17 @@
+"use client";
+
 import React, { ReactNode } from "react";
 import { State, WidgetInstance } from "@courselit/common-models";
 import { Footer, Header } from "@courselit/page-blocks";
 import { Toaster } from "@courselit/components-library";
 import EditableWidget from "./editable-widget";
-import LoginSiteHeader from "../login-site-header";
+import LoginSiteHeader, {
+    isFutureFizioDocumentPath,
+} from "../login-site-header";
 import { generateThemeStyles } from "@/lib/theme-styles";
 import { Theme } from "@courselit/page-models";
+import { usePathname } from "next/navigation";
+import "@/components/public/base-layout/future-fizio-learner.css";
 
 type PageData = Record<string, unknown> & {
     pageType?: "product" | "site" | "blog" | "community";
@@ -40,6 +46,8 @@ const Template = (props: TemplateProps) => {
         state,
     } = props;
 
+    const pathname = usePathname();
+    const brandedDocument = isFutureFizioDocumentPath(pathname);
     const normalizedPageData = {
         ...pageData,
         pageType: pageData.pageType ?? "site",
@@ -79,7 +87,9 @@ const Template = (props: TemplateProps) => {
     );
 
     return (
-        <div className="flex flex-col bg-background courselit-theme">
+        <div
+            className={`flex flex-col bg-background courselit-theme${brandedDocument ? " ff-learner" : ""}`}
+        >
             <LoginSiteHeader
                 fallback={
                     header ? (

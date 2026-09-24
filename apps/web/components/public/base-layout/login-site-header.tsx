@@ -28,11 +28,21 @@ const NAV_LINKS = [
 const linkClassName =
     "font-[Satoshi,Arial,sans-serif] text-[1.125rem] font-bold leading-none text-[#22262d] no-underline transition-colors duration-300 hover:text-[#00afa3]";
 
+export const FUTURE_FIZIO_DOCUMENT_PATHS = ["/p/terms", "/p/privacy"];
+
+export function isFutureFizioDocumentPath(pathname: string | null) {
+    return pathname !== null && FUTURE_FIZIO_DOCUMENT_PATHS.includes(pathname);
+}
+
 export default function LoginSiteHeader({ fallback }: { fallback: ReactNode }) {
     const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
 
-    if (pathname !== "/login" && pathname !== "/logout") {
+    if (
+        pathname !== "/login" &&
+        pathname !== "/logout" &&
+        !isFutureFizioDocumentPath(pathname)
+    ) {
         return <>{fallback}</>;
     }
 

@@ -3,7 +3,8 @@
 html .ff-learner,
 html .ff-learner.courselit-theme,
 html.dark .ff-learner,
-html.dark .ff-learner.courselit-theme {
+html.dark .ff-learner.courselit-theme,
+html .dark .courselit-theme.ff-learner {
     background-color: #f4f1ed;
     color: #22262d;
     --background: 34.3 24.1% 94.3%;

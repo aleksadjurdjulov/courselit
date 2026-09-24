@@ -22,7 +22,9 @@ import { useToast } from "@courselit/components-library";
 import {
     LOGIN_CODE_INTIMATION_MESSAGE,
     LOGIN_FORM_DISCLAIMER,
+    LOGIN_FORM_DISCLAIMER_AND,
     LOGIN_FORM_TERMS_LINK,
+    LOGIN_FORM_PRIVACY_LINK,
     LOGIN_CODE_PLACEHOLDER,
     LOGIN_EMAIL_PLACEHOLDER,
     BTN_LOGIN,
@@ -346,6 +348,10 @@ export function LoginForm({
                 {LOGIN_FORM_DISCLAIMER}
                 <Link href="/p/terms">
                     <span className="underline">{LOGIN_FORM_TERMS_LINK}</span>
+                </Link>
+                {LOGIN_FORM_DISCLAIMER_AND}
+                <Link href="/p/privacy">
+                    <span className="underline">{LOGIN_FORM_PRIVACY_LINK}</span>
                 </Link>
             </Caption>
             <RecaptchaScriptLoader />

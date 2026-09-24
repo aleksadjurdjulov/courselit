@@ -268,7 +268,9 @@ export const BTN_LOGIN_GET_CODE = "Pošalji kod";
 export const LOGIN_CODE_INTIMATION_MESSAGE =
     "Unesite kod koji smo poslali na vaš email";
 export const LOGIN_FORM_DISCLAIMER = "Slanjem prihvatate ";
+export const LOGIN_FORM_DISCLAIMER_AND = " i ";
 export const LOGIN_FORM_TERMS_LINK = "Uslove korišćenja";
+export const LOGIN_FORM_PRIVACY_LINK = "Politiku privatnosti";
 export const LOGIN_EMAIL_PLACEHOLDER = "Unesite Vašu mejl adresu";
 export const LOGIN_CODE_PLACEHOLDER = "Kod";
 export const LOGIN_ERROR_SIGNIN_PREFIX = "Trenutno nije moguća prijava:";

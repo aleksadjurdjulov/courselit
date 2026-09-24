@@ -84,6 +84,17 @@ describe("unauthenticated page access", () => {
         expect(getSession).not.toHaveBeenCalled();
     });
 
+    it("allows terms and privacy pages without a session", async () => {
+        for (const path of ["/p/terms", "/p/privacy"]) {
+            const response = await proxy(
+                new NextRequest(`https://school.example${path}`),
+            );
+
+            expect(response.headers.get("x-middleware-next")).toBe("1");
+        }
+        expect(getSession).not.toHaveBeenCalled();
+    });
+
     it("redirects other pages to login when signed out", async () => {
         const response = await proxy(
             new NextRequest("https://school.example/products?tab=courses"),

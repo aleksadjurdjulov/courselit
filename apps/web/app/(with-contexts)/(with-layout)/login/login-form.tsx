@@ -25,7 +25,9 @@ import {
     BTN_LOGIN_NO_CODE,
     LOGIN_FORM_LABEL,
     LOGIN_FORM_DISCLAIMER,
+    LOGIN_FORM_DISCLAIMER_AND,
     LOGIN_FORM_TERMS_LINK,
+    LOGIN_FORM_PRIVACY_LINK,
     LOGIN_EMAIL_PLACEHOLDER,
     LOGIN_CODE_PLACEHOLDER,
     LOGIN_ERROR_SIGNIN_PREFIX,
@@ -347,6 +349,10 @@ export default function LoginForm({
                             {LOGIN_FORM_DISCLAIMER}
                             <Link href="/p/terms" className="ff-login-link">
                                 {LOGIN_FORM_TERMS_LINK}
+                            </Link>
+                            {LOGIN_FORM_DISCLAIMER_AND}
+                            <Link href="/p/privacy" className="ff-login-link">
+                                {LOGIN_FORM_PRIVACY_LINK}
                             </Link>
                         </Caption>
                     </div>
