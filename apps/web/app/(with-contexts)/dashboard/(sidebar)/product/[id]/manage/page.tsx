@@ -19,6 +19,7 @@ import ProductPublishing from "./components/product-publishing";
 import Certificates from "./components/certificates";
 import ProductDeletion from "./components/product-deletion";
 import ProductDiscussions from "./components/product-discussions";
+import ProductBunnyEmbed from "./components/product-bunny-embed";
 
 const { permissions } = UIConstants;
 
@@ -107,6 +108,7 @@ export default function SettingsPage() {
                     loading={loading}
                 />
                 <ProductDiscussions product={product} />
+                <ProductBunnyEmbed product={product} />
                 <DownloadOptions
                     product={product}
                     paymentPlans={paymentPlans}

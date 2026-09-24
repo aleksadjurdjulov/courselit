@@ -6,8 +6,9 @@ import { AddressContext } from "@components/contexts";
 import { InternalCourse } from "@courselit/orm-models";
 
 export type ProductWithAdminProps = Partial<
-    Omit<InternalCourse, "paymentPlans"> &
+    Omit<InternalCourse, "paymentPlans" | "bunnyEmbedTokenKey"> &
         Pick<Course, "paymentPlans"> & {
+            bunnyEmbedTokenConfigured?: boolean;
             lessons: (Pick<
                 Lesson,
                 "title" | "groupId" | "lessonId" | "type" | "published"
@@ -103,6 +104,7 @@ export default function useProduct(id?: string | null): {
                     leadMagnet
                     defaultPaymentPlan
                     certificate
+                    bunnyEmbedTokenConfigured
                 }
             }
         `;

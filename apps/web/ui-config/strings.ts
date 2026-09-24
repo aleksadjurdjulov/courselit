@@ -167,6 +167,18 @@ export const COURSE_DISCUSSIONS_CONTENT_TOO_LONG =
 export const COURSE_DISCUSSIONS_ADMIN_REPORTS = "Prijave";
 export const COURSE_DISCUSSIONS_ADMIN_VIEW_REPORTS =
     "Upravljaj prijavljenim sadržajem";
+export const BUNNY_EMBED_TOKEN_TITLE = "Bunny embed token";
+export const BUNNY_EMBED_TOKEN_DESCRIPTION =
+    "Token authentication key iz Bunny Stream biblioteke ovog kursa. Ako ključ nije sačuvan, embedi se prikazuju onakvi kakvi jesu. Isključivanje embed view token authentication u Bunny.net i dalje pušta video.";
+export const BUNNY_EMBED_TOKEN_LABEL = "Token authentication key";
+export const BUNNY_EMBED_TOKEN_PLACEHOLDER =
+    "Nalepi ključ iz Stream → Security";
+export const BUNNY_EMBED_TOKEN_CONFIGURED =
+    "Ključ je sačuvan. Unesi novi da ga zameniš.";
+export const BUNNY_EMBED_TOKEN_SAVED = "Bunny token je sačuvan";
+export const BUNNY_EMBED_TOKEN_REMOVED = "Bunny token je uklonjen";
+export const BUNNY_EMBED_TOKEN_SAVE_FAILED = "Bunny token nije sačuvan";
+export const BUNNY_EMBED_TOKEN_REMOVE = "Ukloni ključ";
 export const COURSE_DISCUSSIONS_ADMIN_NO_REPORTS = "Nema prijava";
 export const COURSE_DISCUSSIONS_ADMIN_NO_REPORTS_DESCRIPTION =
     "Prijavljeni komentari iz diskusija će se pojaviti ovde.";

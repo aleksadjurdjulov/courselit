@@ -2215,6 +2215,56 @@ describe("updateCourse", () => {
         );
     });
 
+    it("stores a Bunny embed token key without returning it", async () => {
+        const course = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("bunny-course"),
+            title: id("bunny-course-title"),
+            creatorId: adminUser.userId,
+            lessons: [],
+            type: "course",
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("bunny-course-slug"),
+            published: false,
+        });
+
+        const ctx = {
+            subdomain: testDomain,
+            user: adminUser,
+            address: "",
+        };
+        const updatedCourse = await updateCourse(
+            {
+                id: course.courseId,
+                bunnyEmbedTokenKey: "  library-token-key  ",
+            },
+            ctx,
+        );
+
+        expect(updatedCourse.bunnyEmbedTokenKey).toBeUndefined();
+        expect(updatedCourse.bunnyEmbedTokenConfigured).toBe(true);
+        const stored = await CourseModel.findOne({
+            courseId: course.courseId,
+        }).select("bunnyEmbedTokenKey");
+        expect(stored?.bunnyEmbedTokenKey).toBe("library-token-key");
+
+        const clearedCourse = await updateCourse(
+            {
+                id: course.courseId,
+                bunnyEmbedTokenKey: "   ",
+            },
+            ctx,
+        );
+
+        expect(clearedCourse.bunnyEmbedTokenConfigured).toBe(false);
+        const cleared = await CourseModel.findOne({
+            courseId: course.courseId,
+        }).select("bunnyEmbedTokenKey");
+        expect(cleared?.bunnyEmbedTokenKey).toBe("");
+    });
+
     it("updates one property on an incomplete draft blog", async () => {
         const course = await CourseModel.create({
             domain: testDomain._id,

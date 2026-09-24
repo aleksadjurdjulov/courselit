@@ -140,11 +140,17 @@ async function formatCourse(
                 (groupB.rank ?? Number.MAX_SAFE_INTEGER),
         );
 
+    const bunnyEmbedTokenConfigured = Boolean(
+        course!.bunnyEmbedTokenKey?.trim(),
+    );
+    delete course!.bunnyEmbedTokenKey;
+
     const result = {
         ...course,
         groups: sortedGroups,
         paymentPlans,
         isPreview,
+        bunnyEmbedTokenConfigured,
     };
     return result;
 }
@@ -246,6 +252,19 @@ export const updateCourse = async (
 
     for (const key of Object.keys(courseData)) {
         if (key === "id" || key === "slug") {
+            continue;
+        }
+
+        if (key === "bunnyEmbedTokenKey") {
+            const raw = courseData.bunnyEmbedTokenKey;
+            const tokenKey = typeof raw === "string" ? raw.trim() : "";
+            const courseDocument = course as any;
+            if (!courseDocument.schema.path("bunnyEmbedTokenKey")) {
+                courseDocument.schema.add({
+                    bunnyEmbedTokenKey: { type: String },
+                });
+            }
+            courseDocument.set("bunnyEmbedTokenKey", tokenKey);
             continue;
         }
 

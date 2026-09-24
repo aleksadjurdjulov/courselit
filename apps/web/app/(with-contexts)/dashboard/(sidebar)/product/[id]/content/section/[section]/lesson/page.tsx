@@ -590,6 +590,7 @@ export default function LessonPage() {
                                     </Label>
                                     <LessonContentRenderer
                                         lesson={lesson}
+                                        courseId={productId}
                                         errors={errors}
                                         onContentChange={setContent}
                                         onLessonChange={(updates) => {

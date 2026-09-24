@@ -178,6 +178,10 @@ const courseType = new GraphQLObjectType({
         sales: { type: GraphQLFloat },
         customers: { type: GraphQLInt },
         certificate: { type: GraphQLBoolean },
+        bunnyEmbedTokenConfigured: {
+            type: new GraphQLNonNull(GraphQLBoolean),
+            resolve: (course) => Boolean(course.bunnyEmbedTokenConfigured),
+        },
     },
 });
 
@@ -205,6 +209,7 @@ const courseUpdateInput = new GraphQLInputObjectType({
         leadMagnet: { type: GraphQLBoolean },
         certificate: { type: GraphQLBoolean },
         discussions: { type: GraphQLBoolean },
+        bunnyEmbedTokenKey: { type: GraphQLString },
     },
 });
 

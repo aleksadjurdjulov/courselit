@@ -5,7 +5,7 @@ import {
     GraphQLString,
 } from "graphql";
 import types from "./types";
-import { getLesson, getLessonDetails } from "./logic";
+import { getLesson, getLessonDetails, signLessonEmbed } from "./logic";
 import GQLContext from "../../models/GQLContext";
 
 export default {
@@ -41,5 +41,21 @@ export default {
             }: { id: string; courseId?: string; preview?: boolean },
             context: GQLContext,
         ) => getLessonDetails(id, context, courseId, preview),
+    },
+    signLessonEmbed: {
+        type: new GraphQLNonNull(GraphQLString),
+        args: {
+            courseId: {
+                type: new GraphQLNonNull(GraphQLString),
+            },
+            html: {
+                type: new GraphQLNonNull(GraphQLString),
+            },
+        },
+        resolve: (
+            _: any,
+            { courseId, html }: { courseId: string; html: string },
+            context: GQLContext,
+        ) => signLessonEmbed(courseId, html, context),
     },
 };

@@ -19,7 +19,7 @@ import {
     MIMETYPE_AUDIO,
     MIMETYPE_PDF,
 } from "@ui-config/constants";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AddressContext, ProfileContext } from "@components/contexts";
 import { FetchBuilder } from "@courselit/utils";
 import { Textarea } from "@components/ui/textarea";
@@ -33,6 +33,70 @@ interface LessonContentRendererProps {
     errors: Partial<Record<keyof Lesson, string>>;
     onContentChange: (content: { value: string }) => void;
     onLessonChange: (updates: Partial<Lesson>) => void;
+    courseId?: string;
+}
+
+function EmbedPreview({ html, courseId }: { html: string; courseId?: string }) {
+    const address = useContext(AddressContext);
+    const needsSignature = Boolean(
+        courseId && html.includes("mediadelivery.net"),
+    );
+    const [signed, setSigned] = useState<{
+        html: string;
+        value: string;
+    } | null>(null);
+
+    useEffect(() => {
+        if (!needsSignature) {
+            return;
+        }
+
+        let cancelled = false;
+        const handle = setTimeout(async () => {
+            const query = `
+                query ($courseId: String!, $html: String!) {
+                    signedEmbed: signLessonEmbed(courseId: $courseId, html: $html)
+                }
+            `;
+            const fetch = new FetchBuilder()
+                .setUrl(`${address.backend}/api/graph`)
+                .setPayload({
+                    query,
+                    variables: { courseId, html },
+                })
+                .setIsGraphQLEndpoint(true)
+                .build();
+
+            try {
+                const response = await fetch.exec();
+                if (!cancelled) {
+                    setSigned({
+                        html,
+                        value: response?.signedEmbed || html,
+                    });
+                }
+            } catch {
+                if (!cancelled) {
+                    setSigned({ html, value: html });
+                }
+            }
+        }, 300);
+
+        return () => {
+            cancelled = true;
+            clearTimeout(handle);
+        };
+    }, [address.backend, courseId, html, needsSignature]);
+
+    if (!needsSignature) {
+        return <LessonEmbedViewer content={{ value: html }} />;
+    }
+
+    if (signed?.html !== html) {
+        return null;
+    }
+
+    return <LessonEmbedViewer content={{ value: signed.value }} />;
 }
 
 export function LessonContentRenderer({
@@ -40,6 +104,7 @@ export function LessonContentRenderer({
     errors,
     onContentChange,
     onLessonChange,
+    courseId,
 }: LessonContentRendererProps) {
     const address = useContext(AddressContext);
     const { profile } = useContext(ProfileContext);
@@ -138,7 +203,7 @@ export function LessonContentRenderer({
                         <p className="text-sm text-red-500">{errors.content}</p>
                     )}
                     {embedURL && (
-                        <LessonEmbedViewer content={{ value: embedURL }} />
+                        <EmbedPreview html={embedURL} courseId={courseId} />
                     )}
                 </div>
             );

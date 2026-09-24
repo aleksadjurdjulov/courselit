@@ -38,6 +38,7 @@ import ActivityModel from "@/models/Activity";
 import UserModel from "../../models/User";
 import { replaceTempMediaWithSealedMediaInProseMirrorDoc } from "@/lib/replace-temp-media-with-sealed-media-in-prosemirror-doc";
 import { canManageCourseInContext } from "../courses/permissions";
+import { signBunnyEmbedHtml } from "@/lib/bunny-embed-token";
 
 const { permissions, quiz, scorm } = constants;
 
@@ -169,7 +170,72 @@ export const getLessonDetails = async (
         return removeCorrectAnswersProp(lesson);
     }
 
+    await applyBunnyEmbedToken(lesson);
+
     return lesson;
+};
+
+async function applyBunnyEmbedToken(
+    lesson: Lesson & { unmarkModified(path: string): void },
+) {
+    if (lesson.type !== constants.embed) {
+        return;
+    }
+
+    const content = lesson.content as { value?: unknown } | null;
+    if (!content || typeof content.value !== "string" || !content.value) {
+        return;
+    }
+
+    const course = await CourseModel.findOne({
+        courseId: lesson.courseId,
+        domain: lesson.domain,
+    })
+        .select("bunnyEmbedTokenKey")
+        .lean();
+    const tokenKey = course?.bunnyEmbedTokenKey?.trim();
+    if (!tokenKey) {
+        return;
+    }
+
+    const signedValue = signBunnyEmbedHtml(content.value, tokenKey);
+    if (signedValue === content.value) {
+        return;
+    }
+
+    lesson.content = {
+        ...content,
+        value: signedValue,
+    };
+    // The saved lesson stays unsigned so clearing the key, or turning Bunny
+    // auth off, serves the original embed again.
+    lesson.unmarkModified("content");
+}
+
+export const signLessonEmbed = async (
+    courseId: string,
+    html: string,
+    ctx: GQLContext,
+) => {
+    checkIfAuthenticated(ctx);
+
+    const course = await CourseModel.findOne({
+        courseId,
+        domain: ctx.subdomain._id,
+    })
+        .select("creatorId bunnyEmbedTokenKey")
+        .lean();
+
+    if (!course || !canManageCourseInContext(course, ctx)) {
+        throw new Error(responses.action_not_allowed);
+    }
+
+    const tokenKey = String(course.bunnyEmbedTokenKey || "").trim();
+    if (!tokenKey) {
+        return html;
+    }
+
+    return signBunnyEmbedHtml(html, tokenKey);
 };
 
 export type LessonWithStringContent = Omit<Lesson, "content"> & {

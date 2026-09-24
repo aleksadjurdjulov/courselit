@@ -10,9 +10,16 @@ import {
     getAllLessons,
     getLessonDetails,
     markLessonCompleted,
+    signLessonEmbed,
 } from "../logic";
 import { responses } from "@/config/strings";
 import { sealMedia } from "@/services/medialit";
+import { createHash } from "crypto";
+import {
+    BUNNY_EMBED_TOKEN_TTL_SECONDS,
+    signBunnyEmbedHtml,
+    signBunnyEmbedUrl,
+} from "@/lib/bunny-embed-token";
 
 jest.mock("@/services/medialit", () => ({
     deleteMedia: jest.fn(),
@@ -622,5 +629,211 @@ describe("Lesson visibility and progress", () => {
                 studentCtx,
             ),
         ).rejects.toThrow(responses.drip_not_released);
+    });
+});
+
+describe("Bunny embed view token", () => {
+    const now = 1_700_000_000_000;
+    const videoId = "eb1c4f77-0cda-46be-b47d-1118ad7c2ffe";
+    const embedHtml = `<iframe src="https://iframe.mediadelivery.net/embed/759/${videoId}?autoplay=false"></iframe>`;
+    const tokenKey = "library-token-key";
+
+    it("signs Bunny embed URLs and leaves everything else unchanged", () => {
+        const expires = Math.floor(now / 1000) + BUNNY_EMBED_TOKEN_TTL_SECONDS;
+        const expectedToken = createHash("sha256")
+            .update(`${tokenKey}${videoId}${expires}`)
+            .digest("hex");
+        const signed = new URL(
+            signBunnyEmbedUrl(
+                `https://player.mediadelivery.net/embed/759/${videoId}?autoplay=false`,
+                `  ${tokenKey}  `,
+                now,
+            ),
+        );
+
+        expect(signed.searchParams.get("token")).toBe(expectedToken);
+        expect(signed.searchParams.get("expires")).toBe(String(expires));
+        expect(signed.searchParams.get("autoplay")).toBe("false");
+        expect(
+            signBunnyEmbedUrl(
+                "https://www.youtube.com/embed/abc",
+                tokenKey,
+                now,
+            ),
+        ).toBe("https://www.youtube.com/embed/abc");
+        expect(signBunnyEmbedHtml(embedHtml, "   ", now)).toBe(embedHtml);
+        expect(signBunnyEmbedHtml(embedHtml, tokenKey, now)).toContain(
+            `token=${expectedToken}`,
+        );
+    });
+});
+
+describe("getLessonDetails Bunny embed token", () => {
+    const suite = `bunny-embed-${Date.now()}`;
+    const localId = (suffix: string) => `${suite}-${suffix}`;
+    const embedHtml =
+        '<iframe src="https://iframe.mediadelivery.net/embed/759/eb1c4f77-0cda-46be-b47d-1118ad7c2ffe"></iframe>';
+    const youtubeHtml =
+        '<iframe src="https://www.youtube.com/embed/abc123"></iframe>';
+
+    let testDomain: any;
+    let manager: any;
+    let outsider: any;
+    let course: any;
+    let embedLesson: any;
+    let youtubeLesson: any;
+    let guestCtx: any;
+    let managerCtx: any;
+    let outsiderCtx: any;
+
+    beforeAll(async () => {
+        testDomain = await DomainModel.create({
+            name: localId("domain"),
+            email: `${localId("domain")}@example.com`,
+            features: [],
+        });
+        manager = await UserModel.create({
+            domain: testDomain._id,
+            userId: localId("manager"),
+            email: `${localId("manager")}@example.com`,
+            name: "Manager",
+            active: true,
+            permissions: ["course:manage_any"],
+            unsubscribeToken: localId("unsubscribe-manager"),
+            purchases: [],
+        });
+        outsider = await UserModel.create({
+            domain: testDomain._id,
+            userId: localId("outsider"),
+            email: `${localId("outsider")}@example.com`,
+            name: "Outsider",
+            active: true,
+            permissions: [],
+            unsubscribeToken: localId("unsubscribe-outsider"),
+            purchases: [],
+        });
+
+        const groupId = localId("group");
+        course = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: localId("course"),
+            title: localId("course-title"),
+            creatorId: manager.userId,
+            type: "course",
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: localId("slug"),
+            published: true,
+            lessons: [],
+            groups: [
+                {
+                    _id: groupId,
+                    name: "Section",
+                    lessonsOrder: [],
+                    rank: 1,
+                    collapsed: true,
+                    drip: {
+                        status: false,
+                        type: "relative-date",
+                    },
+                },
+            ],
+        });
+        embedLesson = await LessonModel.create({
+            domain: testDomain._id,
+            courseId: course.courseId,
+            lessonId: localId("embed"),
+            title: "Bunny",
+            type: Constants.LessonType.EMBED,
+            published: true,
+            requiresEnrollment: false,
+            content: { value: embedHtml },
+            creatorId: manager.userId,
+            groupId,
+        });
+        youtubeLesson = await LessonModel.create({
+            domain: testDomain._id,
+            courseId: course.courseId,
+            lessonId: localId("youtube"),
+            title: "YouTube",
+            type: Constants.LessonType.EMBED,
+            published: true,
+            requiresEnrollment: false,
+            content: { value: youtubeHtml },
+            creatorId: manager.userId,
+            groupId,
+        });
+        guestCtx = { subdomain: testDomain };
+        managerCtx = { user: manager, subdomain: testDomain };
+        outsiderCtx = { user: outsider, subdomain: testDomain };
+    });
+
+    afterAll(async () => {
+        await LessonModel.deleteMany({ domain: testDomain._id });
+        await CourseModel.deleteMany({ domain: testDomain._id });
+        await UserModel.deleteMany({ domain: testDomain._id });
+        await DomainModel.deleteOne({ _id: testDomain._id });
+    });
+
+    it("returns the saved embed when the course has no token key", async () => {
+        const lesson = await getLessonDetails(
+            embedLesson.lessonId,
+            guestCtx,
+            course.courseId,
+        );
+
+        expect(lesson.content.value).toBe(embedHtml);
+        expect(
+            await signLessonEmbed(course.courseId, embedHtml, managerCtx),
+        ).toBe(embedHtml);
+    });
+
+    it("signs Bunny embeds for viewers without storing the token", async () => {
+        course.bunnyEmbedTokenKey = "library-token-key";
+        await course.save();
+
+        const lesson = await getLessonDetails(
+            embedLesson.lessonId,
+            guestCtx,
+            course.courseId,
+        );
+        const signedUrl = new URL(
+            lesson.content.value.match(/src="([^"]+)"/)[1],
+        );
+
+        expect(signedUrl.searchParams.get("token")).toHaveLength(64);
+        expect(signedUrl.searchParams.get("expires")).toBeTruthy();
+
+        const stored = await LessonModel.findOne({
+            lessonId: embedLesson.lessonId,
+        });
+        expect(stored.content.value).toBe(embedHtml);
+
+        const youtube = await getLessonDetails(
+            youtubeLesson.lessonId,
+            guestCtx,
+            course.courseId,
+        );
+        expect(youtube.content.value).toBe(youtubeHtml);
+    });
+
+    it("stops signing after the token key is cleared", async () => {
+        course.bunnyEmbedTokenKey = "   ";
+        await course.save();
+
+        const lesson = await getLessonDetails(
+            embedLesson.lessonId,
+            guestCtx,
+            course.courseId,
+        );
+
+        expect(lesson.content.value).toBe(embedHtml);
+    });
+
+    it("rejects embed signing for users who cannot manage the course", async () => {
+        await expect(
+            signLessonEmbed(course.courseId, embedHtml, outsiderCtx),
+        ).rejects.toThrow(responses.action_not_allowed);
     });
 });

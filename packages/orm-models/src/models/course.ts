@@ -21,6 +21,7 @@ export interface InternalCourse extends Omit<Course, "paymentPlans"> {
     customers: string[];
     certificate?: boolean;
     discussions: boolean;
+    bunnyEmbedTokenKey?: string;
 }
 
 export const CourseSchema = new mongoose.Schema<InternalCourse>(
@@ -83,6 +84,7 @@ export const CourseSchema = new mongoose.Schema<InternalCourse>(
         leadMagnet: { type: Boolean, required: true, default: false },
         certificate: Boolean,
         discussions: { type: Boolean, required: true, default: false },
+        bunnyEmbedTokenKey: { type: String },
     },
     {
         timestamps: true,
