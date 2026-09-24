@@ -2,6 +2,7 @@ import React from "react";
 import { extractHeadings } from "@courselit/text-editor";
 import { Header2, Link } from "@courselit/page-primitives";
 import type { ThemeStyle } from "@courselit/page-models";
+import { TABLE_OF_CONTENT_HEADER } from "@ui-config/strings";
 
 interface TableOfContentProps {
     json: Record<string, unknown>;
@@ -11,7 +12,7 @@ interface TableOfContentProps {
 
 export function TableOfContent({
     json,
-    contentTableHeader = "Table of Contents",
+    contentTableHeader = TABLE_OF_CONTENT_HEADER,
     theme,
 }: TableOfContentProps) {
     let headings: { text: string; id: string }[] = [];

@@ -9,8 +9,12 @@ import {
 import { Constants } from "@courselit/common-models";
 import { BadgeCheck, Download } from "lucide-react";
 import { BookOpen } from "lucide-react";
-import { capitalize } from "@courselit/utils";
 import { Badge } from "@components/ui/badge";
+import {
+    COURSE_TYPE_COURSE,
+    COURSE_TYPE_DOWNLOAD,
+    formatLessonsCompleted,
+} from "@ui-config/strings";
 
 interface ContentCardProps {
     item: ContentItem;
@@ -47,7 +51,9 @@ export function MyContentCard({ item }: ContentCardProps) {
                             ) : (
                                 <Download className="h-4 w-4 mr-1" />
                             )}
-                            {capitalize(entity.type)}
+                            {entity.type === Constants.CourseType.COURSE
+                                ? COURSE_TYPE_COURSE
+                                : COURSE_TYPE_DOWNLOAD}
                         </Badge>
                         {entity.certificateId && (
                             <p className="flex items-center text-sm text-muted-foreground">
@@ -65,7 +71,12 @@ export function MyContentCard({ item }: ContentCardProps) {
                     <div className="space-y-2 mt-4">
                         <ProgressBar value={progress} />
                         <p className="text-sm text-muted-foreground flex justify-between">
-                            <span>{`${entity.completedLessonsCount} of ${entity.totalLessons} lessons completed`}</span>
+                            <span>
+                                {formatLessonsCompleted(
+                                    entity.completedLessonsCount ?? 0,
+                                    entity.totalLessons,
+                                )}
+                            </span>
                             <span>{`${Math.round(progress)}%`}</span>
                         </p>
                     </div>

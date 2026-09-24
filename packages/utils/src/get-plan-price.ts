@@ -16,17 +16,17 @@ export function getPlanPrice(plan: PaymentPlan): {
             if (plan.subscriptionYearlyAmount) {
                 return {
                     amount: plan.subscriptionYearlyAmount,
-                    period: "/yr",
+                    period: "/god",
                 };
             }
             return {
                 amount: plan.subscriptionMonthlyAmount || 0,
-                period: "/mo",
+                period: "/mes",
             };
         case Constants.PaymentPlanType.EMI:
             return {
                 amount: plan.emiAmount || 0,
-                period: "/mo",
+                period: "/mes",
             };
         default:
             return { amount: 0, period: "" };

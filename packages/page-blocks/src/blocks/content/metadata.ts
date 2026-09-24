@@ -3,7 +3,7 @@ const { PageType } = Constants;
 
 const metadata: WidgetMetadata = {
     name: "content",
-    displayName: "Sadržaj",
+    displayName: "Kursevi",
     compatibleWith: [PageType.PRODUCT],
 };
 

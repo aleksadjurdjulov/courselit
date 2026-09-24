@@ -166,7 +166,7 @@ export default function Widget({
                     }`}
                 >
                     <Header1 theme={overiddenTheme} className="mb-4">
-                        {title}
+                        {title === "Curriculum" ? "Kursevi" : title}
                     </Header1>
                     {description && (
                         <div

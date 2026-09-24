@@ -272,6 +272,7 @@ export const DOWNLOADABLE_SWITCH = "Za preuzimanje";
 export const TYPE_DROPDOWN = "Tip";
 export const LESSON_CONTENT_HEADER = "Tekstualni sadržaj";
 export const COURSE_CONTENT_HEADER = "Sadržaj";
+export const TABLE_OF_CONTENT_HEADER = "Sadržaj";
 export const LESSON_CONTENT_EMBED_HEADER = "Link";
 export const LESSON_CONTENT_EMBED_PLACEHOLDER = "Link ka YouTube videu itd.";
 export const CONTENT_URL_LABEL = "Medijski sadržaj";
@@ -309,6 +310,21 @@ export const PAGE_HEADER_ALL_POSTS = "Blog";
 export const COURSE_TYPE_BLOG = "Blog";
 export const BACK_TO_BLOG = "Nazad na sve blogove";
 export const COURSE_TYPE_COURSE = "Kurs";
+export const COURSE_TYPE_DOWNLOAD = "Preuzimanje";
+
+export function formatLessonsCompleted(completed: number, total: number) {
+    const n = Math.abs(total);
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    const lessons =
+        mod100 >= 11 && mod100 <= 14
+            ? "lekcija"
+            : mod10 >= 1 && mod10 <= 4
+              ? "lekcije"
+              : "lekcija";
+
+    return `${completed} od ${total} ${lessons} završeno`;
+}
 export const COURSE_CREATOR_PREFIX = "Autor";
 export const APP_MESSAGE_SETTINGS_SAVED = "Podešavanja su sačuvana";
 export const ENROLLED_COURSES_HEADER = "Upisani kursevi";
