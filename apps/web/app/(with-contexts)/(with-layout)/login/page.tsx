@@ -17,7 +17,9 @@ export default async function LoginPage({
         headers: headersList,
     });
 
-    const redirectTo = (await searchParams).redirect as string | undefined;
+    const redirectTo = getSafePostLoginPath(
+        (await searchParams).redirect as string | undefined,
+    );
     const address = await getAddressFromHeaders(headers);
 
     if (session) {
@@ -30,6 +32,19 @@ export default async function LoginPage({
             loginProviders={await getExternalLoginProviders(address)}
         />
     );
+}
+
+function getSafePostLoginPath(value: string | undefined) {
+    if (!value || !value.startsWith("/") || value.startsWith("//")) {
+        return undefined;
+    }
+
+    const path = value.split("?")[0] || "";
+    if (path === "/" || path === "/login" || path.startsWith("/login/")) {
+        return undefined;
+    }
+
+    return value;
 }
 
 export const getExternalLoginProviders = async (

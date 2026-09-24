@@ -3,6 +3,23 @@ import { getBackendAddress } from "@/app/actions";
 import { auth } from "./auth";
 import { COURSE_VIEWER_CURRENT_URL_HEADER } from "./lib/course-viewer-session-params";
 
+function isLoginPath(pathname: string) {
+    return pathname === "/login" || pathname.startsWith("/login/");
+}
+
+function requiresAuthentication(pathname: string) {
+    if (isLoginPath(pathname)) {
+        return false;
+    }
+    if (pathname.startsWith("/api/") || pathname === "/healthy") {
+        return false;
+    }
+    if (pathname === "/favicon.ico") {
+        return false;
+    }
+    return true;
+}
+
 export async function proxy(request: NextRequest) {
     const requestHeaders = request.headers;
     const forwardedProto = request.headers.get("x-forwarded-proto");
@@ -87,16 +104,19 @@ export async function proxy(request: NextRequest) {
             }
         }
 
-        if (request.nextUrl.pathname.startsWith("/dashboard")) {
+        if (request.nextUrl.pathname === "/") {
+            return NextResponse.redirect(new URL("/login", request.url));
+        }
+
+        if (requiresAuthentication(request.nextUrl.pathname)) {
             const session = await auth.api.getSession({
                 headers: requestHeaders,
             });
             if (!session) {
+                const returnPath = `${request.nextUrl.pathname}${request.nextUrl.search}`;
                 return NextResponse.redirect(
                     new URL(
-                        `/login?redirect=${encodeURIComponent(
-                            request.nextUrl.pathname,
-                        )}`,
+                        `/login?redirect=${encodeURIComponent(returnPath)}`,
                         request.url,
                     ),
                 );
@@ -120,9 +140,6 @@ export const config = {
     matcher: [
         "/",
         "/favicon.ico",
-        "/api/:path*",
-        "/healthy",
-        "/course/:path*",
-        "/dashboard/:path*",
+        "/((?!_next/static|_next/image|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|txt|xml|woff2?)$).*)",
     ],
 };
