@@ -71,7 +71,8 @@ export async function DELETE(
 
     try {
         await medialitService.deleteMedia(<string>mediaId);
-        return Response.json({ message: responses.success });
+        // The media selector matches this token exactly. Keep it untranslated.
+        return Response.json({ message: "success" });
     } catch (err: any) {
         return Response.json(
             { error: responses.internal_error },
