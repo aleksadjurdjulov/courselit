@@ -61,8 +61,6 @@ const config: Config = {
         "/.next/",
         // Exclude component tests - they should run in the regular config
         ".*/components/.*/__tests__/.*\\.test\\.(tsx|ts)$",
-        // Exclude browser-only app tests - they should run in the client config
-        ".*/app/.*/__tests__/my-content-tabs\\.test\\.(tsx|ts)$",
     ],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
 };

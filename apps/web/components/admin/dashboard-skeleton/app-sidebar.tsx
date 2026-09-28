@@ -2,8 +2,8 @@
 
 import {
     Box,
+    BookOpen,
     Globe,
-    LibraryBig,
     LifeBuoy,
     Mail,
     MessageCircleHeart,
@@ -34,7 +34,8 @@ import { Profile, UIConstants } from "@courselit/common-models";
 import {
     BROADCASTS,
     GET_SET_UP,
-    MY_CONTENT_HEADER,
+    MY_CONTENT_FEED_TAB,
+    MY_CONTENT_PRODUCTS_TAB,
     SEQUENCES,
     SIDEBAR_MENU_BLOGS,
     SIDEBAR_MENU_MAILS,
@@ -56,6 +57,7 @@ import { CircularProgress } from "@components/circular-progress";
 import { hasPermissionToAccessSetupChecklist } from "@/lib/utils";
 import { ADMIN_PERMISSIONS } from "@ui-config/constants";
 import { isRegularUser } from "@/lib/is-regular-user";
+import { useEnabledCommunities } from "@/hooks/use-enabled-communities";
 import { getSetupChecklist } from "@/app/(with-contexts)/dashboard/(sidebar)/action";
 const { permissions } = UIConstants;
 
@@ -67,6 +69,8 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
     const tab = searchParams?.get("tab");
     const [checklist, setChecklist] = useState<string[]>([]);
     const [totalChecklistItems, setTotalChecklistItems] = useState<number>(0);
+    const { hasEnabledCommunities, loading: enabledCommunitiesLoading } =
+        useEnabledCommunities();
 
     useEffect(() => {
         const loadChecklist = async () => {
@@ -94,7 +98,15 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
     }
 
     const { navMainItems, navProjectItems, navSecondaryItems } =
-        getSidebarItems({ profile, path, tab, checklist, totalChecklistItems });
+        getSidebarItems({
+            profile,
+            path,
+            tab,
+            checklist,
+            totalChecklistItems,
+            hasEnabledCommunities,
+            enabledCommunitiesLoading,
+        });
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -150,12 +162,16 @@ function getSidebarItems({
     totalChecklistItems = 0,
     path,
     tab,
+    hasEnabledCommunities,
+    enabledCommunitiesLoading,
 }: {
     profile: Partial<Profile>;
     checklist: string[];
     totalChecklistItems: number;
     path?: string | null;
     tab?: string | null;
+    hasEnabledCommunities: boolean;
+    enabledCommunitiesLoading: boolean;
 }) {
     const navMainItems: any[] = [];
 
@@ -342,14 +358,30 @@ function getSidebarItems({
             isActive: path === "/dashboard/support",
         });
     }
-    const navProjectItems = [
-        {
-            name: MY_CONTENT_HEADER,
-            url: "/dashboard/my-content",
-            icon: LibraryBig,
-            isActive: !!path && path.startsWith("/dashboard/my-content"),
-        },
-    ];
+    const navProjectItems: {
+        name: string;
+        url: string;
+        icon: typeof BookOpen;
+        isActive: boolean;
+    }[] = [];
+
+    if (hasEnabledCommunities || enabledCommunitiesLoading) {
+        navProjectItems.push({
+            name: MY_CONTENT_FEED_TAB,
+            url: "/dashboard/my-content/feed",
+            icon: MessageCircleHeart,
+            isActive: path === "/dashboard/my-content/feed",
+        });
+    }
+
+    navProjectItems.push({
+        name: MY_CONTENT_PRODUCTS_TAB,
+        url: "/dashboard/my-content/products",
+        icon: BookOpen,
+        isActive:
+            path === "/dashboard/my-content/products" ||
+            path === "/dashboard/my-content",
+    });
 
     return { navMainItems, navSecondaryItems, navProjectItems };
 }

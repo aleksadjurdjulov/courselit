@@ -31,7 +31,7 @@ html .dark .courselit-theme.ff-learner {
     --sidebar-primary-foreground: 218.2 13.9% 15.5%;
     --sidebar-accent: 175.9 45% 88%;
     --sidebar-accent-foreground: 175.9 100% 22%;
-    --sidebar-border: 34 15% 86%;
+    --sidebar-border: 34 18% 82%;
     --sidebar-ring: 175.9 100% 34.3%;
 }
 
@@ -65,6 +65,18 @@ html
 
 .ff-learner button.bg-primary:hover {
     color: #f4f1ed;
+}
+
+.ff-learner button.bg-secondary {
+    background-color: #fff;
+    border: 1px solid #22262d22;
+    color: #22262d;
+}
+
+.ff-learner button.bg-secondary:hover {
+    background-color: #e8f7f6;
+    border-color: #00afa355;
+    color: #007a72;
 }
 
 .ff-learner input:not([type="checkbox"]):not([type="radio"]),

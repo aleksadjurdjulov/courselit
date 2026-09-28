@@ -43,50 +43,47 @@ export default function DashboardContent({
             <header className="flex h-16 shrink-0 items-center gap-2">
                 <div className="flex items-center gap-2 px-4">
                     <SidebarTrigger className="-ml-1" />
-                    <Separator orientation="vertical" className="mr-2 h-4" />
                     {breadcrumbs.length > 0 && (
-                        <Breadcrumb>
-                            <BreadcrumbList>
-                                {breadcrumbs.map((breadcrumb, index) => (
-                                    <Fragment key={index}>
-                                        {index < breadcrumbs.length - 1 && (
-                                            <>
-                                                <BreadcrumbItem className="hidden md:block">
-                                                    <BreadcrumbLink asChild>
-                                                        <Link
-                                                            href={
-                                                                breadcrumb.href
-                                                            }
-                                                        >
-                                                            {breadcrumb.label}
-                                                        </Link>
-                                                    </BreadcrumbLink>
+                        <>
+                            <Separator
+                                orientation="vertical"
+                                className="mr-2 h-4"
+                            />
+                            <Breadcrumb>
+                                <BreadcrumbList>
+                                    {breadcrumbs.map((breadcrumb, index) => (
+                                        <Fragment key={index}>
+                                            {index < breadcrumbs.length - 1 && (
+                                                <>
+                                                    <BreadcrumbItem className="hidden md:block">
+                                                        <BreadcrumbLink asChild>
+                                                            <Link
+                                                                href={
+                                                                    breadcrumb.href
+                                                                }
+                                                            >
+                                                                {
+                                                                    breadcrumb.label
+                                                                }
+                                                            </Link>
+                                                        </BreadcrumbLink>
+                                                    </BreadcrumbItem>
+                                                    <BreadcrumbSeparator className="hidden md:block" />
+                                                </>
+                                            )}
+                                            {index ===
+                                                breadcrumbs.length - 1 && (
+                                                <BreadcrumbItem>
+                                                    <BreadcrumbPage>
+                                                        {breadcrumb.label}
+                                                    </BreadcrumbPage>
                                                 </BreadcrumbItem>
-                                                <BreadcrumbSeparator className="hidden md:block" />
-                                            </>
-                                        )}
-                                        {index === breadcrumbs.length - 1 && (
-                                            <BreadcrumbItem>
-                                                <BreadcrumbPage>
-                                                    {breadcrumb.label}
-                                                </BreadcrumbPage>
-                                            </BreadcrumbItem>
-                                        )}
-                                    </Fragment>
-                                ))}
-                                {/* <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">
-                                        Building Your Application
-                                    </BreadcrumbLink>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator className="hidden md:block" />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>
-                                        Data Fetching
-                                    </BreadcrumbPage>
-                                </BreadcrumbItem> */}
-                            </BreadcrumbList>
-                        </Breadcrumb>
+                                            )}
+                                        </Fragment>
+                                    ))}
+                                </BreadcrumbList>
+                            </Breadcrumb>
+                        </>
                     )}
                 </div>
                 <div className="ml-auto flex items-center gap-2 px-3">

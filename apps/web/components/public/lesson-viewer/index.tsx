@@ -223,7 +223,7 @@ export const LessonViewer = ({
 
     return (
         <div className="text-foreground">
-            <article className="flex flex-col pb-[100px] lg:max-w-[40rem] xl:max-w-[48rem] mx-auto w-full px-4 pt-4">
+            <article className="flex flex-col pb-[100px] max-w-5xl xl:max-w-6xl mx-auto w-full px-0 sm:px-2 pt-2 sm:pt-4">
                 {!lesson && !error && (
                     <div className="flex flex-col">
                         <Skeleton className="h-12 w-full mb-8" />
@@ -236,7 +236,7 @@ export const LessonViewer = ({
                 )}
                 {error && (
                     <div className="flex flex-col ">
-                        <header className="mb-8">
+                        <header className="mb-6 sm:mb-8">
                             <Header1 theme={theme.theme}>
                                 {NOT_ENROLLED_HEADER}
                             </Header1>
@@ -251,7 +251,7 @@ export const LessonViewer = ({
                 )}
                 {lesson && !error && (
                     <>
-                        <header className="mb-8 flex flex-col gap-1">
+                        <header className="mb-4 sm:mb-6 flex flex-col gap-1">
                             {courseTitle && (
                                 <NextLink
                                     href={appendCourseViewerSessionParamsToHref(
@@ -326,21 +326,13 @@ export const LessonViewer = ({
                         )}
                         {String.prototype.toUpperCase.call(LESSON_TYPE_PDF) ===
                             lesson.type && (
-                            <div>
+                            <div className="w-full">
                                 <iframe
-                                    frameBorder="0"
-                                    width="100%"
-                                    height="500"
+                                    title={lesson.title}
+                                    className="w-full rounded-md border-0 h-[min(75vh,calc(100dvh-14rem))] min-h-[20rem] sm:min-h-[28rem]"
                                     src={`${
                                         lesson.media && lesson.media.file
-                                    }#view=fit`}
-                                ></iframe>
-                                <Caption
-                                    text={
-                                        lesson.media?.caption ??
-                                        lesson.media?.originalFileName ??
-                                        ""
-                                    }
+                                    }#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
                                 />
                             </div>
                         )}
@@ -407,36 +399,34 @@ export const LessonViewer = ({
                                     }
                                 />
                             )}
-                        {isViewerEnrolled && !isPreview && (
-                            <div className="mt-8 flex flex-col gap-4">
-                                <div className="flex justify-start">
-                                    {isCompleted ? (
-                                        <Button
-                                            theme={theme.theme}
-                                            disabled
-                                            className="flex gap-1.5 items-center"
-                                        >
-                                            <Check className="h-4 w-4 text-current" />
-                                            {COURSE_PROGRESS_COMPLETED}
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            theme={theme.theme}
-                                            onClick={markAsCompleted}
-                                            disabled={loading}
-                                            className="flex gap-1.5 items-center"
-                                        >
-                                            {COURSE_PROGRESS_MARK_COMPLETED}
-                                        </Button>
-                                    )}
-                                </div>
-                            </div>
-                        )}
                     </>
                 )}
                 {lesson && (isViewerEnrolled || isPreview) && (
-                    <div className="sticky bottom-6 z-20 pointer-events-none w-full flex justify-end pointer-events-auto mt-auto pb-6 pr-6">
-                        <div className="flex gap-2">
+                    <div className="sticky bottom-4 z-20 mt-auto w-full flex items-center justify-between gap-3 pt-6 pb-2">
+                        <div className="min-w-0">
+                            {isViewerEnrolled &&
+                                !isPreview &&
+                                (isCompleted ? (
+                                    <Button
+                                        theme={theme.theme}
+                                        disabled
+                                        className="flex gap-1.5 items-center"
+                                    >
+                                        <Check className="h-4 w-4 text-current" />
+                                        {COURSE_PROGRESS_COMPLETED}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        theme={theme.theme}
+                                        onClick={markAsCompleted}
+                                        disabled={loading}
+                                        className="flex gap-1.5 items-center"
+                                    >
+                                        {COURSE_PROGRESS_MARK_COMPLETED}
+                                    </Button>
+                                ))}
+                        </div>
+                        <div className="flex gap-2 shrink-0">
                             {lesson.prevLesson ? (
                                 <Link
                                     href={appendCourseViewerSessionParamsToHref(

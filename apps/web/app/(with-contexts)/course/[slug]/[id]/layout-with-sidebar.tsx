@@ -155,6 +155,7 @@ export default function ProductPage({
                 {
                     "--sidebar-width": "20rem",
                     "--sidebar-width-mobile": "20rem",
+                    "--sidebar-background": "0 0% 100%",
                 } as React.CSSProperties
             }
             className={
@@ -171,7 +172,7 @@ export default function ProductPage({
                 profile={profile || {}}
                 viewerSessionParams={viewerSessionParams}
             />
-            <SidebarInset>
+            <SidebarInset className="bg-transparent">
                 <header className="flex h-16 shrink-0 items-center gap-2 px-4 justify-between text-foreground transition-all duration-200">
                     <SidebarTrigger className="-ml-1" />
                     <div className="flex items-center gap-2">
@@ -224,8 +225,10 @@ export default function ProductPage({
                         </Tooltip>
                     </div>
                 </header>
-                <div className="flex flex-1 flex-col min-h-0 min-w-0 p-4">
-                    {children}
+                <div className="flex flex-1 flex-col min-h-0 min-w-0 px-2 pb-2 sm:px-4 sm:pb-4">
+                    <div className="flex flex-1 flex-col min-h-0 min-w-0 rounded-xl border border-border bg-card text-card-foreground shadow-sm p-3 sm:p-6">
+                        {children}
+                    </div>
                 </div>
             </SidebarInset>
             {isActualLessonPage && canUseDiscussions && (
@@ -324,7 +327,7 @@ export function AppSidebar({
     const { theme } = useContext(ThemeContext);
 
     return (
-        <Sidebar variant="floating" {...rest} className="bg-background">
+        <Sidebar variant="floating" {...rest}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
