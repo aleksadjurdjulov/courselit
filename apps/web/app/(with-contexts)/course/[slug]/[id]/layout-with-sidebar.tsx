@@ -72,6 +72,7 @@ import {
 } from "@/lib/course-viewer-session-params";
 import { Badge } from "@/components/ui/badge";
 import ProductDiscussionPanel from "@/components/public/product-discussions/panel";
+import SessionHeartbeat from "@/components/course-viewer/session-heartbeat";
 import { isRegularUser } from "@/lib/is-regular-user";
 import "@/components/public/base-layout/future-fizio-learner.css";
 
@@ -113,9 +114,13 @@ function DiscussionSidebarSync({
 export default function ProductPage({
     product,
     children,
+    accountSharingEnabled = true,
+    heartbeatIntervalSeconds = 60,
 }: {
     product: CourseFrontend;
     children: React.ReactNode;
+    accountSharingEnabled?: boolean;
+    heartbeatIntervalSeconds?: number;
 }) {
     const { profile } = useContext(ProfileContext);
     const pathname = usePathname();
@@ -158,6 +163,9 @@ export default function ProductPage({
                     : "courselit-theme"
             }
         >
+            {accountSharingEnabled && (
+                <SessionHeartbeat intervalSeconds={heartbeatIntervalSeconds} />
+            )}
             <AppSidebar
                 course={product}
                 profile={profile || {}}

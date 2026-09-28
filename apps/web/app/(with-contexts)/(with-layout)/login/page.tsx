@@ -6,6 +6,7 @@ import { getAddressFromHeaders } from "@/app/actions";
 import { FetchBuilder } from "@courselit/utils";
 import { error } from "@/services/logger";
 import type { RuntimeLoginProvider } from "@/lib/login-providers";
+import { accountSharingLoginNotice } from "@/lib/account-sharing/login-notice";
 
 export default async function LoginPage({
     searchParams,
@@ -16,9 +17,12 @@ export default async function LoginPage({
     const session = await auth.api.getSession({
         headers: headersList,
     });
-
+    const params = await searchParams;
     const redirectTo = getSafePostLoginPath(
-        (await searchParams).redirect as string | undefined,
+        typeof params.redirect === "string" ? params.redirect : undefined,
+    );
+    const notice = accountSharingLoginNotice(
+        typeof params.reason === "string" ? params.reason : undefined,
     );
     const address = await getAddressFromHeaders(headers);
 
@@ -29,6 +33,7 @@ export default async function LoginPage({
     return (
         <LoginForm
             redirectTo={redirectTo}
+            notice={notice}
             loginProviders={await getExternalLoginProviders(address)}
         />
     );

@@ -16,6 +16,14 @@ import { sanitizeEmail } from "./lib/sanitize-email";
 import DomainModel, { Domain } from "@models/Domain";
 import UserModel from "@models/User";
 import { als } from "./async-local-storage";
+import { error } from "./services/logger";
+import {
+    DEVICE_ID_HEADER,
+    isDeviceId,
+} from "./lib/account-sharing/device-cookie";
+import { onAccountSessionCreated } from "./lib/account-sharing/on-session-created";
+import { isAccountSharingEnabled } from "./lib/account-sharing/config";
+import { getNetworkKey, readCountryCode } from "./lib/account-sharing/policy";
 
 const client = new MongoClient(
     process.env.DB_CONNECTION_STRING || "mongodb://localhost:27017",
@@ -275,6 +283,67 @@ const createAuthConfig = (baseURL = ""): any => ({
                 },
             },
         },
+        session: {
+            create: {
+                before: async (session, ctx) => {
+                    if (!isAccountSharingEnabled()) {
+                        return;
+                    }
+
+                    const deviceId = ctx?.headers?.get(DEVICE_ID_HEADER);
+                    const networkKey = getNetworkKey(
+                        typeof session.ipAddress === "string"
+                            ? session.ipAddress
+                            : null,
+                    );
+                    const country = ctx?.headers
+                        ? readCountryCode(ctx.headers)
+                        : null;
+
+                    return {
+                        data: {
+                            ...(isDeviceId(deviceId) ? { deviceId } : {}),
+                            ...(networkKey ? { networkKey } : {}),
+                            ...(country ? { country } : {}),
+                        },
+                    };
+                },
+                after: async (session, ctx) => {
+                    if (
+                        !isAccountSharingEnabled() ||
+                        !session?.token ||
+                        !session.userId
+                    ) {
+                        return;
+                    }
+
+                    const adapter = ctx?.context?.internalAdapter;
+                    try {
+                        await onAccountSessionCreated({
+                            session,
+                            headers: ctx?.headers ?? null,
+                            listSessions: adapter
+                                ? (userId) => adapter.listSessions(userId)
+                                : async () => [],
+                            deleteSession: adapter
+                                ? (token) => adapter.deleteSession(token)
+                                : async () => undefined,
+                        });
+                    } catch (err) {
+                        await error(
+                            "Failed to enforce account session limits",
+                            {
+                                fileName: "auth.ts",
+                                stack:
+                                    err instanceof Error
+                                        ? { message: err.message }
+                                        : undefined,
+                            },
+                        );
+                    }
+                },
+            },
+        },
     },
     trustedOrigins: async (request?: Request) => {
         // Better Auth may invoke this during initialization/auth.api calls without a request.
@@ -294,7 +363,31 @@ const createAuthConfig = (baseURL = ""): any => ({
         }
         return origins;
     },
-    session: getSessionConfig(),
+    session: {
+        ...getSessionConfig(),
+        additionalFields: {
+            deviceId: {
+                type: "string",
+                required: false,
+                input: false,
+            },
+            networkKey: {
+                type: "string",
+                required: false,
+                input: false,
+            },
+            country: {
+                type: "string",
+                required: false,
+                input: false,
+            },
+            lastHeartbeatAt: {
+                type: "date",
+                required: false,
+                input: false,
+            },
+        },
+    },
 });
 
 const authInstances = new Map<string, ReturnType<typeof betterAuth>>();

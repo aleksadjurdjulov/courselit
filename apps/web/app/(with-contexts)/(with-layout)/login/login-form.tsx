@@ -52,9 +52,11 @@ import "@/components/public/base-layout/login-site-header.css";
 
 export default function LoginForm({
     redirectTo,
+    notice,
     loginProviders = [],
 }: {
     redirectTo?: string;
+    notice?: string;
     loginProviders?: RuntimeLoginProvider[];
 }) {
     const { theme } = useContext(ThemeContext);
@@ -209,6 +211,14 @@ export default function LoginForm({
             <div className="flex min-h-screen flex-col gap-4">
                 <div className="mx-auto flex w-full grow items-center justify-center px-4 lg:max-w-[1200px]">
                     <div className="flex w-full flex-col gap-4 lg:w-[360px]">
+                        {notice && (
+                            <Text1
+                                theme={theme.theme}
+                                className="ff-login-copy mb-4"
+                            >
+                                {notice}
+                            </Text1>
+                        )}
                         {siteinfo.logins?.includes(
                             Constants.LoginProvider.EMAIL,
                         ) && (

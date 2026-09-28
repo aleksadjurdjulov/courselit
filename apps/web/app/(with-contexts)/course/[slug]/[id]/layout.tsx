@@ -10,6 +10,10 @@ import {
     COURSE_VIEWER_CURRENT_URL_HEADER,
     getCourseViewerSessionParamsFromUrl,
 } from "@/lib/course-viewer-session-params";
+import {
+    getAccountHeartbeatIntervalSeconds,
+    isAccountSharingEnabled,
+} from "@/lib/account-sharing/config";
 
 export async function generateMetadata(
     props: { params: Promise<{ slug: string; id: string }> },
@@ -98,5 +102,13 @@ export default async function Layout(props: {
         notFound();
     }
 
-    return <LayoutWithSidebar product={product}>{children}</LayoutWithSidebar>;
+    return (
+        <LayoutWithSidebar
+            product={product}
+            accountSharingEnabled={isAccountSharingEnabled()}
+            heartbeatIntervalSeconds={getAccountHeartbeatIntervalSeconds()}
+        >
+            {children}
+        </LayoutWithSidebar>
+    );
 }

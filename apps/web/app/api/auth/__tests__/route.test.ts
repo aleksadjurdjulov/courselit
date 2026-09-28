@@ -150,13 +150,19 @@ describe("Auth Route Origin Rewrite", () => {
             }),
         });
 
-        await POST(req);
+        const response = await POST(req);
 
         expect(getAuth).toHaveBeenCalledWith("https://domain1.clqa.site");
         expect(mockHandlerPost).toHaveBeenCalledTimes(1);
         const rewrittenRequest = mockHandlerPost.mock.calls[0][0] as Request;
         expect(rewrittenRequest.url).toBe(
             "https://domain1.clqa.site/api/auth/sign-in/sso",
+        );
+        expect(rewrittenRequest.headers.get("x-courselit-device-id")).toBe(
+            "mock-nanoid-id",
+        );
+        expect(response.headers.get("set-cookie")).toContain(
+            "courselit.device_id=mock-nanoid-id",
         );
     });
 

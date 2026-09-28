@@ -267,6 +267,12 @@ export const LOGIN_NO_CODE = "Niste dobili kod?";
 export const BTN_LOGIN_GET_CODE = "Pošalji kod";
 export const LOGIN_CODE_INTIMATION_MESSAGE =
     "Unesite kod koji smo poslali na vaš email";
+export const ACCOUNT_SHARING_SIGNED_IN_ELSEWHERE =
+    "Nalog je prijavljen na drugom mestu. Prijavite se ponovo.";
+export const ACCOUNT_SHARING_NEW_NETWORK =
+    "Prepoznata je nova mreža. Unesite novi kod da nastavite.";
+export const ACCOUNT_SHARING_SESSIONS_REVOKED =
+    "Sve prijave na ovom nalogu su odjavljene. Prijavite se ponovo.";
 export const LOGIN_FORM_DISCLAIMER = "Slanjem prihvatate ";
 export const LOGIN_FORM_DISCLAIMER_AND = " i ";
 export const LOGIN_FORM_TERMS_LINK = "Uslove korišćenja";

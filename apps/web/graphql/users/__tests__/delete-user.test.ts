@@ -37,6 +37,9 @@ import ProductDiscussionReplyModel from "@models/ProductDiscussionReply";
 import ProductDiscussionLikeModel from "@models/ProductDiscussionLike";
 import ProductDiscussionSubscriberModel from "@models/ProductDiscussionSubscriber";
 import ProductDiscussionReportModel from "@models/ProductDiscussionReport";
+import mongoose from "mongoose";
+import AccountNetworkModel from "@models/AccountNetwork";
+import AccountSignInModel from "@models/AccountSignIn";
 import { responses, internal } from "@/config/strings";
 import constants from "@/config/constants";
 import { Constants } from "@courselit/common-models";
@@ -170,6 +173,11 @@ describe("deleteUser - Comprehensive Test Suite", () => {
                 domain: testDomain._id,
             }),
             ProductDiscussionReportModel.deleteMany({ domain: testDomain._id }),
+            AccountNetworkModel.deleteMany({ domain: testDomain._id }),
+            AccountSignInModel.deleteMany({ domain: testDomain._id }),
+            mongoose.connection.collection("sessions").deleteMany({
+                token: { $regex: `^${DELETE_USER_SUITE_PREFIX}` },
+            }),
         ]);
 
         jest.clearAllMocks();
@@ -566,6 +574,43 @@ describe("deleteUser - Comprehensive Test Suite", () => {
     // ============================================
 
     describe("Personal Data Cleanup", () => {
+        it("should delete account sharing records and sessions", async () => {
+            const authUserId = targetUser._id.toString();
+            const sessionToken = duId("session-token");
+            await AccountNetworkModel.create({
+                domain: testDomain._id,
+                authUserId,
+                networkKey: "v4:10.0.0",
+                lastSeenAt: new Date(),
+            });
+            await AccountSignInModel.create({
+                domain: testDomain._id,
+                authUserId,
+                ipAddress: "10.0.0.8",
+            });
+            await mongoose.connection.collection("sessions").insertOne({
+                token: sessionToken,
+                userId: targetUser._id,
+                expiresAt: new Date(Date.now() + 60_000),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            });
+
+            await deleteUser(targetUser.userId, mockCtx);
+
+            expect(
+                await AccountNetworkModel.countDocuments({ authUserId }),
+            ).toBe(0);
+            expect(
+                await AccountSignInModel.countDocuments({ authUserId }),
+            ).toBe(0);
+            expect(
+                await mongoose.connection
+                    .collection("sessions")
+                    .findOne({ token: sessionToken }),
+            ).toBeNull();
+        });
+
         it("should delete user's notifications (received)", async () => {
             await NotificationModel.create({
                 domain: testDomain._id,

@@ -40,4 +40,6 @@ export * from "./models/apikey";
 export * from "./models/user-theme";
 export * from "./models/product-discussion";
 export * from "./models/rate-limit-event";
+export * from "./models/account-network";
+export * from "./models/account-sign-in";
 export * from "./product-discussion-cleanup";

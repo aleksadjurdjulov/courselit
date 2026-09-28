@@ -7,6 +7,13 @@ import {
     getDomainInviteOnlyStatus,
 } from "@/lib/invite-only";
 import { sanitizeEmail } from "@/lib/sanitize-email";
+import { generateUniqueId } from "@courselit/utils";
+import { isAccountSharingEnabled } from "@/lib/account-sharing/config";
+import {
+    DEVICE_ID_HEADER,
+    readDeviceId,
+    serializeDeviceCookie,
+} from "@/lib/account-sharing/device-cookie";
 
 const getHandlers = (baseURL: string) => toNextJsHandler(getAuth(baseURL));
 
@@ -83,27 +90,70 @@ async function enforceInviteOnlyAuth(req: Request): Promise<Response | null> {
     return null;
 }
 
+function attachDevice(req: Request): {
+    request: Request;
+    deviceId: string;
+    isNew: boolean;
+} {
+    const existing = readDeviceId(req.headers.get("cookie"));
+    const deviceId = existing ?? generateUniqueId();
+    const headers = new Headers(req.headers);
+    headers.set(DEVICE_ID_HEADER, deviceId);
+
+    return {
+        request: new Request(req, { headers }),
+        deviceId,
+        isNew: !existing,
+    };
+}
+
+function rememberDevice(
+    response: Response,
+    device: { deviceId: string; isNew: boolean },
+): Response {
+    if (device.isNew) {
+        response.headers.append(
+            "set-cookie",
+            serializeDeviceCookie(device.deviceId),
+        );
+    }
+
+    return response;
+}
+
 export const POST = async (req: Request) => {
     const rewrittenReq = await rewriteAuthRequestOrigin(req);
+    const device = isAccountSharingEnabled()
+        ? attachDevice(rewrittenReq)
+        : null;
+    const authRequest = device?.request ?? rewrittenReq;
     const handlers = getHandlers(new URL(rewrittenReq.url).origin);
     const map = new Map();
     map.set("domain", req.headers.get("domain"));
     map.set("domainId", req.headers.get("domainId"));
 
     return als.run(map, async () => {
-        const blocked = await enforceInviteOnlyAuth(rewrittenReq);
+        const blocked = await enforceInviteOnlyAuth(authRequest);
         if (blocked) {
-            return blocked;
+            return device ? rememberDevice(blocked, device) : blocked;
         }
-        return handlers.POST(rewrittenReq);
+        const response = await handlers.POST(authRequest);
+        return device ? rememberDevice(response, device) : response;
     });
 };
 
 export const GET = async (req: Request) => {
     const rewrittenReq = await rewriteAuthRequestOrigin(req);
+    const device = isAccountSharingEnabled()
+        ? attachDevice(rewrittenReq)
+        : null;
+    const authRequest = device?.request ?? rewrittenReq;
     const handlers = getHandlers(new URL(rewrittenReq.url).origin);
     const map = new Map();
     map.set("domain", req.headers.get("domain"));
     map.set("domainId", req.headers.get("domainId"));
-    return als.run(map, () => handlers.GET(rewrittenReq));
+    return als.run(map, async () => {
+        const response = await handlers.GET(authRequest);
+        return device ? rememberDevice(response, device) : response;
+    });
 };

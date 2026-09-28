@@ -45,6 +45,7 @@ import {
 } from "../communities/logic";
 import { deleteMedia } from "@/services/medialit";
 import Account from "@models/Account";
+import { cleanupAccountSharingData } from "@/lib/account-sharing/cleanup";
 
 const { permissions } = UIConstants;
 
@@ -429,6 +430,8 @@ export async function cleanupPersonalData(
     if (userToDelete.avatar?.mediaId) {
         await deleteMedia(userToDelete.avatar.mediaId);
     }
+
+    await cleanupAccountSharingData(userToDelete._id.toString());
 
     await UserModel.deleteOne({
         domain: ctx.subdomain._id,

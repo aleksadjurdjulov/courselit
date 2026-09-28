@@ -16,6 +16,7 @@ const config = {
         ".*/api/.*/__tests__/.*\\.test\\.(ts|tsx)$",
         // Inbound-email tests use server-only models and middleware.
         ".*/lib/inbound-email/(?:.*/)?__tests__/.*\\.test\\.(ts|tsx)$",
+        ".*/lib/account-sharing/(?:.*/)?__tests__/.*\\.test\\.(ts|tsx)$",
     ],
     // collectCoverage: true,
     // collectCoverageFrom: [

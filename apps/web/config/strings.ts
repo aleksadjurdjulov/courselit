@@ -164,6 +164,7 @@ export const responses = {
     page_id_already_exists: "Ovaj URL slug je već zauzet. Izaberite drugi.",
     signup_disabled:
         "Registracija je onemogućena. Pridružite se samo putem pozivnice.",
+    new_sign_in_mail_subject: "Nova prijava na",
 };
 
 export const internal = {
