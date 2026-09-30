@@ -288,14 +288,16 @@ export const updateCourse = async (
     }
 
     if (Object.prototype.hasOwnProperty.call(courseData, "lecturerId")) {
-        course.set(
+        const courseDocument = course as any;
+        courseDocument.set(
             "lecturerId",
             await resolveCourseStaffUserId((courseData as any).lecturerId, ctx),
         );
     }
 
     if (Object.prototype.hasOwnProperty.call(courseData, "moderatorId")) {
-        course.set(
+        const courseDocument = course as any;
+        courseDocument.set(
             "moderatorId",
             await resolveCourseStaffUserId(
                 (courseData as any).moderatorId,
