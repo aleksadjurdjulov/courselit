@@ -27,6 +27,7 @@ import {
     finalizeUserCreation,
     getCertificate,
     getUser,
+    getUserContent,
     updateUser,
     findMembership,
     inviteCustomer,
@@ -1224,5 +1225,116 @@ describe("createUser invite-only", () => {
         });
 
         expect(again.userId).toBe(existing.userId);
+    });
+});
+
+describe("getUserContent", () => {
+    const suitePrefix = `get-user-content-${Date.now()}`;
+    const id = (suffix: string) => `${suitePrefix}-${suffix}`;
+    const email = (suffix: string) => `${id(suffix)}@example.com`;
+
+    let testDomain: any;
+    let learner: any;
+    let lecturer: any;
+    let moderator: any;
+    let course: any;
+
+    beforeAll(async () => {
+        testDomain = await Domain.create({
+            name: id("domain"),
+            email: email("owner"),
+        });
+
+        lecturer = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("lecturer"),
+            email: email("lecturer"),
+            name: "Nevena Miletić",
+            permissions: [],
+            active: true,
+            unsubscribeToken: id("unsub-lecturer"),
+            purchases: [],
+        });
+        moderator = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("moderator"),
+            email: email("moderator"),
+            name: "Đorđe Zavišić",
+            permissions: [],
+            active: true,
+            unsubscribeToken: id("unsub-moderator"),
+            purchases: [],
+        });
+        learner = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("learner"),
+            email: email("learner"),
+            name: "Learner",
+            permissions: [],
+            active: true,
+            unsubscribeToken: id("unsub-learner"),
+            purchases: [
+                {
+                    courseId: id("course"),
+                    completedLessons: [],
+                },
+            ],
+        });
+        course = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course"),
+            title: id("course-title"),
+            creatorId: lecturer.userId,
+            type: "course",
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-slug"),
+            published: true,
+            lecturerId: lecturer.userId,
+            moderatorId: moderator.userId,
+            lessons: [],
+            groups: [],
+        });
+        await MembershipModel.create({
+            domain: testDomain._id,
+            membershipId: id("membership"),
+            sessionId: id("session"),
+            userId: learner.userId,
+            paymentPlanId: id("plan"),
+            entityId: course.courseId,
+            entityType: Constants.MembershipEntityType.COURSE,
+            status: Constants.MembershipStatus.ACTIVE,
+        });
+    });
+
+    afterAll(async () => {
+        await MembershipModel.deleteMany({ domain: testDomain._id });
+        await CourseModel.deleteMany({ domain: testDomain._id });
+        await UserModel.deleteMany({ domain: testDomain._id });
+        await Domain.deleteOne({ _id: testDomain._id });
+    });
+
+    it("includes lecturer and moderator on enrolled courses", async () => {
+        const content = await getUserContent({
+            subdomain: testDomain,
+            user: learner,
+            address: "",
+        } as any);
+
+        const courseContent = content.find(
+            (item: any) =>
+                item.entityType === Constants.MembershipEntityType.COURSE &&
+                item.entity.id === course.courseId,
+        );
+
+        expect(courseContent?.entity.lecturer).toMatchObject({
+            userId: lecturer.userId,
+            name: "Nevena Miletić",
+        });
+        expect(courseContent?.entity.moderator).toMatchObject({
+            userId: moderator.userId,
+            name: "Đorđe Zavišić",
+        });
     });
 });

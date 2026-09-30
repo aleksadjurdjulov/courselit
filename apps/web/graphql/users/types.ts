@@ -67,6 +67,18 @@ const progress = new GraphQLObjectType({
     },
 });
 
+const userContentPersonType = new GraphQLObjectType({
+    name: "UserContentPerson",
+    fields: {
+        userId: { type: GraphQLString },
+        name: { type: GraphQLString },
+        avatar: {
+            type: mediaTypes.mediaType,
+            resolve: (person) => getMedia(person?.avatar),
+        },
+    },
+});
+
 const entityType = new GraphQLObjectType({
     name: "EntityType",
     fields: {
@@ -83,6 +95,8 @@ const entityType = new GraphQLObjectType({
         },
         type: { type: GraphQLString },
         certificateId: { type: GraphQLString },
+        lecturer: { type: userContentPersonType },
+        moderator: { type: userContentPersonType },
     },
 });
 

@@ -67,6 +67,22 @@ export default function MyContentView({
                         }
                         type
                         certificateId
+                        lecturer {
+                            userId
+                            name
+                            avatar {
+                                file
+                                thumbnail
+                            }
+                        }
+                        moderator {
+                            userId
+                            name
+                            avatar {
+                                file
+                                thumbnail
+                            }
+                        }
                     }
                 }
             }

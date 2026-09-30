@@ -786,6 +786,27 @@ async function getUserContentInternal(ctx: GQLContext, user: User) {
                     )?.completedLessons || []
                 ).filter((lessonId) => publishedLessonIds.has(lessonId));
 
+                const staffUserIds = [
+                    course.lecturerId,
+                    course.moderatorId,
+                ].filter(Boolean) as string[];
+                const staffUsers = staffUserIds.length
+                    ? await UserModel.find({
+                          domain: ctx.subdomain._id,
+                          userId: { $in: staffUserIds },
+                      }).select("userId name avatar")
+                    : [];
+                const staffById = new Map(
+                    staffUsers.map((staffUser) => [
+                        staffUser.userId,
+                        {
+                            userId: staffUser.userId,
+                            name: staffUser.name,
+                            avatar: staffUser.avatar,
+                        },
+                    ]),
+                );
+
                 content.push({
                     entityType: Constants.MembershipEntityType.COURSE,
                     entity: {
@@ -800,6 +821,12 @@ async function getUserContentInternal(ctx: GQLContext, user: User) {
                             (progress: Progress) =>
                                 progress.courseId === course.courseId,
                         )?.certificateId,
+                        lecturer: course.lecturerId
+                            ? staffById.get(course.lecturerId) || null
+                            : null,
+                        moderator: course.moderatorId
+                            ? staffById.get(course.moderatorId) || null
+                            : null,
                     },
                 });
             }
