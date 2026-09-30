@@ -54,7 +54,7 @@ export function MyContentCard({ item }: ContentCardProps) {
             />
             <ContentCardContent>
                 <ContentCardHeader>{item.entity.title}</ContentCardHeader>
-                {people.length > 0 && (
+                {people.length > 0 ? (
                     <div className="flex flex-wrap items-center gap-3 mb-3">
                         {people.map(({ person, role }) => (
                             <div
@@ -83,6 +83,8 @@ export function MyContentCard({ item }: ContentCardProps) {
                             </div>
                         ))}
                     </div>
+                ) : (
+                    ""
                 )}
                 {entityType.toLowerCase() === Constants.CourseType.COURSE ? (
                     <div className="flex justify-between">
