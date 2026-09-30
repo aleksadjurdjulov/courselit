@@ -64,7 +64,8 @@ export function MyContentCard({ item }: ContentCardProps) {
                                 <Image
                                     src={
                                         person.avatar?.file ||
-                                        person.avatar?.thumbnail
+                                        person.avatar?.thumbnail ||
+                                        ""
                                     }
                                     alt={person.name || role}
                                     width="w-8"
