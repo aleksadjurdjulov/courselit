@@ -12,6 +12,8 @@ type ProductDocument = {
     privacy: string;
     tags?: string[];
     featuredImage?: unknown;
+    lecturerId?: string;
+    moderatorId?: string;
     pageId?: string;
     defaultPaymentPlan?: string;
     createdAt?: Date | string;
@@ -88,6 +90,8 @@ export function serializeProduct(
         privacy: product.privacy,
         tags: product.tags,
         featuredImage: product.featuredImage,
+        lecturerId: product.lecturerId,
+        moderatorId: product.moderatorId,
         pageId: product.pageId,
         defaultPaymentPlan: supportsPaymentPlans
             ? product.defaultPaymentPlan

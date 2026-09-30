@@ -40,6 +40,22 @@ export function useProducts(
                         subscriptionYearlyAmount
                     }
                     defaultPaymentPlan
+                    lecturer {
+                        userId
+                        name
+                        avatar {
+                            thumbnail
+                            file
+                        }
+                    }
+                    moderator {
+                        userId
+                        name
+                        avatar {
+                            thumbnail
+                            file
+                        }
+                    }
                     user {
                         name
                         avatar {

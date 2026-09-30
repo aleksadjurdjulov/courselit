@@ -901,6 +901,8 @@ export const productsApiOpenApi = {
                     privacy: { type: "string" },
                     tags: { type: "array", items: { type: "string" } },
                     featuredImage: { type: "object" },
+                    lecturerId: { type: "string", nullable: true },
+                    moderatorId: { type: "string", nullable: true },
                     pageId: { type: "string" },
                     defaultPaymentPlan: { type: "string" },
                     paymentPlans: {
@@ -979,6 +981,8 @@ export const productsApiOpenApi = {
                     },
                     tags: { type: "array", items: { type: "string" } },
                     featuredImage: { type: "object" },
+                    lecturerId: { type: "string", nullable: true },
+                    moderatorId: { type: "string", nullable: true },
                 },
             },
             ProductListResponse: {

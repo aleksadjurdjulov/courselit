@@ -251,7 +251,12 @@ export const updateCourse = async (
     }
 
     for (const key of Object.keys(courseData)) {
-        if (key === "id" || key === "slug") {
+        if (
+            key === "id" ||
+            key === "slug" ||
+            key === "lecturerId" ||
+            key === "moderatorId"
+        ) {
             continue;
         }
 
@@ -280,6 +285,23 @@ export const updateCourse = async (
         }
 
         course[key] = courseData[key];
+    }
+
+    if (Object.prototype.hasOwnProperty.call(courseData, "lecturerId")) {
+        course.set(
+            "lecturerId",
+            await resolveCourseStaffUserId((courseData as any).lecturerId, ctx),
+        );
+    }
+
+    if (Object.prototype.hasOwnProperty.call(courseData, "moderatorId")) {
+        course.set(
+            "moderatorId",
+            await resolveCourseStaffUserId(
+                (courseData as any).moderatorId,
+                ctx,
+            ),
+        );
     }
 
     course = await validateCourse(course, ctx);
@@ -1361,3 +1383,23 @@ export const updateCourseCertificateTemplate = async ({
         logo: updatedTemplate.logo,
     };
 };
+
+async function resolveCourseStaffUserId(
+    userId: string | null | undefined,
+    ctx: GQLContext,
+): Promise<string | null> {
+    if (userId == null || userId === "") {
+        return null;
+    }
+
+    const user = await UserModel.findOne({
+        domain: ctx.subdomain._id,
+        userId,
+    }).select("userId");
+
+    if (!user) {
+        throw new Error(responses.item_not_found);
+    }
+
+    return user.userId;
+}

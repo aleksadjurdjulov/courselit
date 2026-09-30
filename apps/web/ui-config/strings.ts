@@ -70,6 +70,16 @@ export const DIALOG_TITLE_FEATURED_IMAGE = "Izaberi medij";
 export const BUTTON_SET_FEATURED_IMAGE = "Izaberi";
 export const BUTTON_SELECT_MEDIA = "Izaberi medij";
 export const FORM_FIELD_FEATURED_IMAGE = "Istaknuta slika";
+export const PRODUCT_LECTURER_HEADER = "Predavač";
+export const PRODUCT_MODERATOR_HEADER = "Moderator";
+export const PRODUCT_STAFF_SECTION_HEADER = "Predavač i moderator";
+export const PRODUCT_STAFF_SECTION_DESCRIPTION =
+    "Opciono izaberite postojeće korisnike kao predavača i moderatora kursa.";
+export const PRODUCT_PERSON_SEARCH_LABEL = "Pretraži korisnike po emailu";
+export const PRODUCT_PERSON_SEARCH_PLACEHOLDER = "email@primer.com";
+export const PRODUCT_PERSON_REMOVE = "Ukloni";
+export const PRODUCT_PERSON_ADD = "Dodaj";
+export const PRODUCT_PERSON_NO_RESULTS = "Nema rezultata";
 export const BTN_DELETE_COURSE = "Obriši kurs";
 export const BTN_EXIT_COURSE = "Izađi";
 export const BTN_EXIT_COURSE_TOOLTIP = "Izađi iz kursa";

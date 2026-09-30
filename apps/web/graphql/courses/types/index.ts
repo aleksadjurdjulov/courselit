@@ -137,6 +137,34 @@ const courseType = new GraphQLObjectType({
                 return await getUser(course.creatorId, context);
             },
         },
+        lecturerId: { type: GraphQLString },
+        moderatorId: { type: GraphQLString },
+        lecturer: {
+            type: userTypes.userType,
+            resolve: async (course, args, context) => {
+                if (!course.lecturerId) {
+                    return null;
+                }
+                try {
+                    return await getUser(course.lecturerId, context);
+                } catch {
+                    return null;
+                }
+            },
+        },
+        moderator: {
+            type: userTypes.userType,
+            resolve: async (course, args, context) => {
+                if (!course.moderatorId) {
+                    return null;
+                }
+                try {
+                    return await getUser(course.moderatorId, context);
+                } catch {
+                    return null;
+                }
+            },
+        },
         lessons: {
             type: new GraphQLList(lessonMetaType),
             resolve: (course, args, context, info) =>
@@ -210,6 +238,8 @@ const courseUpdateInput = new GraphQLInputObjectType({
         certificate: { type: GraphQLBoolean },
         discussions: { type: GraphQLBoolean },
         bunnyEmbedTokenKey: { type: GraphQLString },
+        lecturerId: { type: GraphQLString },
+        moderatorId: { type: GraphQLString },
     },
 });
 

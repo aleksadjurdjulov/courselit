@@ -23,6 +23,8 @@ type CourseWithoutGroups = Pick<
     | "tags"
     | "paymentPlans"
     | "defaultPaymentPlan"
+    | "lecturer"
+    | "moderator"
 >;
 
 export const getProduct = async (
@@ -43,6 +45,22 @@ export const getProduct = async (
                         featuredImage {
                             file,
                             caption
+                        },
+                        lecturer {
+                            userId
+                            name
+                            avatar {
+                                file
+                                thumbnail
+                            }
+                        },
+                        moderator {
+                            userId
+                            name
+                            avatar {
+                                file
+                                thumbnail
+                            }
                         },
                         updatedAt,
                         creatorId,
@@ -128,6 +146,8 @@ export function formatCourse(
         title: post.title,
         description: post.description,
         featuredImage: post.featuredImage,
+        lecturer: post.lecturer,
+        moderator: post.moderator,
         updatedAt: post.updatedAt,
         creatorId: post.creatorId,
         slug: post.slug,

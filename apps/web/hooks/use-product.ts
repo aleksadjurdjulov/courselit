@@ -84,6 +84,36 @@ export default function useProduct(id?: string | null): {
                         thumbnail,
                         caption
                     },
+                    lecturer {
+                        userId,
+                        name,
+                        email,
+                        avatar {
+                            mediaId,
+                            originalFileName,
+                            mimeType,
+                            size,
+                            access,
+                            file,
+                            thumbnail,
+                            caption
+                        }
+                    },
+                    moderator {
+                        userId,
+                        name,
+                        email,
+                        avatar {
+                            mediaId,
+                            originalFileName,
+                            mimeType,
+                            size,
+                            access,
+                            file,
+                            thumbnail,
+                            caption
+                        }
+                    },
                     published,
                     privacy,
                     pageId,

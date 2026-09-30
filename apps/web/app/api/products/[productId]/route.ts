@@ -19,6 +19,8 @@ const updateProductFields = new Set([
     "privacy",
     "tags",
     "featuredImage",
+    "lecturerId",
+    "moderatorId",
 ]);
 
 function getUnsupportedField(body: Record<string, unknown>) {

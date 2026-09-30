@@ -13,6 +13,7 @@ import {
 } from "@ui-config/strings";
 import ProductDetails from "./components/product-details";
 import ProductFeaturedImage from "./components/product-featured-image";
+import ProductStaff from "./components/product-staff";
 import PaymentPlans from "./components/payment-plans";
 import DownloadOptions from "./components/download-options";
 import ProductPublishing from "./components/product-publishing";
@@ -89,6 +90,7 @@ export default function SettingsPage() {
                 </div>
                 <ProductDetails product={product} />
                 <ProductFeaturedImage product={product} />
+                <ProductStaff product={product} />
                 <PaymentPlans
                     productId={productId || ""}
                     paymentPlans={paymentPlans}

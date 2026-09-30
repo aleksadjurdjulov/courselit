@@ -2346,6 +2346,109 @@ describe("updateCourse", () => {
         expect(updatedCourse.description).toBe(description);
     });
 
+    it("sets and clears optional lecturer and moderator", async () => {
+        const lecturerUser = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("lecturer-user"),
+            email: email("lecturer"),
+            name: "Nevena Miletić",
+            permissions: [],
+            active: true,
+            unsubscribeToken: id("unsubscribe-lecturer"),
+            purchases: [],
+        });
+        const moderatorUser = await UserModel.create({
+            domain: testDomain._id,
+            userId: id("moderator-user"),
+            email: email("moderator"),
+            name: "Đorđe Zavišić",
+            permissions: [],
+            active: true,
+            unsubscribeToken: id("unsubscribe-moderator"),
+            purchases: [],
+        });
+
+        const course = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course-staff"),
+            title: id("course-staff-title"),
+            creatorId: adminUser.userId,
+            deleteable: true,
+            pageId: page.pageId,
+            groups: [],
+            lessons: [],
+            type: "course",
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-staff-slug"),
+            published: false,
+        });
+
+        const ctx = {
+            subdomain: testDomain,
+            user: adminUser,
+            address: "",
+        };
+
+        const updatedCourse = await updateCourse(
+            {
+                id: course.courseId,
+                lecturerId: lecturerUser.userId,
+                moderatorId: moderatorUser.userId,
+            } as any,
+            ctx,
+        );
+
+        expect(updatedCourse.lecturerId).toBe(lecturerUser.userId);
+        expect(updatedCourse.moderatorId).toBe(moderatorUser.userId);
+
+        const clearedCourse = await updateCourse(
+            {
+                id: course.courseId,
+                lecturerId: null,
+                moderatorId: null,
+            } as any,
+            ctx,
+        );
+
+        expect(clearedCourse.lecturerId).toBeFalsy();
+        expect(clearedCourse.moderatorId).toBeFalsy();
+    });
+
+    it("rejects unknown lecturer user ids", async () => {
+        const course = await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course-staff-invalid"),
+            title: id("course-staff-invalid-title"),
+            creatorId: adminUser.userId,
+            deleteable: true,
+            pageId: page.pageId,
+            groups: [],
+            lessons: [],
+            type: "course",
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-staff-invalid-slug"),
+            published: false,
+        });
+
+        await expect(
+            updateCourse(
+                {
+                    id: course.courseId,
+                    lecturerId: "missing-user-id",
+                } as any,
+                {
+                    subdomain: testDomain,
+                    user: adminUser,
+                    address: "",
+                },
+            ),
+        ).rejects.toThrow(responses.item_not_found);
+    });
+
     it("validates the overall state when publishing an incomplete blog", async () => {
         const course = await CourseModel.create({
             domain: testDomain._id,

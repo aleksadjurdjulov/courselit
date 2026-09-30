@@ -17,6 +17,28 @@ import {
 
 const getHandlers = (baseURL: string) => toNextJsHandler(getAuth(baseURL));
 
+function recreateRequest(
+    req: Request,
+    options?: {
+        url?: string | URL;
+        headers?: Headers;
+    },
+): Request {
+    const method = req.method;
+    const hasBody = method !== "GET" && method !== "HEAD";
+
+    return new Request(options?.url ?? req.url, {
+        method,
+        headers: options?.headers ?? new Headers(req.headers),
+        ...(hasBody
+            ? {
+                  body: req.body,
+                  duplex: "half",
+              }
+            : {}),
+    });
+}
+
 // This is needed to prevent creating URLs like https://0.0.0.0:3000/api/auth/sign-in/sso
 export const rewriteAuthRequestOrigin = async (req: Request) => {
     const publicOrigin = await getBackendAddress(req.headers);
@@ -31,7 +53,7 @@ export const rewriteAuthRequestOrigin = async (req: Request) => {
         publicOrigin,
     );
 
-    return new Request(rewrittenUrl, req);
+    return recreateRequest(req, { url: rewrittenUrl });
 };
 
 async function enforceInviteOnlyAuth(req: Request): Promise<Response | null> {
@@ -101,7 +123,7 @@ function attachDevice(req: Request): {
     headers.set(DEVICE_ID_HEADER, deviceId);
 
     return {
-        request: new Request(req, { headers }),
+        request: recreateRequest(req, { headers }),
         deviceId,
         isNew: !existing,
     };

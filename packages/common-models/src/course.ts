@@ -35,4 +35,8 @@ export interface Course {
     lessons?: Lesson[];
     user: User;
     paymentPlans?: PaymentPlan[];
+    lecturerId?: string;
+    moderatorId?: string;
+    lecturer?: User;
+    moderator?: User;
 }

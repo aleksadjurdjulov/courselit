@@ -12,6 +12,10 @@ import { getPlanPrice, truncate } from "@ui-lib/utils";
 import { Button, Subheader1 } from "@courselit/page-primitives";
 import { formatCurrency } from "@courselit/utils";
 import { ThemeStyle } from "@courselit/page-models";
+import {
+    PRODUCT_LECTURER_HEADER,
+    PRODUCT_MODERATOR_HEADER,
+} from "@ui-config/strings";
 const ITEMS_PER_PAGE = 9;
 
 export function ProductsList({
@@ -72,6 +76,30 @@ export function ProductsList({
                                   name: product.user.name || "",
                                   thumbnail: product.user.avatar?.thumbnail,
                               }}
+                              lecturer={
+                                  product.lecturer?.name
+                                      ? {
+                                            name: product.lecturer.name,
+                                            thumbnail:
+                                                product.lecturer.avatar
+                                                    ?.thumbnail ||
+                                                product.lecturer.avatar?.file,
+                                            role: PRODUCT_LECTURER_HEADER,
+                                        }
+                                      : null
+                              }
+                              moderator={
+                                  product.moderator?.name
+                                      ? {
+                                            name: product.moderator.name,
+                                            thumbnail:
+                                                product.moderator.avatar
+                                                    ?.thumbnail ||
+                                                product.moderator.avatar?.file,
+                                            role: PRODUCT_MODERATOR_HEADER,
+                                        }
+                                      : null
+                              }
                               image={
                                   product.featuredImage?.file ||
                                   "/courselit_backdrop_square.webp"

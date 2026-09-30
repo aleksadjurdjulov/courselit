@@ -1,28 +1,57 @@
 import React from "react";
 import { Image, Link, Skeleton } from "@courselit/components-library";
-import { Badge, PageCardHeader, Subheader1 } from "@courselit/page-primitives";
+import {
+    Badge,
+    Caption,
+    PageCardHeader,
+    Subheader1,
+} from "@courselit/page-primitives";
 import { PageCardContent } from "@courselit/page-primitives";
 import { PageCard, PageCardImage } from "@courselit/page-primitives";
 import { ThemeStyle } from "@courselit/page-models";
 
+export type ProductCardPerson = {
+    name: string;
+    thumbnail?: string;
+    role?: string;
+};
+
 export function ProductCard({
     title,
     user,
+    lecturer,
+    moderator,
     theme,
     href,
     image,
     badgeChildren,
 }: {
     title: string;
-    user: {
+    user?: {
         name: string;
         thumbnail: string;
     };
+    lecturer?: ProductCardPerson | null;
+    moderator?: ProductCardPerson | null;
     theme?: ThemeStyle;
     href: string;
     image: string;
     badgeChildren?: any;
 }) {
+    const people: ProductCardPerson[] = [];
+    if (lecturer?.name) {
+        people.push(lecturer);
+    }
+    if (moderator?.name) {
+        people.push(moderator);
+    }
+    if (people.length === 0 && user?.name) {
+        people.push({
+            name: user.name,
+            thumbnail: user.thumbnail,
+        });
+    }
+
     return (
         <Link href={href} className="flex">
             <PageCard
@@ -40,17 +69,36 @@ export function ProductCard({
                     <PageCardHeader theme={theme} className="grow">
                         {title}
                     </PageCardHeader>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <Image
-                                src={user?.thumbnail}
-                                alt={user?.name || "User Avatar"}
-                                width="w-8"
-                                height="h-8"
-                                className="rounded-full"
-                                objectFit="cover"
-                            />
-                            <Subheader1 theme={theme}>{user?.name}</Subheader1>
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-3 flex-wrap">
+                            {people.map((person) => (
+                                <div
+                                    key={`${person.role || "person"}-${person.name}`}
+                                    className="flex items-center gap-2"
+                                >
+                                    <Image
+                                        src={person.thumbnail}
+                                        alt={person.name}
+                                        width="w-8"
+                                        height="h-8"
+                                        className="rounded-full"
+                                        objectFit="cover"
+                                    />
+                                    <div className="flex flex-col">
+                                        <Subheader1 theme={theme}>
+                                            {person.name}
+                                        </Subheader1>
+                                        {person.role && (
+                                            <Caption
+                                                theme={theme}
+                                                className="text-muted-foreground"
+                                            >
+                                                {person.role}
+                                            </Caption>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                         {badgeChildren && (
                             <Badge theme={theme}>{badgeChildren}</Badge>

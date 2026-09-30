@@ -6,6 +6,8 @@ import { ArrowRight } from "@courselit/icons";
 import {
     COURSE_PROGRESS_START,
     BTN_VIEW_CERTIFICATE,
+    PRODUCT_LECTURER_HEADER,
+    PRODUCT_MODERATOR_HEADER,
 } from "@ui-config/strings";
 import { Link, Image } from "@courselit/components-library";
 import { TextRenderer } from "@courselit/page-blocks";
@@ -30,6 +32,7 @@ import {
 } from "@/lib/course-viewer-session-params";
 import { useSearchParams } from "next/navigation";
 import type { Profile } from "@courselit/common-models";
+import { CoursePeople } from "@components/course-people";
 
 export default function ProductPage(props: {
     params: Promise<{ slug: string; id: string }>;
@@ -124,6 +127,14 @@ export default function ProductPage(props: {
                     </div>
                 </div>
             )}
+            <CoursePeople
+                lecturer={product.lecturer}
+                moderator={product.moderator}
+                lecturerLabel={PRODUCT_LECTURER_HEADER}
+                moderatorLabel={PRODUCT_MODERATOR_HEADER}
+                theme={theme.theme}
+                className="mb-8"
+            />
             <div className="overflow-hidden min-h-[360px]">
                 <div className="flex flex-col gap-4 text-foreground">
                     <TableOfContent

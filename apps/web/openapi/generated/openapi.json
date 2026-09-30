@@ -2374,6 +2374,14 @@
                     "featuredImage": {
                         "type": "object"
                     },
+                    "lecturerId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "moderatorId": {
+                        "type": "string",
+                        "nullable": true
+                    },
                     "pageId": {
                         "type": "string"
                     },
@@ -2451,6 +2459,14 @@
                     },
                     "featuredImage": {
                         "type": "object"
+                    },
+                    "lecturerId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "moderatorId": {
+                        "type": "string",
+                        "nullable": true
                     }
                 }
             },

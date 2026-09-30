@@ -60,6 +60,20 @@ export default function Widget({
                         subscriptionYearlyAmount
                     }
                     defaultPaymentPlan
+                    lecturer {
+                        name
+                        avatar {
+                            thumbnail
+                            file
+                        }
+                    }
+                    moderator {
+                        name
+                        avatar {
+                            thumbnail
+                            file
+                        }
+                    }
                     user {
                         name
                         avatar {
@@ -137,6 +151,32 @@ export default function Widget({
                                             course.user?.avatar?.thumbnail ||
                                             "",
                                     }}
+                                    lecturer={
+                                        course.lecturer?.name
+                                            ? {
+                                                  name: course.lecturer.name,
+                                                  thumbnail:
+                                                      course.lecturer.avatar
+                                                          ?.thumbnail ||
+                                                      course.lecturer.avatar
+                                                          ?.file ||
+                                                      "",
+                                              }
+                                            : null
+                                    }
+                                    moderator={
+                                        course.moderator?.name
+                                            ? {
+                                                  name: course.moderator.name,
+                                                  thumbnail:
+                                                      course.moderator.avatar
+                                                          ?.thumbnail ||
+                                                      course.moderator.avatar
+                                                          ?.file ||
+                                                      "",
+                                              }
+                                            : null
+                                    }
                                     image={
                                         course.featuredImage?.file ||
                                         "/courselit_backdrop_square.webp"
