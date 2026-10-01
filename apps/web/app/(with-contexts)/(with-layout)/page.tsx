@@ -53,8 +53,10 @@ export async function generateMetadata(
                 },
             ],
         },
+        // Temporary: force noindex until go-live (overrides page.robotsAllowed).
         robots: {
-            index: page.robotsAllowed,
+            index: false,
+            follow: false,
         },
         icons: {
             icon: siteInfo.settings.logo?.file || "/favicon.ico",

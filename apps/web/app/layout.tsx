@@ -40,6 +40,11 @@ export async function generateMetadata(): Promise<Metadata> {
         },
         generator: "CourseLit",
         applicationName: "CourseLit",
+        // Temporary: keep the site out of search results until go-live.
+        robots: {
+            index: false,
+            follow: false,
+        },
     };
 }
 
