@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 import "./login-site-header.css";
 
-const MARKETING_SITE_ORIGIN = "https://future-fizio-hub.webflow.io";
+const MARKETING_SITE_ORIGIN = "https://www.futurefizio.com";
 
 const NAV_LINKS = [
     { label: LOGIN_NAV_HOME, href: `${MARKETING_SITE_ORIGIN}/` },

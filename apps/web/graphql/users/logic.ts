@@ -11,6 +11,7 @@ import { checkPermission, getEmailFrom, getPlanPrice } from "@courselit/utils";
 import UserSegmentModel from "@models/UserSegment";
 import {
     InternalCourse,
+    InternalMembership,
     InternalUser,
     UserSegment,
 } from "@courselit/orm-models";
@@ -32,6 +33,7 @@ import { triggerSequences } from "@/lib/trigger-sequences";
 import { getCourseOrThrow } from "../courses/logic";
 import pug from "pug";
 import courseEnrollTemplate from "@/templates/course-enroll";
+import courseEnrollBundleTemplate from "@/templates/course-enroll-bundle";
 import MembershipModel from "@models/Membership";
 import CommunityModel from "@models/Community";
 import CourseModel from "@models/Course";
@@ -46,9 +48,9 @@ import {
 } from "../paymentplans/logic";
 import {
     convertFiltersToDBConditions,
+    getPublishedProductsForDomain,
     getSiteUrl,
 } from "@courselit/common-logic";
-import { InternalMembership } from "@courselit/orm-models";
 import CertificateModel from "@models/Certificate";
 import CertificateTemplateModel, {
     CertificateTemplate,
@@ -184,22 +186,18 @@ export const updateUser = async (userData: UserData, ctx: GQLContext) => {
     return user;
 };
 
-export const inviteCustomer = async (
-    email: string,
-    tags: string[],
-    id: string,
-    ctx: GQLContext,
-) => {
+async function assertCanInviteCustomers(ctx: GQLContext) {
     checkIfAuthenticated(ctx);
     if (!checkPermission(ctx.user.permissions, [permissions.manageUsers])) {
         throw new Error(responses.action_not_allowed);
     }
+}
 
-    const course = await getCourseOrThrow(undefined, ctx, id);
-    if (!course.published) {
-        throw new Error(responses.cannot_invite_to_unpublished_product);
-    }
-
+async function resolveInviteCustomer(
+    email: string,
+    tags: string[],
+    ctx: GQLContext,
+) {
     const sanitizedEmail = sanitizeEmail(email);
     let user = await UserModel.findOne({
         email: sanitizedEmail,
@@ -221,32 +219,81 @@ export const inviteCustomer = async (
         );
     }
 
-    const paymentPlan = await getInternalPaymentPlan(ctx);
+    return user;
+}
+
+async function activateCourseMembershipForInvite({
+    userId,
+    courseId,
+    paymentPlan,
+    ctx,
+}: {
+    userId: string;
+    courseId: string;
+    paymentPlan: PaymentPlan;
+    ctx: GQLContext;
+}): Promise<{ membership: InternalMembership; activated: boolean }> {
     const membership = await getMembership({
         domainId: ctx.subdomain._id,
-        userId: user.userId,
+        userId,
         entityType: Constants.MembershipEntityType.COURSE,
-        entityId: course.courseId,
+        entityId: courseId,
         planId: paymentPlan.planId,
     });
 
     if (membership.status === Constants.MembershipStatus.ACTIVE) {
-        return user;
+        return { membership, activated: false };
     }
 
     await activateMembership(ctx.subdomain!, membership, paymentPlan);
+    const refreshedMembership =
+        (await findMembership({
+            domainId: ctx.subdomain._id,
+            userId,
+            entityId: courseId,
+        })) || membership;
+
+    return { membership: refreshedMembership, activated: true };
+}
+
+async function sendCourseEnrollEmail({
+    userEmail,
+    courseNames,
+    ctx,
+}: {
+    userEmail: string;
+    courseNames: string[];
+    ctx: GQLContext;
+}) {
+    if (!courseNames.length) {
+        return;
+    }
 
     try {
-        const emailBody = pug.render(courseEnrollTemplate, {
-            courseName: course.title,
-            loginLink: `${getSiteUrl(ctx.subdomain, ctx.address)}/login`,
-            hideCourseLitBranding:
-                ctx.subdomain.settings?.hideCourseLitBranding,
-        });
+        const loginLink = `${getSiteUrl(ctx.subdomain, ctx.address)}/login`;
+        const hideCourseLitBranding =
+            ctx.subdomain.settings?.hideCourseLitBranding;
+        const isBundle = courseNames.length > 1;
+        const emailBody = pug.render(
+            isBundle ? courseEnrollBundleTemplate : courseEnrollTemplate,
+            isBundle
+                ? {
+                      courseNames,
+                      loginLink,
+                      hideCourseLitBranding,
+                  }
+                : {
+                      courseName: courseNames[0],
+                      loginLink,
+                      hideCourseLitBranding,
+                  },
+        );
 
         await addMailJob({
-            to: [user.email],
-            subject: `${responses.course_enroll_email_subject_prefix} ${course.title}`,
+            to: [userEmail],
+            subject: isBundle
+                ? responses.course_enroll_bundle_email_subject
+                : `${responses.course_enroll_email_subject_prefix} ${courseNames[0]}`,
             body: emailBody,
             from: getEmailFrom({
                 name: ctx.subdomain?.settings?.title || ctx.subdomain.name,
@@ -257,8 +304,87 @@ export const inviteCustomer = async (
         // eslint-disable-next-line no-console
         console.log("error", error);
     }
+}
+
+export const inviteCustomer = async (
+    email: string,
+    tags: string[],
+    id: string,
+    ctx: GQLContext,
+) => {
+    await assertCanInviteCustomers(ctx);
+
+    const course = await getCourseOrThrow(undefined, ctx, id);
+    if (!course.published) {
+        throw new Error(responses.cannot_invite_to_unpublished_product);
+    }
+
+    const user = await resolveInviteCustomer(email, tags, ctx);
+    const paymentPlan = await getInternalPaymentPlan(ctx);
+    const { activated } = await activateCourseMembershipForInvite({
+        userId: user.userId,
+        courseId: course.courseId,
+        paymentPlan,
+        ctx,
+    });
+
+    if (activated) {
+        await sendCourseEnrollEmail({
+            userEmail: user.email,
+            courseNames: [course.title],
+            ctx,
+        });
+    }
 
     return user;
+};
+
+export const inviteCustomerToAllPublishedProducts = async (
+    email: string,
+    tags: string[],
+    ctx: GQLContext,
+) => {
+    await assertCanInviteCustomers(ctx);
+
+    const publishedProducts = await getPublishedProductsForDomain(
+        ctx.subdomain._id,
+    );
+    if (!publishedProducts.length) {
+        throw new Error(responses.no_published_products);
+    }
+
+    const user = await resolveInviteCustomer(email, tags, ctx);
+    const paymentPlan = await getInternalPaymentPlan(ctx);
+    const newlyEnrolledCourseNames: string[] = [];
+    const products: {
+        productId: string;
+        membership: InternalMembership;
+    }[] = [];
+
+    for (const product of publishedProducts) {
+        const { membership, activated } =
+            await activateCourseMembershipForInvite({
+                userId: user.userId,
+                courseId: product.courseId,
+                paymentPlan,
+                ctx,
+            });
+        if (activated) {
+            newlyEnrolledCourseNames.push(product.title);
+        }
+        products.push({
+            productId: product.courseId,
+            membership,
+        });
+    }
+
+    await sendCourseEnrollEmail({
+        userEmail: user.email,
+        courseNames: newlyEnrolledCourseNames,
+        ctx,
+    });
+
+    return { user, products };
 };
 
 export const deleteUser = async (

@@ -198,6 +198,12 @@ describe("Products OpenAPI", () => {
             routes.paths["/api/products/{productId}/customers"].post,
         ).toBeUndefined();
         expect(
+            routes.paths["/api/products/invitations/all"].post,
+        ).toMatchObject({
+            tags: ["Product Customers"],
+            operationId: "inviteCustomerToAllPublishedProducts",
+        });
+        expect(
             routes.paths["/api/products/{productId}/customers/invitations"]
                 .post,
         ).toMatchObject({

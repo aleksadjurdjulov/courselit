@@ -39,6 +39,25 @@ Request body:
 
 The endpoint uses CourseLit's existing customer invitation behavior. It creates or reuses a customer user, enrolls that customer into the product, and sends the invitation email.
 
+## Invite a customer to all published products
+
+Use:
+
+```http
+POST /api/products/invitations/all
+```
+
+Request body:
+
+```json
+{
+    "email": "student@example.com",
+    "tags": ["cohort-2026"]
+}
+```
+
+This enrolls the customer into every published course and download on the school and sends a single invitation email that lists the newly enrolled products. Products the customer already has active access to are left unchanged and omitted from the email.
+
 ## List product customers
 
 Use:

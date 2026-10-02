@@ -2,6 +2,10 @@
  * @jest-environment node
  */
 
+jest.mock("nanoid", () => ({
+    nanoid: () => Math.random().toString(36).substring(2),
+}));
+
 jest.mock("../../notifications/logic", () => ({
     seedNotificationPreferencesForUser: jest.fn(),
 }));
@@ -31,6 +35,7 @@ import {
     updateUser,
     findMembership,
     inviteCustomer,
+    inviteCustomerToAllPublishedProducts,
     createUser,
 } from "../logic";
 import CertificateModel from "@models/Certificate";
@@ -1147,6 +1152,104 @@ describe("inviteCustomer", () => {
         const mailPayload = addMailJobMock.mock.calls[0][0];
         expect(mailPayload.body).toContain("https://school.example.com/login");
         expect(mailPayload.body).not.toContain("0.0.0.0");
+    });
+
+    it("sends one bundle email when inviting to all published products", async () => {
+        process.env.PROTOCOL = "https";
+
+        await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course-2"),
+            title: "Second Invite Course",
+            creatorId: adminUser.userId,
+            groups: [],
+            lessons: [],
+            type: Constants.CourseType.COURSE,
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-2-slug"),
+            published: true,
+        });
+
+        await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course-unpublished"),
+            title: "Unpublished Course",
+            creatorId: adminUser.userId,
+            groups: [],
+            lessons: [],
+            type: Constants.CourseType.COURSE,
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-unpublished-slug"),
+            published: false,
+        });
+
+        const studentEmail = email("bundle-student");
+        const result = await inviteCustomerToAllPublishedProducts(
+            studentEmail,
+            ["bundle"],
+            ctx,
+        );
+
+        expect(result.products).toHaveLength(2);
+        expect(
+            result.products.map((product) => product.productId).sort(),
+        ).toEqual([publishedCourse.courseId, id("course-2")].sort());
+        expect(addMailJobMock).toHaveBeenCalledTimes(1);
+        const mailPayload = addMailJobMock.mock.calls[0][0];
+        expect(mailPayload.subject).toBe(
+            responses.course_enroll_bundle_email_subject,
+        );
+        expect(mailPayload.body).toContain("Invite Course");
+        expect(mailPayload.body).toContain("Second Invite Course");
+        expect(mailPayload.body).not.toContain("Unpublished Course");
+        expect(mailPayload.body).toContain("https://school.example.com/login");
+        expect(mailPayload.to).toEqual([studentEmail]);
+    });
+
+    it("omits already-active products from the invite-all email", async () => {
+        process.env.PROTOCOL = "https";
+
+        await CourseModel.create({
+            domain: testDomain._id,
+            courseId: id("course-3"),
+            title: "Third Invite Course",
+            creatorId: adminUser.userId,
+            groups: [],
+            lessons: [],
+            type: Constants.CourseType.COURSE,
+            privacy: "unlisted",
+            costType: "free",
+            cost: 0,
+            slug: id("course-3-slug"),
+            published: true,
+        });
+
+        const studentEmail = email("partial-bundle");
+        await inviteCustomer(studentEmail, [], publishedCourse.courseId, ctx);
+        addMailJobMock.mockClear();
+
+        await inviteCustomerToAllPublishedProducts(studentEmail, [], ctx);
+
+        expect(addMailJobMock).toHaveBeenCalledTimes(1);
+        const mailPayload = addMailJobMock.mock.calls[0][0];
+        expect(mailPayload.body).toContain("Third Invite Course");
+        expect(mailPayload.body).not.toContain(
+            `<strong>${publishedCourse.title}</strong>`,
+        );
+    });
+
+    it("does not email when the customer already has all published products", async () => {
+        const studentEmail = email("already-active");
+        await inviteCustomerToAllPublishedProducts(studentEmail, [], ctx);
+        addMailJobMock.mockClear();
+
+        await inviteCustomerToAllPublishedProducts(studentEmail, [], ctx);
+
+        expect(addMailJobMock).not.toHaveBeenCalled();
     });
 });
 

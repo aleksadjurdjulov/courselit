@@ -687,6 +687,33 @@ export const productsApiOpenApi = {
                 },
             },
         },
+        "/api/products/invitations/all": {
+            post: {
+                tags: ["Product Customers"],
+                summary: "Invite a customer to all published products",
+                description:
+                    "Invites a customer by email into every published course and download on the school. Memberships are created for each product and a single invitation email is sent listing newly enrolled products.",
+                operationId: "inviteCustomerToAllPublishedProducts",
+                security: secured,
+                requestBody: jsonBody({
+                    type: "object",
+                    properties: {
+                        email: { type: "string", format: "email" },
+                        tags: { type: "array", items: { type: "string" } },
+                    },
+                    required: ["email"],
+                }),
+                responses: {
+                    201: jsonResponse(
+                        "#/components/schemas/BulkCustomerInvitation",
+                    ),
+                    400: error(
+                        "Unsupported customer invitation field or missing email.",
+                    ),
+                    422: error("Customer could not be invited."),
+                },
+            },
+        },
         "/api/products/{productId}/customers/invitations": {
             post: {
                 tags: ["Product Customers"],
@@ -1281,6 +1308,35 @@ export const productsApiOpenApi = {
                         properties: {
                             page: { type: "integer" },
                             limit: { type: "integer" },
+                        },
+                    },
+                },
+            },
+            BulkCustomerInvitationProduct: {
+                type: "object",
+                properties: {
+                    productId: { type: "string" },
+                    membershipId: { type: "string" },
+                    membershipStatus: { type: "string" },
+                    subscriptionMethod: { type: "string" },
+                    subscriptionId: { type: "string" },
+                    enrolledAt: { type: "string", format: "date-time" },
+                    updatedAt: { type: "string", format: "date-time" },
+                },
+            },
+            BulkCustomerInvitation: {
+                type: "object",
+                description:
+                    "Customer invitation result for all published products.",
+                properties: {
+                    userId: { type: "string" },
+                    email: { type: "string" },
+                    name: { type: "string" },
+                    avatar: { type: "object" },
+                    products: {
+                        type: "array",
+                        items: {
+                            $ref: "#/components/schemas/BulkCustomerInvitationProduct",
                         },
                     },
                 },
