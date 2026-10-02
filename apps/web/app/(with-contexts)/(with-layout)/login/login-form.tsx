@@ -53,15 +53,17 @@ import "@/components/public/base-layout/login-site-header.css";
 export default function LoginForm({
     redirectTo,
     notice,
+    email: initialEmail = "",
     loginProviders = [],
 }: {
     redirectTo?: string;
     notice?: string;
+    email?: string;
     loginProviders?: RuntimeLoginProvider[];
 }) {
     const { theme } = useContext(ThemeContext);
     const [showCode, setShowCode] = useState(false);
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(initialEmail);
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);

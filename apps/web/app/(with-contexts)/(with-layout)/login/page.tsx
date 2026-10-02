@@ -24,6 +24,8 @@ export default async function LoginPage({
     const notice = accountSharingLoginNotice(
         typeof params.reason === "string" ? params.reason : undefined,
     );
+    const email =
+        typeof params.email === "string" ? params.email.trim() : undefined;
     const address = await getAddressFromHeaders(headers);
 
     if (session) {
@@ -34,6 +36,7 @@ export default async function LoginPage({
         <LoginForm
             redirectTo={redirectTo}
             notice={notice}
+            email={email}
             loginProviders={await getExternalLoginProviders(address)}
         />
     );
